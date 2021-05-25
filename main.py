@@ -122,6 +122,8 @@ def get_pixels(headers: dict):
         GET_PIXELS_URL,
         headers=headers
     )
+    ratelimit(r.headers)
+
     pixels_bytes = r.content
     print(pixels_bytes)
     print(pixels_bytes.decode(encoding='utf-8', errors='ignore'))
