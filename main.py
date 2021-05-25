@@ -167,7 +167,7 @@ def main():
     while True:
         for zone in zones_to_do:
             img = zone['img']
-            img_location = zone['image_location']
+            img_location = zone['img_location']
 
             print(f"img name: {zone['name']}")
             print(f'img dimension x: {len(img[0])}')
