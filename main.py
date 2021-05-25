@@ -140,11 +140,11 @@ def get_pixels(headers: dict):
 
 
 def run_for_img(img, img_location, headers):
-    print('Getting current canvas status')
-    canvas = get_pixels(headers)
-    print('Got current canvas status')
-
     for y_index, row in enumerate(img):
+        print('Getting current canvas status')
+        canvas = get_pixels(headers)
+        print('Got current canvas status')
+
         for x_index, colour_code in enumerate(row):
             pix_y = img_location['y'] + y_index
             pix_x = img_location['x'] + x_index
