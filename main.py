@@ -111,7 +111,7 @@ def set_pixel(x: int, y: int, rgb: str, headers: dict):
 def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
     rgb_ints = [b for b in pixel]
     rgb_hex = [hex(i) for i in rgb_ints]
-    rgb_hex_strings = [str(h).removeprefix('0x') for h in rgb_hex]
+    rgb_hex_strings = [str(h)[2:] for h in rgb_hex]
     rgb_hex_string = ''.join(rgb_hex_strings)
 
     return rgb_hex_string
