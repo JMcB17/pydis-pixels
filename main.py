@@ -86,6 +86,7 @@ def get_pixels(headers: dict):
 def main():
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
+    print('Loaded config')
 
     bearer_token = f"Bearer {config['token']}"
     headers = {
@@ -93,7 +94,9 @@ def main():
     }
 
     while True:
+        print('Getting current canvas status')
         canvas = get_pixels(headers)
+        print('Got current canvas status')
 
         for y_index, row in enumerate(img):
             for x_index, pix_active in enumerate(row):
@@ -101,12 +104,16 @@ def main():
                 pix_x = img_location['x'] + x_index
 
                 if pix_active and canvas[pix_y][pix_x] == target_colour:
+                    print(f'Pixel at ({pix_x}, {pix_y}) is target colour as intended')
                     continue
                 elif not pix_active and canvas[pix_y][pix_x] == blank_colour:
+                    print(f'Pixel at ({pix_x}, {pix_y}) is blank as intended')
                     continue
                 elif pix_active:
+                    print(f'Pixel at ({pix_x}, {pix_y}) will be made target colour')
                     set_pixel(x=pix_x, y=pix_y, rgb=target_colour, headers=headers)
                 else:
+                    print(f'Pixel at ({pix_x}, {pix_y}) will be made blank')
                     set_pixel(x=pix_x, y=pix_y, rgb=blank_colour, headers=headers)
 
 
