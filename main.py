@@ -7,6 +7,9 @@ from pathlib import Path
 import requests
 
 
+__version__ = '1.0.0'
+
+
 CONFIG_FILE_PATH = Path('config.json')
 BASE_URL = 'https://pixels.pythondiscord.com'
 SET_URL = f'{BASE_URL}/set_pixel'
