@@ -86,6 +86,7 @@ def get_pixels(headers: dict):
         headers=headers
     )
     pixels_bytes = r.content
+    print(pixels_bytes)
     canvas = []
     for y in range(CANVAS_SIZE['height']+1):
         row = []
