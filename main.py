@@ -17,6 +17,17 @@ CANVAS_SIZE = {
     'height': 90,
 }
 
+img = [
+    [1, 0],
+    [0, 1],
+]
+# noinspection SpellCheckingInspection
+target_colour = '1dbfff'
+img_location = {
+    'x': 80,
+    'y': 2
+}
+
 
 def ratelimit(headers):
     requests_remaining = int(headers['requests-remaining'])
@@ -78,6 +89,19 @@ def main():
     headers = {
         "Authorization": bearer_token
     }
+
+    while True:
+        canvas = get_pixels(headers)
+
+        for y_index, row in enumerate(img):
+            for x_index, pix_active in enumerate(row):
+                pix_y = img_location['y'] + y_index
+                pix_x = img_location['x'] + x_index
+
+                if not pix_active or canvas[pix_y][pix_x] == target_colour:
+                    continue
+                else:
+                    set_pixel(x=pix_x, y=pix_y, rgb=target_colour, headers=headers)
 
 
 if __name__ == '__main__':
