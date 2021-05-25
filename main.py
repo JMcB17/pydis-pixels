@@ -8,7 +8,14 @@ import requests
 
 
 CONFIG_FILE_PATH = Path('config.json')
-SET_URL = 'https://pixels.pythondiscord.com/set_pixel'
+BASE_URL = 'https://pixels.pythondiscord.com'
+SET_URL = f'{BASE_URL}/set_pixel'
+GET_SIZE_URL = f'{BASE_URL}/get_size'
+GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
+CANVAS_SIZE = {
+    'width': 160,
+    'height': 90,
+}
 
 
 def ratelimit(headers):
@@ -20,7 +27,7 @@ def ratelimit(headers):
         time.sleep(requests_reset)
 
 
-def set_pixel(x: int, y: int, rgb: str, headers:dict):
+def set_pixel(x: int, y: int, rgb: str, headers: dict):
     payload = {
         'x': x,
         'y': y,
@@ -31,8 +38,36 @@ def set_pixel(x: int, y: int, rgb: str, headers:dict):
         json=payload,
         headers=headers
     )
+    print(r.json()['message'])
 
     ratelimit(r.headers)
+
+
+def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
+    rgb_ints = [b for b in pixel]
+    rgb_hex = [hex(i) for i in rgb_ints]
+    rgb_hex_strings = [str(h).removeprefix('0x') for h in rgb_hex]
+    rgb_hex_string = ''.join(rgb_hex_strings)
+
+    return rgb_hex_string
+
+
+def get_pixels(headers: dict):
+    r = requests.get(
+        GET_PIXELS_URL,
+        headers=headers
+    )
+    pixels_bytes = r.content
+    canvas = []
+    for y in range(CANVAS_SIZE['height']+1):
+        row = []
+        for x in range(CANVAS_SIZE['width']+1):
+            index = (y * CANVAS_SIZE['width'] * 3) + (x * 3)
+            pixel = pixels_bytes[index:index+3]
+            row.append(three_bytes_to_rgb_hex_string(pixel))
+        canvas.append(row)
+
+    return canvas
 
 
 def main():
