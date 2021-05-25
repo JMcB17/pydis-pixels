@@ -26,7 +26,7 @@ img = [
 target_colour = '1dbfff'
 blank_colour = 'ffffff'
 img_location = {
-    'x': 80,
+    'x': 75,
     'y': 2
 }
 
