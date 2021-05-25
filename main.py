@@ -17,10 +17,17 @@ CANVAS_SIZE = {
     'height': 90,
 }
 
+# JMCB
 img = [
     [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0],
     [0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1],
     [1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0],
+]
+# CMPC
+img2 = [
+    [1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1],
+    [1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0],
+    [1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1],
 ]
 print(f'img dimension x: {len(img[0])}')
 print(f'img dimension y: {len(img)}')
@@ -35,12 +42,17 @@ img_location = {
 
 
 def ratelimit(headers):
-    requests_remaining = int(headers['requests-remaining'])
-    print(f'{requests_remaining} requests remaining')
-    if not requests_remaining:
-        requests_reset = int(headers['requests-reset'])
-        print(f'sleeping for {requests_reset} seconds')
-        time.sleep(requests_reset)
+    if 'requests-remaining' in headers:
+        requests_remaining = int(headers['requests-remaining'])
+        print(f'{requests_remaining} requests remaining')
+        if not requests_remaining:
+            requests_reset = int(headers['requests-reset'])
+            print(f'sleeping for {requests_reset} seconds')
+            time.sleep(requests_reset)
+    else:
+        cooldown_reset = int(headers['cooldown-reset'])
+        print(f'on cooldown\nsleeping for {cooldown_reset} seconds')
+        time.sleep(cooldown_reset)
 
 
 def set_pixel(x: int, y: int, rgb: str, headers: dict):
