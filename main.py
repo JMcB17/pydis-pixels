@@ -17,6 +17,24 @@ CANVAS_SIZE = {
     'height': 90,
 }
 
+
+# COLOURS
+# noinspection SpellCheckingInspection
+target_colour = '1dbfff'
+blank_colour = 'ffffff'
+divider_blue = '7ecde9'
+cmpc_blue = '0006ff'
+cmpc_red = 'ff0000'
+colours = {
+    0: blank_colour,
+    1: target_colour,
+    2: cmpc_blue,
+    3: cmpc_red,
+    4: divider_blue,
+}
+
+
+# IMAGES
 # JMCB
 img_jmcb = [
     [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 4],
@@ -33,28 +51,31 @@ img_cmpc = [
 img_cmpc_row_one = [[2, 2, 0, 2, 2, 0, 2, 2, 0, 3, 3, 0, 3, 3]]
 img_cmpc_row_two = [[2, 0, 0, 2, 0, 2, 0, 3, 0, 3, 3, 0, 3, 0]]
 img_cmpc_row_thr = [[2, 2, 0, 2, 0, 0, 0, 3, 0, 3, 0, 0, 3, 3]]
-# choose img
-# img = img_cmpc_row_{num}
-print(f'img dimension x: {len(img[0])}')
-print(f'img dimension y: {len(img)}')
-print(f'img pixels: {len(img[0]) * len(img)}')
-# noinspection SpellCheckingInspection
-target_colour = '1dbfff'
-blank_colour = 'ffffff'
-divider_blue = '7ecde9'
-cmpc_blue = '0006ff'
-cmpc_red = 'ff0000'
-img_location = {
-    'x': 13,
-#     'y': 41+{row number}
+
+
+# ZONES (img + location pairs)
+jmcb_zone = {
+    'name': 'JMCB',
+    'img': img_jmcb,
+    'img_location': {
+        'x': 75,
+        'y': 2
+    }
 }
-colours = {
-    0: blank_colour,
-    1: target_colour,
-    2: cmpc_blue,
-    3: cmpc_red,
-    4: divider_blue,
+cmpc_zone = {
+    'name': 'CMPC',
+    'img': img_cmpc,
+    'img_location': {
+        'x': 13,
+        'y': 42
+    }
 }
+
+# MODIFY THIS
+zones_to_do = [
+    cmpc_zone,
+    jmcb_zone,
+]
 
 
 def ratelimit(headers):
@@ -115,6 +136,24 @@ def get_pixels(headers: dict):
     return canvas
 
 
+def run_for_img(img, img_location, headers):
+    print('Getting current canvas status')
+    canvas = get_pixels(headers)
+    print('Got current canvas status')
+
+    for y_index, row in enumerate(img):
+        for x_index, colour_code in enumerate(row):
+            pix_y = img_location['y'] + y_index
+            pix_x = img_location['x'] + x_index
+
+            if canvas[pix_y][pix_x] == colours[colour_code]:
+                print(f'Pixel at ({pix_x}, {pix_y}) is {colours[colour_code]} as intended')
+                continue
+            else:
+                print(f'Pixel at ({pix_x}, {pix_y}) will be made {colours[colour_code]}')
+                set_pixel(x=pix_x, y=pix_y, rgb=colours[colour_code], headers=headers)
+
+
 def main():
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
@@ -126,21 +165,15 @@ def main():
     }
 
     while True:
-        print('Getting current canvas status')
-        canvas = get_pixels(headers)
-        print('Got current canvas status')
+        for zone in zones_to_do:
+            img = zone['img']
+            img_location = zone['image_location']
 
-        for y_index, row in enumerate(img):
-            for x_index, colour_code in enumerate(row):
-                pix_y = img_location['y'] + y_index
-                pix_x = img_location['x'] + x_index
-
-                if canvas[pix_y][pix_x] == colours[colour_code]:
-                    print(f'Pixel at ({pix_x}, {pix_y}) is {colours[colour_code]} as intended')
-                    continue
-                else:
-                    print(f'Pixel at ({pix_x}, {pix_y}) will be made {colours[colour_code]}')
-                    set_pixel(x=pix_x, y=pix_y, rgb=colours[colour_code], headers=headers)
+            print(f"img name: {zone['name']}")
+            print(f'img dimension x: {len(img[0])}')
+            print(f'img dimension y: {len(img)}')
+            print(f'img pixels: {len(img[0]) * len(img)}')
+            run_for_img(img, img_location, headers)
 
 
 if __name__ == '__main__':
