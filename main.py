@@ -24,13 +24,17 @@ img_jmcb = [
     [1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 4],
 ]
 # CMPC
+# 14x3
 img_cmpc = [
     [2, 2, 0, 2, 2, 0, 2, 2, 0, 3, 3, 0, 3, 3],
     [2, 0, 0, 2, 0, 2, 0, 3, 0, 3, 3, 0, 3, 0],
     [2, 2, 0, 2, 0, 0, 0, 3, 0, 3, 0, 0, 3, 3],
 ]
+img_cmpc_row_one = [[2, 2, 0, 2, 2, 0, 2, 2, 0, 3, 3, 0, 3, 3]]
+img_cmpc_row_two = [[2, 0, 0, 2, 0, 2, 0, 3, 0, 3, 3, 0, 3, 0]]
+img_cmpc_row_thr = [[2, 2, 0, 2, 0, 0, 0, 3, 0, 3, 0, 0, 3, 3]]
 # choose img
-img = img_jmcb
+# img = img_cmpc_row_{num}
 print(f'img dimension x: {len(img[0])}')
 print(f'img dimension y: {len(img)}')
 print(f'img pixels: {len(img[0]) * len(img)}')
@@ -41,8 +45,8 @@ divider_blue = '7ecde9'
 cmpc_blue = '0006ff'
 cmpc_red = 'ff0000'
 img_location = {
-    'x': 75,
-    'y': 2
+    'x': 13,
+#     'y': 41+{row number}
 }
 colours = {
     0: blank_colour,
