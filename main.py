@@ -22,6 +22,9 @@ img = [
     [0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1],
     [1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0],
 ]
+print(f'img dimension x: {len(img[0])}')
+print(f'img dimension y: {len(img)}')
+print(f'img pixels: {len(img[0]) * len(img)}')
 # noinspection SpellCheckingInspection
 target_colour = '1dbfff'
 blank_colour = 'ffffff'
