@@ -18,23 +18,28 @@ CANVAS_SIZE = {
 }
 
 # JMCB
-img = [
-    [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0],
-    [0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1],
-    [1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0],
+img_jmcb = [
+    [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 4],
+    [0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 4],
+    [1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 4],
 ]
 # CMPC
-img2 = [
+img_cmpc = [
     [1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1],
     [1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0],
     [1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1],
 ]
+# choose img
+img = img_jmcb
 print(f'img dimension x: {len(img[0])}')
 print(f'img dimension y: {len(img)}')
 print(f'img pixels: {len(img[0]) * len(img)}')
 # noinspection SpellCheckingInspection
 target_colour = '1dbfff'
 blank_colour = 'ffffff'
+divider_blue = '7ecde9'
+cmpc_blue = '0006ff'
+cmpc_red = 'ff0000'
 img_location = {
     'x': 75,
     'y': 2
@@ -42,6 +47,9 @@ img_location = {
 colours = {
     0: blank_colour,
     1: target_colour,
+    2: cmpc_blue,
+    3: cmpc_red,
+    4: divider_blue,
 }
 
 
