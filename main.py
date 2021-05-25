@@ -39,6 +39,10 @@ img_location = {
     'x': 75,
     'y': 2
 }
+colours = {
+    0: blank_colour,
+    1: target_colour,
+}
 
 
 def ratelimit(headers):
@@ -115,22 +119,16 @@ def main():
         print('Got current canvas status')
 
         for y_index, row in enumerate(img):
-            for x_index, pix_active in enumerate(row):
+            for x_index, colour_code in enumerate(row):
                 pix_y = img_location['y'] + y_index
                 pix_x = img_location['x'] + x_index
 
-                if pix_active and canvas[pix_y][pix_x] == target_colour:
-                    print(f'Pixel at ({pix_x}, {pix_y}) is target colour as intended')
+                if canvas[pix_y][pix_x] == colours[colour_code]:
+                    print(f'Pixel at ({pix_x}, {pix_y}) is {colours[colour_code]} as intended')
                     continue
-                elif not pix_active and canvas[pix_y][pix_x] == blank_colour:
-                    print(f'Pixel at ({pix_x}, {pix_y}) is blank as intended')
-                    continue
-                elif pix_active:
-                    print(f'Pixel at ({pix_x}, {pix_y}) will be made target colour')
-                    set_pixel(x=pix_x, y=pix_y, rgb=target_colour, headers=headers)
                 else:
-                    print(f'Pixel at ({pix_x}, {pix_y}) will be made blank')
-                    set_pixel(x=pix_x, y=pix_y, rgb=blank_colour, headers=headers)
+                    print(f'Pixel at ({pix_x}, {pix_y}) will be made {colours[colour_code]}')
+                    set_pixel(x=pix_x, y=pix_y, rgb=colours[colour_code], headers=headers)
 
 
 if __name__ == '__main__':
