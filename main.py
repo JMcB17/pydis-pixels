@@ -24,6 +24,7 @@ img = [
 ]
 # noinspection SpellCheckingInspection
 target_colour = '1dbfff'
+blank_colour = 'ffffff'
 img_location = {
     'x': 80,
     'y': 2
@@ -99,10 +100,14 @@ def main():
                 pix_y = img_location['y'] + y_index
                 pix_x = img_location['x'] + x_index
 
-                if not pix_active or canvas[pix_y][pix_x] == target_colour:
+                if pix_active and canvas[pix_y][pix_x] == target_colour:
                     continue
-                else:
+                elif not pix_active and canvas[pix_y][pix_x] == blank_colour:
+                    continue
+                elif pix_active:
                     set_pixel(x=pix_x, y=pix_y, rgb=target_colour, headers=headers)
+                else:
+                    set_pixel(x=pix_x, y=pix_y, rgb=blank_colour, headers=headers)
 
 
 if __name__ == '__main__':
