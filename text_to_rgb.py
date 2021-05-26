@@ -1,14 +1,25 @@
 #!/usr/bin/env python
 
+import argparse
 from pathlib import Path
 import PIL.Image
 from main import three_bytes_to_rgb_hex_string
 
 
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 
 
 IGNORED_FOLDER = Path('imgs') / 'upscale'
+
+
+def get_parser() -> argparse.ArgumentParser:
+    """Get this script's parser."""
+    parser = argparse.ArgumentParser(description='convert text to colours codes and an image')
+
+    parser.add_argument('text', nargs='?', help='the text to convert')
+    parser.add_argument('-s', '--scale', type=int, default=1)
+
+    return parser
 
 
 def sanitise_filename(string: str) -> str:
@@ -24,10 +35,17 @@ def sanitise_filename(string: str) -> str:
 
 def main():
     """Take input and print the colours then save an image."""
-    text = input('Text: ')
-    scale = int(input('Scale: '))
-    if not scale:
-        scale = 1
+    parser = get_parser()
+    args = parser.parse_args()
+
+    if args.text:
+        text = args.text
+        scale = args.scale
+    else:
+        text = input('Text: ')
+        scale = int(input('Scale: '))
+        if not scale:
+            scale = args.scale
 
     text_encoded = text.encode('utf-8')
 

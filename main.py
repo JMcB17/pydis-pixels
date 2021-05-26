@@ -4,6 +4,7 @@ import json
 import time
 import typing
 import re
+import time
 from pathlib import Path
 
 import requests
@@ -11,7 +12,10 @@ from requests.structures import CaseInsensitiveDict
 import PIL.Image
 
 
-__version__ = '2.6.0'
+# todo: add display of canvas
+
+
+__version__ = '2.7.0'
 
 
 # modify this to change the order of priority or add/remove images
@@ -28,6 +32,7 @@ imgs = [
 
 CONFIG_FILE_PATH = Path('config.json')
 IMGS_FOLDER = Path('imgs')
+CANVAS_LOG_PATH = Path('canvas.log')
 BASE_URL = 'https://pixels.pythondiscord.com'
 SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
@@ -204,9 +209,8 @@ def get_pixels(canvas_size: dict, headers: dict) -> img_type:
     ratelimit(r.headers)
 
     pixels_bytes = r.content
-    # todo: log to a file
-    # print(pixels_bytes)
-    # print(pixels_bytes.decode(encoding='utf-8', errors='ignore'))
+    with open(CANVAS_LOG_PATH, 'a') as canvas_log_file:
+        canvas_log_file.write(f'{time.asctime()}\n{pixels_bytes}\n')
     canvas = []
     for y in range(canvas_size['height'] + 1):
         row = []
@@ -220,7 +224,7 @@ def get_pixels(canvas_size: dict, headers: dict) -> img_type:
 
 
 def get_pixel(x: int, y: int, headers: dict) -> str:
-    "get_pixel endpoint wrapper."
+    """get_pixel endpoint wrapper."""
     params = {
         'x': x,
         'y': y
