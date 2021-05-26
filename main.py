@@ -19,6 +19,7 @@ CANVAS_SIZE = {
     'width': 160,
     'height': 90,
 }
+STARTUP_DELAY = 120
 
 
 # COLOURS
@@ -167,6 +168,8 @@ def main():
         "Authorization": bearer_token
     }
 
+    print(f'sleeping for {STARTUP_DELAY} seconds')
+    time.sleep(STARTUP_DELAY)
     while True:
         for zone in zones_to_do:
             img = zone['img']
