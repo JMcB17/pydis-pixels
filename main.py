@@ -17,10 +17,6 @@ BASE_URL = 'https://pixels.pythondiscord.com'
 SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
-CANVAS_SIZE = {
-    'width': 160,
-    'height': 90,
-}
 STARTUP_DELAY = 120
 
 
@@ -137,7 +133,7 @@ def img_to_lists(img_path: typing.Union[str, Path]) -> typing.List[typing.List[s
     return dimensional_list_img
 
 
-def get_pixels(headers: dict):
+def get_pixels(canvas_size: dict, headers: dict):
     r = requests.get(
         GET_PIXELS_URL,
         headers=headers
@@ -149,10 +145,10 @@ def get_pixels(headers: dict):
     # print(pixels_bytes)
     # print(pixels_bytes.decode(encoding='utf-8', errors='ignore'))
     canvas = []
-    for y in range(CANVAS_SIZE['height']+1):
+    for y in range(canvas_size['height'] + 1):
         row = []
-        for x in range(CANVAS_SIZE['width']+1):
-            index = (y * CANVAS_SIZE['width'] * 3) + (x * 3)
+        for x in range(canvas_size['width'] + 1):
+            index = (y * canvas_size['width'] * 3) + (x * 3)
             pixel = pixels_bytes[index:index+3]
             row.append(three_bytes_to_rgb_hex_string(pixel))
         canvas.append(row)
@@ -160,10 +156,20 @@ def get_pixels(headers: dict):
     return canvas
 
 
+def get_size(headers: dict):
+    r = requests.get(
+        GET_SIZE_URL,
+        headers=headers
+    )
+    ratelimit(r.headers)
+    return r.json()
+
+
 def run_for_img(img, img_location, headers):
     for y_index, row in enumerate(img):
         print('Getting current canvas status')
-        canvas = get_pixels(headers)
+        canvas_size = get_size(headers)
+        canvas = get_pixels(canvas_size, headers)
         print('Got current canvas status')
 
         for x_index, colour_code in enumerate(row):
