@@ -154,7 +154,7 @@ def get_size(headers: dict):
         GET_SIZE_URL,
         headers=headers
     )
-    ratelimit(r.headers)
+    # ratelimit(r.headers)
     return r.json()
 
 
