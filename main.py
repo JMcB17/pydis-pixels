@@ -307,15 +307,18 @@ def main():
     print(f'finish sleeping at {sleep_finish_time}')
     time.sleep(STARTUP_DELAY)
     while True:
-        for zone in zones_to_do:
-            img = zone.img
-            img_location = zone.location
+        try:
+            for zone in zones_to_do:
+                img = zone.img
+                img_location = zone.location
 
-            print(f"img name: {zone.name}")
-            print(f'img dimension x: {zone.width}')
-            print(f'img dimension y: {zone.height}')
-            print(f'img pixels: {zone.area_not_transparent}')
-            run_for_img(img, img_location, canvas_size, headers)
+                print(f"img name: {zone.name}")
+                print(f'img dimension x: {zone.width}')
+                print(f'img dimension y: {zone.height}')
+                print(f'img pixels: {zone.area_not_transparent}')
+                run_for_img(img, img_location, canvas_size, headers)
+        except Exception as error:
+            print(error)
 
 
 if __name__ == '__main__':
