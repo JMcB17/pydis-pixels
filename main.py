@@ -301,7 +301,10 @@ def main():
     total_area_percent = round(((total_area / canvas_area) * 100), 2)
     print(f'Total area: {total_area_percent}% of canvas')
 
+    # todo: fix duplicated code
     print(f'sleeping for {STARTUP_DELAY} seconds')
+    sleep_finish_time = time.asctime(time.localtime(time.time() + STARTUP_DELAY))
+    print(f'finish sleeping at {sleep_finish_time}')
     time.sleep(STARTUP_DELAY)
     while True:
         for zone in zones_to_do:
