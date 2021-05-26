@@ -10,7 +10,12 @@ import requests
 import PIL.Image
 
 
-__version__ = '2.3.0'
+# todo: use get_pixel
+# todo: add script to encode text as colours
+# todo: type hinting and docstrings if bothered
+
+
+__version__ = '2.4.0'
 
 
 CONFIG_FILE_PATH = Path('config.json')
@@ -19,6 +24,7 @@ BASE_URL = 'https://pixels.pythondiscord.com'
 SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
+GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
 STARTUP_DELAY = 0
 
 
@@ -164,6 +170,20 @@ def get_pixels(canvas_size: dict, headers: dict):
         canvas.append(row)
 
     return canvas
+
+
+def get_pixel(x: int, y: int, headers: dict) -> str:
+    params = {
+        'x': x,
+        'y': y
+    }
+    r = requests.get(
+        GET_PIXEL_URL,
+        params=params,
+        headers=headers
+    )
+    ratelimit(r.headers)
+    return r.json()['rgb']
 
 
 def get_size(headers: dict):
