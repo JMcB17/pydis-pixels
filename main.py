@@ -10,73 +10,16 @@ import requests
 import PIL.Image
 
 
-__version__ = '1.0.0'
+__version__ = '2.0.0'
 
 
 CONFIG_FILE_PATH = Path('config.json')
+IMGS_FOLDER = Path('imgs')
 BASE_URL = 'https://pixels.pythondiscord.com'
 SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
 STARTUP_DELAY = 120
-
-
-# COLOURS
-# noinspection SpellCheckingInspection
-target_colour = '1dbfff'
-blank_colour = 'ffffff'
-# noinspection SpellCheckingInspection
-divider_blue = '7ecde9'
-cmpc_blue = '0006ff'
-cmpc_red = 'ff0000'
-colours = {
-    0: blank_colour,
-    1: target_colour,
-    2: cmpc_blue,
-    3: cmpc_red,
-    4: divider_blue,
-}
-
-
-# IMAGES
-# JMCB
-img_jmcb = [
-    [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 4],
-    [0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 4],
-    [1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 4],
-]
-# CMPC
-# 14x3
-img_cmpc = [
-    [2, 2, 0, 2, 2, 0, 2, 3, 0, 3, 3, 0, 3, 3],
-    [2, 0, 0, 2, 0, 3, 0, 3, 0, 3, 3, 0, 3, 0],
-    [2, 2, 0, 2, 0, 0, 0, 3, 0, 3, 0, 0, 3, 3],
-]
-
-
-# ZONES (img + location pairs)
-jmcb_zone = {
-    'name': 'JMCB',
-    'img': img_jmcb,
-    'img_location': {
-        'x': 75,
-        'y': 2
-    }
-}
-cmpc_zone = {
-    'name': 'CMPC',
-    'img': img_cmpc,
-    'img_location': {
-        'x': 13,
-        'y': 42
-    }
-}
-
-# MODIFY THIS
-zones_to_do = [
-    cmpc_zone,
-    jmcb_zone,
-]
 
 
 def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
@@ -112,7 +55,7 @@ def scale_img(pil_img: PIL.Image.Image, scale: int) -> PIL.Image.Image:
 
 
 class Zone:
-    """An area of pixels on the canvas to be maintained."""
+    """An area of pixels on the canvas, to be maintained."""
     # name,scalex,(x,y)
     # e.g.
     # jmcb,10x,(75,2)
@@ -128,14 +71,29 @@ class Zone:
         self.name = properties[1]
         self.scale = int(properties[2])
         self.location = {
-            'x': properties[3],
-            'y': properties[4]
+            'x': int(properties[3]),
+            'y': int(properties[4])
         }
 
         pil_img = PIL.Image.open(self.img_path)
         pil_img_rgb = pil_img.convert('RGB')
-        pil_img_scaled = scale_img(pil_img_rgb, self.scale)
+        if self.scale != 1:
+            pil_img_scaled = scale_img(pil_img_rgb, self.scale)
+        else:
+            pil_img_scaled = pil_img_rgb
         self.img = img_to_lists(pil_img_scaled)
+
+        print(f'Loaded zone {self.name}')
+        # todo: add more logging, and total canvas coverage in load_zones
+
+
+def load_zones(directory: Path):
+    zones = []
+    for file in directory.iterdir():
+        if file.is_file():
+            zones.append(Zone(file))
+
+    return zones
 
 
 def ratelimit(headers):
@@ -207,22 +165,25 @@ def run_for_img(img, img_location, headers):
         canvas = get_pixels(canvas_size, headers)
         print('Got current canvas status')
 
-        for x_index, colour_code in enumerate(row):
+        for x_index, colour in enumerate(row):
             pix_y = img_location['y'] + y_index
             pix_x = img_location['x'] + x_index
 
-            if canvas[pix_y][pix_x] == colours[colour_code]:
-                print(f'Pixel at ({pix_x}, {pix_y}) is {colours[colour_code]} as intended')
+            if canvas[pix_y][pix_x] == colour:
+                print(f'Pixel at ({pix_x}, {pix_y}) is {colour} as intended')
                 continue
             else:
-                print(f'Pixel at ({pix_x}, {pix_y}) will be made {colours[colour_code]}')
-                set_pixel(x=pix_x, y=pix_y, rgb=colours[colour_code], headers=headers)
+                print(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
+                set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
 
 
 def main():
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
     print('Loaded config')
+
+    print(f'Loading zones to do from {IMGS_FOLDER}')
+    zones_to_do = load_zones(IMGS_FOLDER)
 
     bearer_token = f"Bearer {config['token']}"
     headers = {
@@ -233,10 +194,10 @@ def main():
     time.sleep(STARTUP_DELAY)
     while True:
         for zone in zones_to_do:
-            img = zone['img']
-            img_location = zone['img_location']
+            img = zone.img
+            img_location = zone.location
 
-            print(f"img name: {zone['name']}")
+            print(f"img name: {zone.name}")
             print(f'img dimension x: {len(img[0])}')
             print(f'img dimension y: {len(img)}')
             print(f'img pixels: {len(img[0]) * len(img)}')
