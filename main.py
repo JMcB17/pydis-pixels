@@ -260,21 +260,29 @@ def put_scaled_pixel(tk_img: tkinter.PhotoImage, colour: str, location: typing.T
             tk_img.put(fcolour, (slocation[0] + x, slocation[1] + y))
 
 
-def render_img_tk(tk_img: tkinter.PhotoImage, img: img_type):
+def render_img_tk(tk_img: tkinter.PhotoImage, tk_canvas: tkinter.Canvas, img: img_type, scale: int = GUI_SCALE):
     for y_index, row in enumerate(img):
         for x_index, pixel in enumerate(row):
             if pixel:
-                put_scaled_pixel(tk_img, pixel, (x_index, y_index))
+                tk_img.put(f'#{pixel}', (x_index, y_index))
+
+    w = tk_img.width()
+    h = tk_img.height()
+    tk_img = tk_img.zoom(x=scale, y=scale)
+    tk_canvas.delete('Pixels')
+    tk_canvas.create_image(
+        (w/2, h/2), image=tk_img, state='normal'
+    )
 
 
-def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, headers: dict):
+def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, tk_canvas: tkinter.Canvas, headers: dict):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     img = zone.img
     img_location = zone.location
 
     print('Getting current canvas status')
     canvas = get_pixels(canvas_size, headers)
-    render_img_tk(tk_img, canvas)
+    render_img_tk(tk_img, tk_canvas, canvas)
     print('Got current canvas status')
 
     for y_index, row in enumerate(img):
@@ -369,7 +377,7 @@ def main():
             print(f'img dimension x: {zone.width}')
             print(f'img dimension y: {zone.height}')
             print(f'img pixels: {zone.area_not_transparent}')
-            run_for_img(zone, canvas_size, gui_thread.tk_img, headers)
+            run_for_img(zone, canvas_size, gui_thread.tk_img, gui_thread.tk_canvas, headers)
 
 
 if __name__ == '__main__':
