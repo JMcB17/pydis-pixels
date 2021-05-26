@@ -164,6 +164,12 @@ def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
     return zones
 
 
+def print_sleep_time(duration):
+    print(f'sleeping for {duration} seconds')
+    sleep_finish_time = time.asctime(time.localtime(time.time() + duration))
+    print(f'finish sleeping at {sleep_finish_time}')
+
+
 def ratelimit(headers: CaseInsensitiveDict):
     """Given headers from a response, print info and sleep if needed."""
     if 'requests-remaining' in headers:
@@ -171,15 +177,12 @@ def ratelimit(headers: CaseInsensitiveDict):
         print(f'{requests_remaining} requests remaining')
         if not requests_remaining:
             requests_reset = int(headers['requests-reset'])
-            print(f'sleeping for {requests_reset} seconds')
-            sleep_finish_time = time.asctime(time.localtime(time.time() + requests_reset))
-            print(f'finish sleeping at {sleep_finish_time}')
+            print_sleep_time(requests_reset)
             time.sleep(requests_reset)
     else:
         cooldown_reset = int(headers['cooldown-reset'])
-        print(f'on cooldown\nsleeping for {cooldown_reset} seconds')
-        sleep_finish_time = time.asctime(time.localtime(time.time() + cooldown_reset))
-        print(f'finish sleeping at {sleep_finish_time}')
+        print('on cooldown')
+        print_sleep_time(cooldown_reset)
         time.sleep(cooldown_reset)
 
 
@@ -305,10 +308,7 @@ def main():
     total_area_percent = round(((total_area / canvas_area) * 100), 2)
     print(f'Total area: {total_area_percent}% of canvas')
 
-    # todo: fix duplicated code
-    print(f'sleeping for {STARTUP_DELAY} seconds')
-    sleep_finish_time = time.asctime(time.localtime(time.time() + STARTUP_DELAY))
-    print(f'finish sleeping at {sleep_finish_time}')
+    print_sleep_time(STARTUP_DELAY)
     time.sleep(STARTUP_DELAY)
     while True:
         try:
