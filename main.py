@@ -10,7 +10,10 @@ import requests
 import PIL.Image
 
 
-__version__ = '2.0.0'
+# todo: ensure transparent pixels work right
+
+
+__version__ = '2.1.0'
 
 
 CONFIG_FILE_PATH = Path('config.json')
@@ -81,10 +84,17 @@ class Zone:
             pil_img_scaled = scale_img(pil_img_rgb, self.scale)
         else:
             pil_img_scaled = pil_img_rgb
+        self.width = pil_img_scaled.width
+        self.height = pil_img_scaled.height
+        self.area = self.width * self.height
         self.img = img_to_lists(pil_img_scaled)
 
-        print(f'Loaded zone {self.name}')
-        # todo: add more logging, and total canvas coverage in load_zones
+        print(
+            f'Loaded zone {self.name}'
+            f'    width:  {self.width}'
+            f'    height: {self.height}'
+            f'    area:   {self.area}'
+        )
 
 
 def load_zones(directory: Path):
@@ -158,10 +168,9 @@ def get_size(headers: dict):
     return r.json()
 
 
-def run_for_img(img, img_location, headers):
+def run_for_img(img, img_location, canvas_size, headers):
     for y_index, row in enumerate(img):
         print('Getting current canvas status')
-        canvas_size = get_size(headers)
         canvas = get_pixels(canvas_size, headers)
         print('Got current canvas status')
 
@@ -181,14 +190,22 @@ def main():
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
     print('Loaded config')
-
-    print(f'Loading zones to do from {IMGS_FOLDER}')
-    zones_to_do = load_zones(IMGS_FOLDER)
-
     bearer_token = f"Bearer {config['token']}"
     headers = {
         "Authorization": bearer_token
     }
+
+    print('Getting canvas size')
+    canvas_size = get_size(headers)
+    print(f'Canvas size: {canvas_size}')
+
+    print(f'Loading zones to do from {IMGS_FOLDER}')
+    zones_to_do = load_zones(IMGS_FOLDER)
+    total_area = sum(z.area for z in zones_to_do)
+    print(f'Total area: {total_area}')
+    canvas_area = canvas_size['x'] * canvas_size['y']
+    total_area_percent = round(((total_area / canvas_area) * 100), 2)
+    print(f'Total area: {total_area_percent}% of canvas')
 
     print(f'sleeping for {STARTUP_DELAY} seconds')
     time.sleep(STARTUP_DELAY)
@@ -201,7 +218,7 @@ def main():
             print(f'img dimension x: {len(img[0])}')
             print(f'img dimension y: {len(img)}')
             print(f'img pixels: {len(img[0]) * len(img)}')
-            run_for_img(img, img_location, headers)
+            run_for_img(img, img_location, canvas_size, headers)
 
 
 if __name__ == '__main__':
