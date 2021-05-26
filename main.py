@@ -19,7 +19,7 @@ BASE_URL = 'https://pixels.pythondiscord.com'
 SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
-STARTUP_DELAY = 120
+STARTUP_DELAY = 0
 
 
 def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
