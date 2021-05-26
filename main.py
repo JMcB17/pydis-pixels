@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import json
-import time
 import typing
 import re
 import time
