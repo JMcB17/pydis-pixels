@@ -25,6 +25,7 @@ imgs = [
     "voxelfox,1x,(103,37).png",
     "cmpc,1x,(13,35).png",
     "jmcb,1x,(75,2).png",
+    "sqlitecult,1x,(0,44).png",
     "pydispix,1x,(139,0).png",
 ]
 
