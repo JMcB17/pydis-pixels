@@ -7,12 +7,12 @@ import re
 from pathlib import Path
 
 import requests
+from requests.structures import CaseInsensitiveDict
 import PIL.Image
 
 
-# todo: use get_pixel
 # todo: add script to encode text as colours
-# todo: type hinting and docstrings if bothered
+# todo: docstrings if bothered
 # todo: calculate area of non-transparent pixels
 
 
@@ -29,6 +29,9 @@ GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
 STARTUP_DELAY = 120
 
 
+img_type = typing.List[typing.List[str]]
+
+
 def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
     rgb_hex = [hex(i) for i in rgb_ints]
     rgb_hex_strings = [str(h)[2:].rjust(2, '0') for h in rgb_hex]
@@ -43,7 +46,7 @@ def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
 
 
 # mode of pil_img should be RGBA
-def img_to_lists(pil_img: PIL.Image.Image) -> typing.List[typing.List[str]]:
+def img_to_lists(pil_img: PIL.Image.Image) -> img_type:
     pixel_list_img = []
     for p in pil_img.getdata():
         # if alpha channel shows pixel is transparent, save None instead
@@ -120,7 +123,7 @@ def load_zones(directory: Path, imgs: list) -> typing.List[Zone]:
     return zones
 
 
-def ratelimit(headers):
+def ratelimit(headers: CaseInsensitiveDict):
     if 'requests-remaining' in headers:
         requests_remaining = int(headers['requests-remaining'])
         print(f'{requests_remaining} requests remaining')
@@ -150,7 +153,7 @@ def set_pixel(x: int, y: int, rgb: str, headers: dict):
     ratelimit(r.headers)
 
 
-def get_pixels(canvas_size: dict, headers: dict):
+def get_pixels(canvas_size: dict, headers: dict) -> img_type:
     r = requests.get(
         GET_PIXELS_URL,
         headers=headers
@@ -187,7 +190,7 @@ def get_pixel(x: int, y: int, headers: dict) -> str:
     return r.json()['rgb']
 
 
-def get_size(headers: dict):
+def get_size(headers: dict) -> typing.Dict[str, int]:
     r = requests.get(
         GET_SIZE_URL,
         headers=headers
@@ -196,7 +199,7 @@ def get_size(headers: dict):
     return r.json()
 
 
-def run_for_img(img, img_location, canvas_size, headers):
+def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: dict):
     print('Getting current canvas status')
     canvas = get_pixels(canvas_size, headers)
     print('Got current canvas status')
@@ -206,9 +209,13 @@ def run_for_img(img, img_location, canvas_size, headers):
             pix_y = img_location['y'] + y_index
             pix_x = img_location['x'] + x_index
 
-            print(f'Getting status of pixel at ({pix_x}, {pix_y})')
-            canvas[pix_y][pix_x] = get_pixel(pix_x, pix_y, headers)
-            print(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
+            # get canvas every other time
+            # getting it more often means better collaboration
+            # but too often is too often
+            if x_index % 2 == 0:
+                print(f'Getting status of pixel at ({pix_x}, {pix_y})')
+                canvas[pix_y][pix_x] = get_pixel(pix_x, pix_y, headers)
+                print(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
 
             if colour is None:
                 print(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
