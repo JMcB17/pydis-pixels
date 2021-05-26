@@ -32,6 +32,7 @@ img_type = typing.List[typing.List[str]]
 
 
 def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
+    """Take a list of ints and convert it to a colour e.g. [255, 255, 255] -> ffffff."""
     rgb_hex = [hex(i) for i in rgb_ints]
     rgb_hex_strings = [str(h)[2:].rjust(2, '0') for h in rgb_hex]
     rgb_hex_string = ''.join(rgb_hex_strings)
@@ -40,6 +41,7 @@ def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
 
 
 def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
+    """Take three bytes and convert them to a colour."""
     rgb_ints = [b for b in pixel]
     return three_ints_to_rgb_hex_string(rgb_ints)
 

@@ -5,7 +5,21 @@ import PIL.Image
 from main import three_bytes_to_rgb_hex_string
 
 
+__version__ = '1.0.1'
+
+
 IGNORED_FOLDER = Path('imgs') / 'upscale'
+
+
+def sanitise_filename(string: str) -> str:
+    """Remove non alphanumeric characters."""
+    chars_to_remove = []
+    for char in string:
+        if not char.isalnum():
+            chars_to_remove.append(char)
+    for char in chars_to_remove:
+        string = string.replace(char, '')
+    return string
 
 
 def main():
@@ -30,7 +44,7 @@ def main():
         img_scaled = img.resize(new_size, resample=PIL.Image.NEAREST)
     else:
         img_scaled = img
-    img_name = f'{text},{scale}x,(,).png'
+    img_name = f'{sanitise_filename(text)},{scale}x,(,).png'
     img_scaled.save(IGNORED_FOLDER / img_name)
 
 
