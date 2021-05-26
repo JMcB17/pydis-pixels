@@ -273,7 +273,9 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, heade
             # but too often is too often
             if x_index % 2 == 0:
                 print(f'Getting status of pixel at ({pix_x}, {pix_y})')
-                canvas[pix_y][pix_x] = get_pixel(pix_x, pix_y, headers)
+                new_pixel = get_pixel(pix_x, pix_y, headers)
+                canvas[pix_y][pix_x] = new_pixel
+                tk_img.put(f'#{new_pixel}', (pix_x, pix_y))
                 print(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
 
             if colour is None:
@@ -283,6 +285,7 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, heade
             else:
                 print(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
                 set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
+                tk_img.put(f'#{colour}', (pix_x, pix_y))
 
 
 class GUIThread(threading.Thread):
@@ -304,7 +307,7 @@ class GUIThread(threading.Thread):
             name='Pixels', width=self.canvas_size['width'], height=self.canvas_size['height']
         )
         self.tk_canvas.create_image(
-            (self.canvas_size['width'], self.canvas_size['height']), image=self.tk_img, state='normal'
+            (self.canvas_size['width']/2, self.canvas_size['height']/2), image=self.tk_img, state='normal'
         )
 
         self.startup_barrier.wait()
