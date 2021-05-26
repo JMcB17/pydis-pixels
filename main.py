@@ -90,9 +90,9 @@ class Zone:
         self.img = img_to_lists(pil_img_scaled)
 
         print(
-            f'Loaded zone {self.name}'
-            f'    width:  {self.width}'
-            f'    height: {self.height}'
+            f'Loaded zone {self.name}\n'
+            f'    width:  {self.width}\n'
+            f'    height: {self.height}\n'
             f'    area:   {self.area}'
         )
 
@@ -203,7 +203,7 @@ def main():
     zones_to_do = load_zones(IMGS_FOLDER)
     total_area = sum(z.area for z in zones_to_do)
     print(f'Total area: {total_area}')
-    canvas_area = canvas_size['x'] * canvas_size['y']
+    canvas_area = canvas_size['width'] * canvas_size['height']
     total_area_percent = round(((total_area / canvas_area) * 100), 2)
     print(f'Total area: {total_area_percent}% of canvas')
 
