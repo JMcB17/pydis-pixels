@@ -2,9 +2,11 @@
 
 import json
 import time
+import typing
 from pathlib import Path
 
 import requests
+import PIL.Image
 
 
 __version__ = '1.0.0'
@@ -110,13 +112,29 @@ def set_pixel(x: int, y: int, rgb: str, headers: dict):
     ratelimit(r.headers)
 
 
-def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
-    rgb_ints = [b for b in pixel]
+def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
     rgb_hex = [hex(i) for i in rgb_ints]
     rgb_hex_strings = [str(h)[2:] for h in rgb_hex]
     rgb_hex_string = ''.join(rgb_hex_strings)
 
     return rgb_hex_string
+
+
+def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
+    rgb_ints = [b for b in pixel]
+    return three_ints_to_rgb_hex_string(rgb_ints)
+
+
+def img_to_lists(img_path: typing.Union[str, Path]) -> typing.List[typing.List[str]]:
+    pil_img = PIL.Image.open(img_path)
+    pixel_list_img = [three_ints_to_rgb_hex_string(p) for p in pil_img.getdata()]
+
+    dimensional_list_img = []
+    for i in range(pil_img.height):
+        w = pil_img.width
+        dimensional_list_img.append(pixel_list_img[i*w:i*w + w])
+
+    return dimensional_list_img
 
 
 def get_pixels(headers: dict):
