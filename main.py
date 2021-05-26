@@ -10,7 +10,7 @@ import requests
 import PIL.Image
 
 
-__version__ = '2.2.0'
+__version__ = '2.3.0'
 
 
 CONFIG_FILE_PATH = Path('config.json')
@@ -175,13 +175,23 @@ def get_size(headers: dict):
     return r.json()
 
 
-def run_for_img(img, img_location, canvas_size, headers):
-    for y_index, row in enumerate(img):
-        print('Getting current canvas status')
-        canvas = get_pixels(canvas_size, headers)
-        print('Got current canvas status')
+def get_canvas(canvas_size, headers):
+    print('Getting current canvas status')
+    canvas = get_pixels(canvas_size, headers)
+    print('Got current canvas status')
+    return canvas
 
+
+def run_for_img(img, img_location, canvas_size, headers):
+    canvas = get_canvas(canvas_size, headers)
+    for y_index, row in enumerate(img):
         for x_index, colour in enumerate(row):
+            # get canvas every other time
+            # getting it more often means better collaboration
+            # but too often is too often
+            if x_index % 2 == 0:
+                canvas = get_canvas(canvas_size, headers)
+
             pix_y = img_location['y'] + y_index
             pix_x = img_location['x'] + x_index
 
