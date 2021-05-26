@@ -173,10 +173,14 @@ def ratelimit(headers: CaseInsensitiveDict):
         if not requests_remaining:
             requests_reset = int(headers['requests-reset'])
             print(f'sleeping for {requests_reset} seconds')
+            sleep_finish_time = time.asctime(time.localtime(time.time() + requests_reset))
+            print(f'finish sleeping at {sleep_finish_time}')
             time.sleep(requests_reset)
     else:
         cooldown_reset = int(headers['cooldown-reset'])
         print(f'on cooldown\nsleeping for {cooldown_reset} seconds')
+        sleep_finish_time = time.asctime(time.localtime(time.time() + cooldown_reset))
+        print(f'finish sleeping at {sleep_finish_time}')
         time.sleep(cooldown_reset)
 
 
