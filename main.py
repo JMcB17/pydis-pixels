@@ -24,7 +24,7 @@ STARTUP_DELAY = 0
 
 def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
     rgb_hex = [hex(i) for i in rgb_ints]
-    rgb_hex_strings = [str(h)[2:] for h in rgb_hex]
+    rgb_hex_strings = [str(h)[2:].rjust(2, '0') for h in rgb_hex]
     rgb_hex_string = ''.join(rgb_hex_strings)
 
     return rgb_hex_string
