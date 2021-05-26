@@ -11,7 +11,6 @@ from requests.structures import CaseInsensitiveDict
 import PIL.Image
 
 
-# todo: add script to encode text as colours
 # todo: docstrings if bothered
 # todo: calculate area of non-transparent pixels
 
