@@ -11,11 +11,7 @@ from requests.structures import CaseInsensitiveDict
 import PIL.Image
 
 
-# todo: docstrings if bothered
-# todo: calculate area of non-transparent pixels
-
-
-__version__ = '2.5.0'
+__version__ = '2.6.0'
 
 
 # modify this to change the order of priority or add/remove images
@@ -58,6 +54,7 @@ def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
 
 # mode of pil_img should be RGBA
 def img_to_lists(pil_img: PIL.Image.Image) -> img_type:
+    """Convert a PIL image to a 2d list of hex colour strings (None for transparent pixels)."""
     pixel_list_img = []
     for p in pil_img.getdata():
         # if alpha channel shows pixel is transparent, save None instead
@@ -75,6 +72,7 @@ def img_to_lists(pil_img: PIL.Image.Image) -> img_type:
 
 
 def scale_img(pil_img: PIL.Image.Image, scale: int) -> PIL.Image.Image:
+    """Calculate the new size of a PIL image, resize and return it."""
     new_size = (
         pil_img.width // scale,
         pil_img.height // scale
@@ -83,13 +81,32 @@ def scale_img(pil_img: PIL.Image.Image, scale: int) -> PIL.Image.Image:
 
 
 class Zone:
-    """An area of pixels on the canvas, to be maintained."""
-    # name,scalex,(x,y)
-    # e.g.
-    # jmcb,10x,(75,2)
+    """An area of pixels on the canvas, to be maintained.
+
+    Attrs:
+        img_path -- path provided to constructor
+        name -- name from filename
+        scale -- scale from filename
+        location -- co-ordinates on canvas of top-left corner
+        width
+        height
+        area
+        img -- a 2d list of hex colour strings, like run_for_img takes
+    """
     img_name_regexp = re.compile(r'(.*),([0-9]*)x,\(([0-9]*),([0-9]*)\)')
 
     def __init__(self, img_path: typing.Union[str, Path]):
+        """Load an image and calulcate its attributes.
+
+        Args:
+            img_path -- str or Path object to an image
+        Its name should match Zone.img_name_regexp:
+        name,scalex,(x,y)
+        e.g.
+        jmcb,10x,(75,2)
+        This is used by the code.
+        The image is resized and converted to a 2d list of hex colour strings.
+        """
         if not isinstance(img_path, Path):
             img_path = Path(img_path)
         self.img_path = img_path
@@ -114,6 +131,12 @@ class Zone:
         self.area = self.width * self.height
         self.img = img_to_lists(pil_img_scaled)
 
+        self.area_not_transparent = self.area
+        for row in self.img:
+            for pixel in row:
+                if pixel is None:
+                    self.area_not_transparent -= 1
+
         print(
             f'Loaded zone {self.name}\n'
             f'    width:  {self.width}\n'
@@ -123,9 +146,10 @@ class Zone:
 
 
 def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
+    """Load zones that match img_names from directory and return them."""
     zones = []
 
-    for img in imgs:
+    for img in img_names:
         for file in directory.iterdir():
             if file.name == img and file.is_file():
                 zones.append(Zone(file))
@@ -135,6 +159,7 @@ def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
 
 
 def ratelimit(headers: CaseInsensitiveDict):
+    """Given headers from a response, print info and sleep if needed."""
     if 'requests-remaining' in headers:
         requests_remaining = int(headers['requests-remaining'])
         print(f'{requests_remaining} requests remaining')
@@ -149,6 +174,7 @@ def ratelimit(headers: CaseInsensitiveDict):
 
 
 def set_pixel(x: int, y: int, rgb: str, headers: dict):
+    """set_pixel endpoint wrapper."""
     payload = {
         'x': x,
         'y': y,
@@ -165,6 +191,10 @@ def set_pixel(x: int, y: int, rgb: str, headers: dict):
 
 
 def get_pixels(canvas_size: dict, headers: dict) -> img_type:
+    """get_pixels endpoint wrapper.
+
+    Returns as a 2d list of hex colour strings, like an img.
+    """
     r = requests.get(
         GET_PIXELS_URL,
         headers=headers
@@ -188,6 +218,7 @@ def get_pixels(canvas_size: dict, headers: dict) -> img_type:
 
 
 def get_pixel(x: int, y: int, headers: dict) -> str:
+    "get_pixel endpoint wrapper."
     params = {
         'x': x,
         'y': y
@@ -202,6 +233,7 @@ def get_pixel(x: int, y: int, headers: dict) -> str:
 
 
 def get_size(headers: dict) -> typing.Dict[str, int]:
+    """get_size endpoint wrapper."""
     r = requests.get(
         GET_SIZE_URL,
         headers=headers
@@ -211,6 +243,7 @@ def get_size(headers: dict) -> typing.Dict[str, int]:
 
 
 def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: dict):
+    """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     print('Getting current canvas status')
     canvas = get_pixels(canvas_size, headers)
     print('Got current canvas status')
@@ -238,6 +271,7 @@ def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: d
 
 
 def main():
+    """Run the program for all imgs."""
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
     print('Loaded config')
@@ -252,7 +286,7 @@ def main():
 
     print(f'Loading zones to do from {IMGS_FOLDER}')
     zones_to_do = load_zones(IMGS_FOLDER, imgs)
-    total_area = sum(z.area for z in zones_to_do)
+    total_area = sum(z.area_not_transparent for z in zones_to_do)
     print(f'Total area: {total_area}')
     canvas_area = canvas_size['width'] * canvas_size['height']
     total_area_percent = round(((total_area / canvas_area) * 100), 2)
@@ -266,9 +300,9 @@ def main():
             img_location = zone.location
 
             print(f"img name: {zone.name}")
-            print(f'img dimension x: {len(img[0])}')
-            print(f'img dimension y: {len(img)}')
-            print(f'img pixels: {len(img[0]) * len(img)}')
+            print(f'img dimension x: {zone.width}')
+            print(f'img dimension y: {zone.height}')
+            print(f'img pixels: {zone.area_not_transparent}')
             run_for_img(img, img_location, canvas_size, headers)
 
 

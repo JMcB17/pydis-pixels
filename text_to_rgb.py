@@ -23,6 +23,7 @@ def sanitise_filename(string: str) -> str:
 
 
 def main():
+    """Take input and print the colours then save an image."""
     text = input('Text: ')
     scale = int(input('Scale: '))
     if not scale:
