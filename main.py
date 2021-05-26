@@ -10,10 +10,7 @@ import requests
 import PIL.Image
 
 
-# todo: ensure transparent pixels work right
-
-
-__version__ = '2.1.1'
+__version__ = '2.2.0'
 
 
 CONFIG_FILE_PATH = Path('config.json')
@@ -38,8 +35,15 @@ def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
     return three_ints_to_rgb_hex_string(rgb_ints)
 
 
+# mode of pil_img should be RGBA
 def img_to_lists(pil_img: PIL.Image.Image) -> typing.List[typing.List[str]]:
-    pixel_list_img = [three_ints_to_rgb_hex_string(p) for p in pil_img.getdata()]
+    pixel_list_img = []
+    for p in pil_img.getdata():
+        # if alpha channel shows pixel is transparent, save None instead
+        if p[3] == 0:
+            pixel_list_img.append(None)
+        else:
+            pixel_list_img.append(three_ints_to_rgb_hex_string(p[:3]))
 
     dimensional_list_img = []
     for i in range(pil_img.height):
@@ -79,7 +83,7 @@ class Zone:
         }
 
         pil_img = PIL.Image.open(self.img_path)
-        pil_img_rgb = pil_img.convert('RGB')
+        pil_img_rgb = pil_img.convert('RGBA')
         if self.scale != 1:
             pil_img_scaled = scale_img(pil_img_rgb, self.scale)
         else:
@@ -178,9 +182,10 @@ def run_for_img(img, img_location, canvas_size, headers):
             pix_y = img_location['y'] + y_index
             pix_x = img_location['x'] + x_index
 
-            if canvas[pix_y][pix_x] == colour:
+            if colour is None:
+                print(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
+            elif canvas[pix_y][pix_x] == colour:
                 print(f'Pixel at ({pix_x}, {pix_y}) is {colour} as intended')
-                continue
             else:
                 print(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
                 set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
