@@ -15,7 +15,17 @@ import PIL.Image
 # todo: calculate area of non-transparent pixels
 
 
-__version__ = '2.4.0'
+__version__ = '2.5.0'
+
+
+# modify this to change the order of priority or add/remove images
+imgs = [
+    "voxelfox,1x,(103,37).png",
+    "httpscmpclivetwitchtvcontrolmypc,1x,(13,38).png",
+    "cmpc,1x,(13,35).png",
+    "jmcb,1x,(75,2).png",
+    "pydispix,1x,(139,0).png"
+]
 
 
 CONFIG_FILE_PATH = Path('config.json')
@@ -112,7 +122,7 @@ class Zone:
         )
 
 
-def load_zones(directory: Path, imgs: list) -> typing.List[Zone]:
+def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
     zones = []
 
     for img in imgs:
@@ -241,7 +251,7 @@ def main():
     print(f'Canvas size: {canvas_size}')
 
     print(f'Loading zones to do from {IMGS_FOLDER}')
-    zones_to_do = load_zones(IMGS_FOLDER, config['imgs'])
+    zones_to_do = load_zones(IMGS_FOLDER, imgs)
     total_area = sum(z.area for z in zones_to_do)
     print(f'Total area: {total_area}')
     canvas_area = canvas_size['width'] * canvas_size['height']
