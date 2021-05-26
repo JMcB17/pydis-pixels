@@ -13,6 +13,7 @@ import PIL.Image
 # todo: use get_pixel
 # todo: add script to encode text as colours
 # todo: type hinting and docstrings if bothered
+# todo: calculate area of non-transparent pixels
 
 
 __version__ = '2.4.0'
@@ -25,7 +26,7 @@ SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
 GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
-STARTUP_DELAY = 0
+STARTUP_DELAY = 120
 
 
 def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
@@ -191,29 +192,23 @@ def get_size(headers: dict):
         GET_SIZE_URL,
         headers=headers
     )
-    # ratelimit(r.headers)
+
     return r.json()
 
 
-def get_canvas(canvas_size, headers):
+def run_for_img(img, img_location, canvas_size, headers):
     print('Getting current canvas status')
     canvas = get_pixels(canvas_size, headers)
     print('Got current canvas status')
-    return canvas
 
-
-def run_for_img(img, img_location, canvas_size, headers):
-    canvas = get_canvas(canvas_size, headers)
     for y_index, row in enumerate(img):
         for x_index, colour in enumerate(row):
-            # get canvas every other time
-            # getting it more often means better collaboration
-            # but too often is too often
-            if x_index % 2 == 0:
-                canvas = get_canvas(canvas_size, headers)
-
             pix_y = img_location['y'] + y_index
             pix_x = img_location['x'] + x_index
+
+            print(f'Getting status of pixel at ({pix_x}, {pix_y})')
+            canvas[pix_y][pix_x] = get_pixel(pix_x, pix_y, headers)
+            print(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
 
             if colour is None:
                 print(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
