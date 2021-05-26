@@ -45,7 +45,7 @@ def main():
         img_scaled = img.resize(new_size, resample=PIL.Image.NEAREST)
     else:
         img_scaled = img
-    img_name = f'{sanitise_filename(text)},{scale}x,(,).png'
+    img_name = f'{sanitise_filename(text)}-utf-8,{scale}x,(,).png'
     img_scaled.save(IGNORED_FOLDER / img_name)
 
 

@@ -16,11 +16,13 @@ __version__ = '2.6.0'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
+    "httpscmpclivetwitchtvcontrolmypc-utf-8,1x,(13,38).png",
+    "httpsvflgg-utf-8,1x,(103,56).png",
+    "JMcB-utf-8,1x,(75,5).png",
     "voxelfox,1x,(103,37).png",
-    "httpscmpclivetwitchtvcontrolmypc,1x,(13,38).png",
     "cmpc,1x,(13,35).png",
     "jmcb,1x,(75,2).png",
-    "pydispix,1x,(139,0).png"
+    "pydispix,1x,(139,0).png",
 ]
 
 
