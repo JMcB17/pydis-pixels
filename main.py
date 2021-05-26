@@ -258,6 +258,8 @@ def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: d
     print('Got current canvas status')
 
     for y_index, row in enumerate(img):
+        hit_incorrect_pixel = False
+
         for x_index, colour in enumerate(row):
             pix_y = img_location['y'] + y_index
             pix_x = img_location['x'] + x_index
@@ -265,7 +267,8 @@ def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: d
             # get canvas every other time
             # getting it more often means better collaboration
             # but too often is too often
-            if x_index % 2 == 0:
+            # also only do it if we've hit a zone that needs changing, to further prevent get_pixel rate limiting
+            if hit_incorrect_pixel and x_index % 2 == 0:
                 print(f'Getting status of pixel at ({pix_x}, {pix_y})')
                 canvas[pix_y][pix_x] = get_pixel(pix_x, pix_y, headers)
                 print(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
@@ -275,6 +278,7 @@ def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: d
             elif canvas[pix_y][pix_x] == colour:
                 print(f'Pixel at ({pix_x}, {pix_y}) is {colour} as intended')
             else:
+                hit_incorrect_pixel = True
                 print(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
                 set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
 
