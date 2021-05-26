@@ -36,7 +36,9 @@ SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
 GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
-STARTUP_DELAY = 10
+GUI_SCALE = 5
+# todo: change back to default 120
+STARTUP_DELAY = 0
 
 
 img_type = typing.List[typing.List[str]]
@@ -246,11 +248,19 @@ def get_size(headers: dict) -> typing.Dict[str, int]:
     return r.json()
 
 
+def put_scaled_pixel(tk_img: tkinter.PhotoImage, colour: str, location: typing.Tuple[int, int], scale: int = GUI_SCALE):
+    fcolour = f'#{colour}'
+    slocation = [c * scale for c in location]
+    for y in range(scale):
+        for x in range(scale):
+            tk_img.put(fcolour, (slocation[0] + x, slocation[1] + y))
+
+
 def render_img_tk(tk_img: tkinter.PhotoImage, img: img_type):
     for y_index, row in enumerate(img):
         for x_index, pixel in enumerate(row):
             if pixel:
-                tk_img.put(f'#{pixel}', (x_index, y_index))
+                put_scaled_pixel(tk_img, pixel, (x_index, y_index))
 
 
 def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, headers: dict):
@@ -275,7 +285,7 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, heade
                 print(f'Getting status of pixel at ({pix_x}, {pix_y})')
                 new_pixel = get_pixel(pix_x, pix_y, headers)
                 canvas[pix_y][pix_x] = new_pixel
-                tk_img.put(f'#{new_pixel}', (pix_x, pix_y))
+                put_scaled_pixel(tk_img, new_pixel, (pix_x, pix_y))
                 print(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
 
             if colour is None:
@@ -285,12 +295,14 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, heade
             else:
                 print(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
                 set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
-                tk_img.put(f'#{colour}', (pix_x, pix_y))
+                put_scaled_pixel(tk_img, colour, (pix_x, pix_y))
 
 
 class GUIThread(threading.Thread):
     def __init__(self, canvas_size: dict, startup_barrier: threading.Barrier, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.daemon = True
+
         self.canvas_size = canvas_size
         self.startup_barrier = startup_barrier
 
@@ -299,15 +311,18 @@ class GUIThread(threading.Thread):
         self.tk_img = None
 
     def run(self) -> None:
+        w = self.canvas_size['width'] * GUI_SCALE
+        h = self.canvas_size['height'] * GUI_SCALE
+
         self.tk = tkinter.Tk()
         self.tk.title('pydis-pixels')
-        self.tk_canvas = tkinter.Canvas(self.tk, bg='#ffffff')
+        self.tk_canvas = tkinter.Canvas(self.tk, bg='#ffffff', width=w, height=h)
         self.tk_canvas.pack()
         self.tk_img = tkinter.PhotoImage(
-            name='Pixels', width=self.canvas_size['width'], height=self.canvas_size['height']
+            name='Pixels', width=w, height=h
         )
         self.tk_canvas.create_image(
-            (self.canvas_size['width']/2, self.canvas_size['height']/2), image=self.tk_img, state='normal'
+            (w/2, h/2), image=self.tk_img, state='normal'
         )
 
         self.startup_barrier.wait()
