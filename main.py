@@ -313,8 +313,8 @@ def main():
     tk = tkinter.Tk()
     tk.title('pydis-pixels')
     tk_canvas = tkinter.Canvas(tk, bg='#ffffff')
-    tk_img = tkinter.PhotoImage(canvas_size['width'], canvas_size['height'])
-    tk_canvas.create_image((canvas_size['width'], canvas_size['height']), img=tk_img, state='normal')
+    tk_img = tkinter.PhotoImage(name='Pixels', width=canvas_size['width'], height=canvas_size['height'])
+    tk_canvas.create_image((canvas_size['width'], canvas_size['height']), image=tk_img, state='normal')
 
     gui_thread = threading.Thread(target=tk.mainloop)
     gui_thread.start()
