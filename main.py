@@ -3,6 +3,7 @@
 import json
 import time
 import typing
+import re
 from pathlib import Path
 
 import requests
@@ -78,6 +79,65 @@ zones_to_do = [
 ]
 
 
+def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
+    rgb_hex = [hex(i) for i in rgb_ints]
+    rgb_hex_strings = [str(h)[2:] for h in rgb_hex]
+    rgb_hex_string = ''.join(rgb_hex_strings)
+
+    return rgb_hex_string
+
+
+def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
+    rgb_ints = [b for b in pixel]
+    return three_ints_to_rgb_hex_string(rgb_ints)
+
+
+def img_to_lists(pil_img: PIL.Image.Image) -> typing.List[typing.List[str]]:
+    pixel_list_img = [three_ints_to_rgb_hex_string(p) for p in pil_img.getdata()]
+
+    dimensional_list_img = []
+    for i in range(pil_img.height):
+        w = pil_img.width
+        dimensional_list_img.append(pixel_list_img[i*w:i*w + w])
+
+    return dimensional_list_img
+
+
+def scale_img(pil_img: PIL.Image.Image, scale: int) -> PIL.Image.Image:
+    new_size = (
+        pil_img.width // scale,
+        pil_img.height // scale
+    )
+    return pil_img.resize(size=new_size, resample=PIL.Image.NEAREST)
+
+
+class Zone:
+    """An area of pixels on the canvas to be maintained."""
+    # name,scalex,(x,y)
+    # e.g.
+    # jmcb,10x,(75,2)
+    img_name_regexp = re.compile(r'(.*),([0-9]*)x,\(([0-9]*),([0-9]*)\)')
+
+    def __init__(self, img_path: typing.Union[str, Path]):
+        if not isinstance(img_path, Path):
+            img_path = Path(img_path)
+        self.img_path = img_path
+
+        filename = self.img_path.stem
+        properties = re.match(self.img_name_regexp, filename)
+        self.name = properties[1]
+        self.scale = int(properties[2])
+        self.location = {
+            'x': properties[3],
+            'y': properties[4]
+        }
+
+        pil_img = PIL.Image.open(self.img_path)
+        pil_img_rgb = pil_img.convert('RGB')
+        pil_img_scaled = scale_img(pil_img_rgb, self.scale)
+        self.img = img_to_lists(pil_img_scaled)
+
+
 def ratelimit(headers):
     if 'requests-remaining' in headers:
         requests_remaining = int(headers['requests-remaining'])
@@ -106,31 +166,6 @@ def set_pixel(x: int, y: int, rgb: str, headers: dict):
     print(r.json()['message'])
 
     ratelimit(r.headers)
-
-
-def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
-    rgb_hex = [hex(i) for i in rgb_ints]
-    rgb_hex_strings = [str(h)[2:] for h in rgb_hex]
-    rgb_hex_string = ''.join(rgb_hex_strings)
-
-    return rgb_hex_string
-
-
-def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
-    rgb_ints = [b for b in pixel]
-    return three_ints_to_rgb_hex_string(rgb_ints)
-
-
-def img_to_lists(img_path: typing.Union[str, Path]) -> typing.List[typing.List[str]]:
-    pil_img = PIL.Image.open(img_path)
-    pixel_list_img = [three_ints_to_rgb_hex_string(p) for p in pil_img.getdata()]
-
-    dimensional_list_img = []
-    for i in range(pil_img.height):
-        w = pil_img.width
-        dimensional_list_img.append(pixel_list_img[i*w:i*w + w])
-
-    return dimensional_list_img
 
 
 def get_pixels(canvas_size: dict, headers: dict):
