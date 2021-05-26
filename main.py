@@ -285,6 +285,20 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, heade
                 set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
 
 
+class GUIThread(threading.Thread):
+    def __init__(self, canvas_size: dict, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.tk = tkinter.Tk()
+        self.tk.title('pydis-pixels')
+        self.tk_canvas = tkinter.Canvas(self.tk, bg='#ffffff')
+        self.tk_img = tkinter.PhotoImage(name='Pixels', width=canvas_size['width'], height=canvas_size['height'])
+        self.tk_canvas.create_image((canvas_size['width'], canvas_size['height']), image=self.tk_img, state='normal')
+
+    def run(self) -> None:
+        self.tk.mainloop()
+
+
 def main():
     """Run the program for all imgs."""
     with open(CONFIG_FILE_PATH) as config_file:
@@ -310,13 +324,7 @@ def main():
     print(f'sleeping for {STARTUP_DELAY} seconds')
     time.sleep(STARTUP_DELAY)
 
-    tk = tkinter.Tk()
-    tk.title('pydis-pixels')
-    tk_canvas = tkinter.Canvas(tk, bg='#ffffff')
-    tk_img = tkinter.PhotoImage(name='Pixels', width=canvas_size['width'], height=canvas_size['height'])
-    tk_canvas.create_image((canvas_size['width'], canvas_size['height']), image=tk_img, state='normal')
-
-    gui_thread = threading.Thread(target=tk.mainloop)
+    gui_thread = GUIThread(canvas_size)
     gui_thread.start()
 
     while True:
@@ -325,7 +333,7 @@ def main():
             print(f'img dimension x: {zone.width}')
             print(f'img dimension y: {zone.height}')
             print(f'img pixels: {zone.area_not_transparent}')
-            run_for_img(zone, canvas_size, tk_img, headers)
+            run_for_img(zone, canvas_size, gui_thread.tk_img, headers)
 
 
 if __name__ == '__main__':
