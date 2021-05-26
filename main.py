@@ -101,11 +101,14 @@ class Zone:
         )
 
 
-def load_zones(directory: Path):
+def load_zones(directory: Path, imgs: list) -> typing.List[Zone]:
     zones = []
-    for file in directory.iterdir():
-        if file.is_file():
-            zones.append(Zone(file))
+
+    for img in imgs:
+        for file in directory.iterdir():
+            if file.name == img and file.is_file():
+                zones.append(Zone(file))
+                break
 
     return zones
 
@@ -205,7 +208,7 @@ def main():
     print(f'Canvas size: {canvas_size}')
 
     print(f'Loading zones to do from {IMGS_FOLDER}')
-    zones_to_do = load_zones(IMGS_FOLDER)
+    zones_to_do = load_zones(IMGS_FOLDER, config['imgs'])
     total_area = sum(z.area for z in zones_to_do)
     print(f'Total area: {total_area}')
     canvas_area = canvas_size['width'] * canvas_size['height']
