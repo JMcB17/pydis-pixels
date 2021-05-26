@@ -13,7 +13,7 @@ import PIL.Image
 # todo: ensure transparent pixels work right
 
 
-__version__ = '2.1.0'
+__version__ = '2.1.1'
 
 
 CONFIG_FILE_PATH = Path('config.json')
