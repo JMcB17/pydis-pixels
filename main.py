@@ -4,6 +4,8 @@ import json
 import typing
 import re
 import time
+import tkinter
+import threading
 from pathlib import Path
 
 import requests
@@ -11,10 +13,7 @@ from requests.structures import CaseInsensitiveDict
 import PIL.Image
 
 
-# todo: add display of canvas
-
-
-__version__ = '2.7.0'
+__version__ = '3.0.0'
 
 
 # modify this to change the order of priority or add/remove images
@@ -247,10 +246,21 @@ def get_size(headers: dict) -> typing.Dict[str, int]:
     return r.json()
 
 
-def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: dict):
+def render_img_tk(tk_img: tkinter.PhotoImage, img: img_type):
+    for y_index, row in enumerate(img):
+        for x_index, pixel in enumerate(row):
+            if pixel is not None:
+                tk_img.put(f'#{pixel}', (x_index, y_index))
+
+
+def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, headers: dict):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
+    img = zone.img
+    img_location = zone.location
+
     print('Getting current canvas status')
     canvas = get_pixels(canvas_size, headers)
+    render_img_tk(tk_img, canvas)
     print('Got current canvas status')
 
     for y_index, row in enumerate(img):
@@ -299,16 +309,23 @@ def main():
 
     print(f'sleeping for {STARTUP_DELAY} seconds')
     time.sleep(STARTUP_DELAY)
+
+    tk = tkinter.Tk()
+    tk.title('pydis-pixels')
+    tk_canvas = tkinter.Canvas(tk, bg='#ffffff')
+    tk_img = tkinter.PhotoImage(canvas_size['width'], canvas_size['height'])
+    tk_canvas.create_image((canvas_size['width'], canvas_size['height']), img=tk_img, state='normal')
+
+    gui_thread = threading.Thread(target=tk.mainloop)
+    gui_thread.start()
+
     while True:
         for zone in zones_to_do:
-            img = zone.img
-            img_location = zone.location
-
             print(f"img name: {zone.name}")
             print(f'img dimension x: {zone.width}')
             print(f'img dimension y: {zone.height}')
             print(f'img pixels: {zone.area_not_transparent}')
-            run_for_img(img, img_location, canvas_size, headers)
+            run_for_img(zone, canvas_size, tk_img, headers)
 
 
 if __name__ == '__main__':
