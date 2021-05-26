@@ -26,6 +26,7 @@ STARTUP_DELAY = 120
 # noinspection SpellCheckingInspection
 target_colour = '1dbfff'
 blank_colour = 'ffffff'
+# noinspection SpellCheckingInspection
 divider_blue = '7ecde9'
 cmpc_blue = '0006ff'
 cmpc_red = 'ff0000'
@@ -126,8 +127,9 @@ def get_pixels(headers: dict):
     ratelimit(r.headers)
 
     pixels_bytes = r.content
-    print(pixels_bytes)
-    print(pixels_bytes.decode(encoding='utf-8', errors='ignore'))
+    # todo: log to a file
+    # print(pixels_bytes)
+    # print(pixels_bytes.decode(encoding='utf-8', errors='ignore'))
     canvas = []
     for y in range(CANVAS_SIZE['height']+1):
         row = []
