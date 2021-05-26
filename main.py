@@ -14,7 +14,7 @@ import PIL.Image
 # todo: add display of canvas
 
 
-__version__ = '2.7.0'
+__version__ = '2.8.0'
 
 
 # modify this to change the order of priority or add/remove images
