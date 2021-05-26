@@ -36,7 +36,7 @@ SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
 GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
-STARTUP_DELAY = 120
+STARTUP_DELAY = 10
 
 
 img_type = typing.List[typing.List[str]]
@@ -249,7 +249,7 @@ def get_size(headers: dict) -> typing.Dict[str, int]:
 def render_img_tk(tk_img: tkinter.PhotoImage, img: img_type):
     for y_index, row in enumerate(img):
         for x_index, pixel in enumerate(row):
-            if pixel is not None:
+            if pixel:
                 tk_img.put(f'#{pixel}', (x_index, y_index))
 
 
@@ -286,16 +286,28 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, heade
 
 
 class GUIThread(threading.Thread):
-    def __init__(self, canvas_size: dict, *args, **kwargs):
+    def __init__(self, canvas_size: dict, startup_barrier: threading.Barrier, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.canvas_size = canvas_size
+        self.startup_barrier = startup_barrier
 
+        self.tk = None
+        self.tk_canvas = None
+        self.tk_img = None
+
+    def run(self) -> None:
         self.tk = tkinter.Tk()
         self.tk.title('pydis-pixels')
         self.tk_canvas = tkinter.Canvas(self.tk, bg='#ffffff')
-        self.tk_img = tkinter.PhotoImage(name='Pixels', width=canvas_size['width'], height=canvas_size['height'])
-        self.tk_canvas.create_image((canvas_size['width'], canvas_size['height']), image=self.tk_img, state='normal')
+        self.tk_canvas.pack()
+        self.tk_img = tkinter.PhotoImage(
+            name='Pixels', width=self.canvas_size['width'], height=self.canvas_size['height']
+        )
+        self.tk_canvas.create_image(
+            (self.canvas_size['width'], self.canvas_size['height']), image=self.tk_img, state='normal'
+        )
 
-    def run(self) -> None:
+        self.startup_barrier.wait()
         self.tk.mainloop()
 
 
@@ -324,8 +336,10 @@ def main():
     print(f'sleeping for {STARTUP_DELAY} seconds')
     time.sleep(STARTUP_DELAY)
 
-    gui_thread = GUIThread(canvas_size)
+    startup_barrier = threading.Barrier(2)
+    gui_thread = GUIThread(canvas_size, startup_barrier)
     gui_thread.start()
+    startup_barrier.wait()
 
     while True:
         for zone in zones_to_do:
