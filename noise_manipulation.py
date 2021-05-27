@@ -4,6 +4,9 @@ import typing
 import main
 
 
+__version__ = '0.1.0'
+
+
 HEX_CHARS = '0123456789abcdef'
 
 
@@ -27,7 +30,13 @@ def get_neighbour_pixels(x: int, y: int, img: main.img_type) -> typing.List[str]
             x_neighbour_range.remove(x)
 
         for x_neighbour_coord in x_neighbour_range:
-            neighbours.append(img[y_neighbour_coord][x_neighbour_coord])
+            if x_neighbour_coord < 0 or y_neighbour_coord < 0:
+                raise IndexError('pixel is edge pixel')
+
+            try:
+                neighbours.append(img[y_neighbour_coord][x_neighbour_coord])
+            except IndexError as error:
+                raise IndexError('pixel is edge pixel') from error
 
     return neighbours
 
