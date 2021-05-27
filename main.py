@@ -18,14 +18,14 @@ __version__ = '2.9.0'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
-    "httpscmpclivetwitchtvcontrolmypc-utf-8,1x,(13,38).png",
-    "httpsvflgg-utf-8,1x,(103,56).png",
-    "JMcB-utf-8,1x,(75,5).png",
-    "voxelfox,1x,(103,37).png",
-    "cmpc,1x,(13,35).png",
-    "jmcb,1x,(75,2).png",
-    "sqlitecult,1x,(0,44).png",
-    "pydispix,1x,(139,0).png",
+    "httpscmpclivetwitchtvcontrolmypc-utf-8",
+    "httpsvflgg-utf-8",
+    "JMcB-utf-8",
+    "voxelfox",
+    "cmpc",
+    "jmcb",
+    "sqlitecult",
+    "pydispix",
 ]
 
 
@@ -181,7 +181,7 @@ def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
 
     for img in img_names:
         for file in directory.iterdir():
-            if file.name == img and file.is_file():
+            if file.name.startswith(img) and file.is_file():
                 zones.append(Zone(file))
                 break
 
