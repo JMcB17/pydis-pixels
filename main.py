@@ -242,9 +242,9 @@ def get_pixels(canvas_size: dict, headers: dict) -> img_type:
     with open(CANVAS_LOG_PATH, 'a', encoding='utf-8') as canvas_log_file:
         canvas_log_file.write(f'{time.asctime()}\n{pixels_bytes}\n')
     canvas = []
-    for y in range(canvas_size['height'] + 1):
+    for y in range(canvas_size['height']):
         row = []
-        for x in range(canvas_size['width'] + 1):
+        for x in range(canvas_size['width']):
             index = (y * canvas_size['width'] * 3) + (x * 3)
             pixel = pixels_bytes[index:index+3]
             row.append(three_bytes_to_rgb_hex_string(pixel))
