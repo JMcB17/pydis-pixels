@@ -15,13 +15,15 @@ Image names are in the format used by my own script, which is in this same githu
 
 ### [voxelfox - (103, 37)](#voxelfox)
 ![voxelfox,1x,(103,37)](https://user-images.githubusercontent.com/26749912/119971083-70094a00-bfa8-11eb-86f2-af1190569125.png)
-![voxelfox,10x,(103,37)](https://user-images.githubusercontent.com/26749912/119971096-74356780-bfa8-11eb-9bf0-6db2f2bc4451.png)
+![voxelfox,10x,(103,37)](https://user-images.githubusercontent.com/26749912/119971096-74356780-bfa8-11eb-9bf0-6db2f2bc4451.png)    
+Via [Voxel Fox Ltd.](https://github.com/Voxel-Fox-Ltd/Meta/blob/master/assets/Voxel%20Fox%20Original%20(Pixels)/FOX%20EX%202.png)
 ### [jmcb - (73, 1)](#jmcb)
 ![jmcb,1x,(73,1)](https://user-images.githubusercontent.com/26749912/119992691-b8cdfc80-bfc2-11eb-8225-013ab5feac58.png)
 ![jmcb,10x,(73,1)](https://user-images.githubusercontent.com/26749912/119992762-c4212800-bfc2-11eb-86d8-d91bd61ecb8a.png)
 ### [cmpc - (112, 108)](#cmpc)
 ![cmpc,1x,(112,108)](https://user-images.githubusercontent.com/26749912/119971425-db531c00-bfa8-11eb-826c-08e1909b0974.png)
-![cmpc,10x,(112,108)](https://user-images.githubusercontent.com/26749912/119971621-19504000-bfa9-11eb-9f21-ee62266c618b.png)
+![cmpc,10x,(112,108)](https://user-images.githubusercontent.com/26749912/119971621-19504000-bfa9-11eb-9f21-ee62266c618b.png)    
+Via [controlmypc](https://cmpc.live/logo_old.png)
 
 Courtesy of me, JMcB#7918
 
