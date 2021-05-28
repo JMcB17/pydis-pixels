@@ -78,6 +78,13 @@ The church also protects cmpc.
 
 Courtesy of Max T.#7212 and NotC#6952
 
+## terrain
+The largest images on the map. Currently only Rainbow Road
+
+### [rainbow road - (0, 114)](rainbow-road#)
+![rainbow-road,1x,(0,114)](https://user-images.githubusercontent.com/26749912/119987767-47d81600-bfbd-11eb-9283-4a54fc5e66ea.png)
+![rainbow-road,10x,(0,114)](https://user-images.githubusercontent.com/26749912/119987768-4870ac80-bfbd-11eb-9658-aa6b6eb97098.png)
+
 ## misc
 
 Todo: organise
@@ -88,7 +95,8 @@ Todo: organise
 Courtesy of ambv#1804
 ### [osu - (93, 55)](#osu)
 ![osu,1x,(93,55)](https://user-images.githubusercontent.com/26749912/119977609-903d0700-bfb0-11eb-90a3-df83e2f51576.png)
-![osu,10x,(93,55)](https://user-images.githubusercontent.com/26749912/119977615-9206ca80-bfb0-11eb-932c-d543747da228.png)
+![osu,10x,(93,55)](https://user-images.githubusercontent.com/26749912/119977615-9206ca80-bfb0-11eb-932c-d543747da228.png)    
+Courtesy of Arisu#4829
 ### [amogus - (4, 54)](#amogus)
 ![amogus-sprite,1x,(4,54)](https://user-images.githubusercontent.com/26749912/119981694-d3e63f80-bfb5-11eb-8b0f-f49013f819df.png)
 ![amogus-sprite,10x,(4,54)](https://user-images.githubusercontent.com/26749912/119981700-d5176c80-bfb5-11eb-8428-32aa5bb47363.png)
@@ -122,7 +130,6 @@ Courtesy of AaEnnDeeErrEeEss#5157
 ![golden-heart-upper,1x,(87,17)](https://user-images.githubusercontent.com/26749912/119984837-c7fc7c80-bfb9-11eb-92fc-b652ee8d36cd.png)
 ![golden-heart-upper,10x,(87,17)](https://user-images.githubusercontent.com/26749912/119984841-c9c64000-bfb9-11eb-863c-20eadeb6646f.png)    
 Lower at (60, 54).
-### [whatever this is - (47, 73)](#whateverthisis)
-![whateverthisis,1x,(47,73)](https://user-images.githubusercontent.com/26749912/119984917-e793a500-bfb9-11eb-883e-7523e9dbad8a.png)
-![whateverthisis,10x,(47,73)](https://user-images.githubusercontent.com/26749912/119984920-e82c3b80-bfb9-11eb-987c-6611eaf8e7fa.png)    
-If you know remember what this is please tell me or PR it.
+### [Linode - (47, 73)](#linode)
+![linode,1x,(47,73)](https://user-images.githubusercontent.com/26749912/119984917-e793a500-bfb9-11eb-883e-7523e9dbad8a.png)
+![linode,10x,(47,73)](https://user-images.githubusercontent.com/26749912/119984920-e82c3b80-bfb9-11eb-987c-6611eaf8e7fa.png)    
