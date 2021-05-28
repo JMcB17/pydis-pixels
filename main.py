@@ -36,8 +36,7 @@ GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
 GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
 GUI_SCALE = 5
-# todo: change back to default 120
-STARTUP_DELAY = 0
+STARTUP_DELAY = 120
 
 
 img_type = typing.List[typing.List[str]]
@@ -352,12 +351,13 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, tk_ca
 
 
 class GUIThread(threading.Thread):
-    def __init__(self, canvas_size: dict, startup_barrier: threading.Barrier, *args, **kwargs):
+    def __init__(self, canvas_size: dict, activate: bool = True, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.daemon = True
+        self.startup_barrier = threading.Barrier(2)
 
         self.canvas_size = canvas_size
-        self.startup_barrier = startup_barrier
+        self.activate = activate
 
         self.tk = None
         self.tk_canvas = None
@@ -379,11 +379,15 @@ class GUIThread(threading.Thread):
         )
 
         self.startup_barrier.wait()
-        self.tk.mainloop()
+        if self.activate:
+            self.tk.mainloop()
 
 
 def main():
     """Run the program for all imgs."""
+    parser = get_parser()
+    args = parser.parse_args()
+
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
     logging.info('Loaded config')
@@ -407,10 +411,9 @@ def main():
     print_sleep_time(STARTUP_DELAY)
     time.sleep(STARTUP_DELAY)
 
-    startup_barrier = threading.Barrier(2)
-    gui_thread = GUIThread(canvas_size, startup_barrier)
+    gui_thread = GUIThread(canvas_size=canvas_size, activate=args.gui)
     gui_thread.start()
-    startup_barrier.wait()
+    gui_thread.startup_barrier.wait()
 
     while True:
         try:
