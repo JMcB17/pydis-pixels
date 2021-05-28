@@ -25,7 +25,7 @@ Via [Voxel Fox Ltd.](https://github.com/Voxel-Fox-Ltd/Meta/blob/master/assets/Vo
 ![cmpc,10x,(112,108)](https://user-images.githubusercontent.com/26749912/119971621-19504000-bfa9-11eb-9f21-ee62266c618b.png)    
 Via [controlmypc](https://cmpc.live/logo_old.png)
 
-Courtesy of me, JMcB#7918
+By me, JMcB#7918
 
 ## images I'm protecting
 
@@ -177,6 +177,12 @@ Courtesy of LX#4932
 ![Õ,1x,(31,32)](https://user-images.githubusercontent.com/26749912/120024301-ddd46680-bfe6-11eb-864a-d8f78c8b1187.png)
 ![Õ,10x,(31,32)](https://user-images.githubusercontent.com/26749912/120024309-e0cf5700-bfe6-11eb-8d8c-51916553ae8c.png)    
 Courtesy of AaEnnDeeErrEeEss#5157
+### [minecraft dirt block - (160, 0)](#minecraft-dirt)
+![minecraft-dirt,1x,(160,0)](https://user-images.githubusercontent.com/26749912/120036764-86d78d00-bff8-11eb-9abc-d022864ff145.png)
+![minecraft-dirt,10x,(160,0)](https://user-images.githubusercontent.com/26749912/120036767-8808ba00-bff8-11eb-89fc-90d0a59bc33d.png)
+### [smiley - (79, 54)](#smiley)
+![smiley,1x,(79,54)](https://user-images.githubusercontent.com/26749912/120036809-95be3f80-bff8-11eb-92fc-fcd8d31e2ab1.png)
+![smiley,10x,(79,54)](https://user-images.githubusercontent.com/26749912/120036812-96ef6c80-bff8-11eb-9e96-a29b1921d810.png)
 
 ## obselete
 These images currently don't exist on the canvas.
