@@ -1,6 +1,6 @@
 # github page
 
-A single source for every image on the canvas!
+# A source for every image on the canvas in one place!
 
 Please feel free to make pull requests to add images.
 
@@ -16,9 +16,9 @@ Image names are in the format used by my own script, which is in this same githu
 ### [voxelfox - (103, 37)](#voxelfox)
 ![voxelfox,1x,(103,37)](https://user-images.githubusercontent.com/26749912/119971083-70094a00-bfa8-11eb-86f2-af1190569125.png)
 ![voxelfox,10x,(103,37)](https://user-images.githubusercontent.com/26749912/119971096-74356780-bfa8-11eb-9bf0-6db2f2bc4451.png)
-### [jmcb - (74, 2)](#jmcb)
-![jmcb,1x,(74,2)](https://user-images.githubusercontent.com/26749912/119971151-84e5dd80-bfa8-11eb-809b-c78538ded0aa.png)
-![jmcb,10x,(74,2)](https://user-images.githubusercontent.com/26749912/119971997-954a8800-bfa9-11eb-8709-6b6b70963d2d.png)
+### [jmcb - (73, 1)](#jmcb)
+![jmcb,1x,(73,1)](https://user-images.githubusercontent.com/26749912/119992691-b8cdfc80-bfc2-11eb-8225-013ab5feac58.png)
+![jmcb,10x,(73,1)](https://user-images.githubusercontent.com/26749912/119992762-c4212800-bfc2-11eb-86d8-d91bd61ecb8a.png)
 ### [cmpc - (112, 108)](#cmpc)
 ![cmpc,1x,(112,108)](https://user-images.githubusercontent.com/26749912/119971425-db531c00-bfa8-11eb-826c-08e1909b0974.png)
 ![cmpc,10x,(112,108)](https://user-images.githubusercontent.com/26749912/119971621-19504000-bfa9-11eb-9f21-ee62266c618b.png)
@@ -86,6 +86,11 @@ The largest images on the map. Currently only Rainbow Road
 ![rainbow-road,1x,(0,114)](https://user-images.githubusercontent.com/26749912/119987767-47d81600-bfbd-11eb-9283-4a54fc5e66ea.png)
 ![rainbow-road,10x,(0,114)](https://user-images.githubusercontent.com/26749912/119987768-4870ac80-bfbd-11eb-9658-aa6b6eb97098.png)
 
+## oreo, the mask cat
+### [oreo, the mask cat - (41, 20)](#oreo-the-mask-cat)
+![oreo-the-mask-cat,1x,(41,20)](https://user-images.githubusercontent.com/26749912/119995801-e23c5780-bfc5-11eb-9a82-701200d1e58f.png)
+![oreo-the-mask-cat,10x,(41,20)](https://user-images.githubusercontent.com/26749912/119995809-e36d8480-bfc5-11eb-82de-0c282f4c7c44.png)
+
 ## misc
 
 Todo: organise
@@ -116,7 +121,7 @@ Courtesy of hahastinkypoop#8591
 ### [foxears - (90, 10)](#foxears)
 ![foxears,1x,(90,109)](https://user-images.githubusercontent.com/26749912/119982120-5a028600-bfb6-11eb-9ceb-122ddcfd5a1d.png)
 ![foxears,10x,(90,109)](https://user-images.githubusercontent.com/26749912/119982127-5b33b300-bfb6-11eb-92ea-f78757929463.png)    
-Courtesy of Bast#0006
+Courtesy of Sedsarq#5109 and Bast#0006
 ### [PLS SOMEONE HUG ME - (59, 99)](#plshug)
 ![plshug,1x,(59,99)](https://user-images.githubusercontent.com/26749912/119982194-74d4fa80-bfb6-11eb-8670-dd6532385bd5.png)
 ![plshug,10x,(59,99)](https://user-images.githubusercontent.com/26749912/119982200-76062780-bfb6-11eb-8327-c3737d815856.png)
@@ -144,3 +149,10 @@ Courtesy of ItsDrike#5359
 ### [TheelUtil - (139, 44)](#theelutil)
 ![theelutil,1x,(139,44)](https://user-images.githubusercontent.com/26749912/119990379-2af11200-bfc0-11eb-8295-d46b9a741cf0.png)
 ![theelutil,10x,(139,44)](https://user-images.githubusercontent.com/26749912/119990385-2c223f00-bfc0-11eb-99d0-fe09fc531a37.png)
+### [HI - (0, 109)](#hi)
+![HI,1x,(0,109)](https://user-images.githubusercontent.com/26749912/119995702-c3d65c00-bfc5-11eb-99c7-4c48b7559421.png)
+![HI,10x,(0,109)](https://user-images.githubusercontent.com/26749912/119995705-c5a01f80-bfc5-11eb-8020-0147cbcedb8d.png)
+### [Griff - (120, )46](#griff)
+![griff,1x,(120,46)](https://user-images.githubusercontent.com/26749912/119996013-24659900-bfc6-11eb-9f43-8d9214d82f2f.png)
+![griff,10x,(120,46)](https://user-images.githubusercontent.com/26749912/119996021-262f5c80-bfc6-11eb-9cae-a16b2934fa97.png)    
+Courtesy of Griff#9021
