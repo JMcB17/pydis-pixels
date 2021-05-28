@@ -119,8 +119,8 @@ Courtesy of BrightSkyz#2627 and stupid cat#8160
 ![Duck,10x,(74,19)](https://user-images.githubusercontent.com/26749912/119981806-f6785880-bfb5-11eb-84ae-998019f08e37.png)    
 Courtesy of hahastinkypoop#8591
 ### [foxears - (90, 10)](#foxears)
-![foxears,1x,(90,109)](https://user-images.githubusercontent.com/26749912/119982120-5a028600-bfb6-11eb-9ceb-122ddcfd5a1d.png)
-![foxears,10x,(90,109)](https://user-images.githubusercontent.com/26749912/119982127-5b33b300-bfb6-11eb-92ea-f78757929463.png)    
+![foxears,1x,(90,109)](https://user-images.githubusercontent.com/26749912/119996437-ac4ba300-bfc6-11eb-9adc-414c64d3859a.png)
+![foxears,10x,(90,109)](https://user-images.githubusercontent.com/26749912/119996442-ad7cd000-bfc6-11eb-9ee9-653fa68519a3.png)
 Courtesy of Sedsarq#5109 and Bast#0006
 ### [PLS SOMEONE HUG ME - (59, 99)](#plshug)
 ![plshug,1x,(59,99)](https://user-images.githubusercontent.com/26749912/119982194-74d4fa80-bfb6-11eb-8670-dd6532385bd5.png)
