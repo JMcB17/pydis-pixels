@@ -14,7 +14,10 @@ from requests.structures import CaseInsensitiveDict
 import PIL.Image
 
 
-__version__ = '2.10.0'
+# todo: discord bot canvas mirror
+
+
+__version__ = '2.10.1'
 
 
 # modify this to change the order of priority or add/remove images
@@ -300,6 +303,7 @@ def get_size(headers: dict) -> typing.Dict[str, int]:
 def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path] = None):
     if path is None:
         path = CANVAS_IMAGE_PATH
+    path.parent.mkdir(parents=True, exist_ok=True)
 
     canvas_bytes = get_pixels(canvas_size, headers, as_bytes=True)
     canvas_pil_img = PIL.Image.frombytes(
