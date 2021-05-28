@@ -62,6 +62,7 @@ Courtesy of Foxy#1259
 ![aromantic-pride,10x,(48,63)](https://user-images.githubusercontent.com/26749912/119977399-494f1180-bfb0-11eb-92f0-b0d374edae41.png)
 
 ## Church of Rick
+https://pixel-tasks.scoder12.repl.co/
 
 ### [rick - (106, 0)](#rick)
 ![rick,1x,(106,0)](https://user-images.githubusercontent.com/26749912/119984474-56bcc980-bfb9-11eb-98a4-a6e9fdeb8cd9.png)
@@ -75,6 +76,9 @@ Courtesy of Foxy#1259
 ### [Joe - (182, 11)](#joe)
 ![joe,1x,(182,11)](https://user-images.githubusercontent.com/26749912/119984612-7f44c380-bfb9-11eb-849c-69723cbacb65.png)
 ![joe,10x,(182,11)](https://user-images.githubusercontent.com/26749912/119984617-8075f080-bfb9-11eb-8da2-730adfcff1ff.png)
+### [beat saber - (19, 90)](#beat-saber)
+![beat-saber,1x,(19,90)](https://user-images.githubusercontent.com/26749912/120023939-60a8f180-bfe6-11eb-9551-32fb68ad8591.png)
+![beat-saber,10x,(19,90)](https://user-images.githubusercontent.com/26749912/120023940-61da1e80-bfe6-11eb-918c-c78a1bea884b.png)
 ### [Jason - (135, 26)](#jason)
 A protection of the Church, not an offical project.    
 ![Jason,1x,(135,26)](https://user-images.githubusercontent.com/26749912/119984644-8b308580-bfb9-11eb-94dd-9387fd05238f.png)
@@ -169,6 +173,10 @@ Courtesy of LX#4932 via the Python Discord emote :yert:
 ![Wilson,1x,(160,16)](https://user-images.githubusercontent.com/26749912/119998731-e5851280-bfc8-11eb-8af2-8b61e99ab4b3.png)
 ![Wilson,10x,(160,16)](https://user-images.githubusercontent.com/26749912/119998735-e61da900-bfc8-11eb-830a-1eae8c843baa.png)    
 Courtesy of LX#4932
+### [Õ - (31, 32)](#o)
+![Õ,1x,(31,32)](https://user-images.githubusercontent.com/26749912/120024301-ddd46680-bfe6-11eb-864a-d8f78c8b1187.png)
+![Õ,10x,(31,32)](https://user-images.githubusercontent.com/26749912/120024309-e0cf5700-bfe6-11eb-8d8c-51916553ae8c.png)    
+Courtesy of AaEnnDeeErrEeEss#5157
 
 ## obselete
 These images currently don't exist on the canvas.
