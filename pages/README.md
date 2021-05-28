@@ -74,6 +74,7 @@ Courtesy of laundmo#7544
 A protection of the Church, not an offical project.    
 ![Jason,1x,(135,26)](https://user-images.githubusercontent.com/26749912/119984644-8b308580-bfb9-11eb-94dd-9387fd05238f.png)
 ![Jason,10x,(135,26)](https://user-images.githubusercontent.com/26749912/119984647-8c61b280-bfb9-11eb-8fdf-ccef945a0430.png)    
+Courtesy of Jason Terror ♦#5889    
 The church also protects cmpc.
 
 Courtesy of Max T.#7212 and NotC#6952
@@ -99,7 +100,12 @@ Courtesy of ambv#1804
 Courtesy of Arisu#4829
 ### [amogus - (4, 54)](#amogus)
 ![amogus-sprite,1x,(4,54)](https://user-images.githubusercontent.com/26749912/119981694-d3e63f80-bfb5-11eb-8b0f-f49013f819df.png)
-![amogus-sprite,10x,(4,54)](https://user-images.githubusercontent.com/26749912/119981700-d5176c80-bfb5-11eb-8428-32aa5bb47363.png)
+![amogus-sprite,10x,(4,54)](https://user-images.githubusercontent.com/26749912/119981700-d5176c80-bfb5-11eb-8428-32aa5bb47363.png)    
+Courtesy of stupid cat#8160
+### [amongdrip - (23, 56)](#amongdrip)
+![amongdrip,1x,(23,56)](https://user-images.githubusercontent.com/26749912/119990447-3f350f00-bfc0-11eb-8560-ce099116c1c6.png)
+![amongdrip,10x,(23,56)](https://user-images.githubusercontent.com/26749912/119990460-41976900-bfc0-11eb-88ae-b1373ddfb3ae.png)    
+Courtesy of BrightSkyz#2627 and stupid cat#8160
 ### [Brave browser - (0, 1)](#bravebrowser)
 ![bravebrowser,1x,(0,1)](https://user-images.githubusercontent.com/26749912/119981749-e3658880-bfb5-11eb-856b-89d237df1499.png)
 ![bravebrowser,10x,(0,1)](https://user-images.githubusercontent.com/26749912/119981760-e6607900-bfb5-11eb-9cb9-742e2aaf745e.png)
@@ -135,3 +141,6 @@ Lower at (60, 54).
 ![linode,1x,(47,73)](https://user-images.githubusercontent.com/26749912/119984917-e793a500-bfb9-11eb-883e-7523e9dbad8a.png)
 ![linode,10x,(47,73)](https://user-images.githubusercontent.com/26749912/119984920-e82c3b80-bfb9-11eb-987c-6611eaf8e7fa.png)    
 Courtesy of ItsDrike#5359
+### [TheelUtil - (139, 44)](#theelutil)
+![theelutil,1x,(139,44)](https://user-images.githubusercontent.com/26749912/119990379-2af11200-bfc0-11eb-8295-d46b9a741cf0.png)
+![theelutil,10x,(139,44)](https://user-images.githubusercontent.com/26749912/119990385-2c223f00-bfc0-11eb-99d0-fe09fc531a37.png)
