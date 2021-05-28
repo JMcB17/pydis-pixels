@@ -74,6 +74,42 @@ for logger_name in ['urllib3', 'PIL']:
     logging.getLogger(logger_name).setLevel(logging.ERROR)
 
 
+class GUIThread(threading.Thread):
+    def __init__(self, canvas_size: dict, activate: bool = True, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.daemon = True
+        self.startup_barrier = threading.Barrier(2)
+
+        self.canvas_size = canvas_size
+        self.activate = activate
+
+        self.tk = None
+        self.tk_canvas = None
+        self.tk_img = None
+
+    def run(self) -> None:
+        w = self.canvas_size['width'] * GUI_SCALE
+        h = self.canvas_size['height'] * GUI_SCALE
+
+        self.tk = tkinter.Tk()
+        self.tk.title('pydis-pixels')
+        self.tk.resizable(width=False, height=False)
+        self.tk.geometry(f'{w}x{h}')
+        self.tk_canvas = tkinter.Canvas(self.tk, bg='#ffffff', width=w, height=h)
+        self.tk_canvas.pack()
+        self.tk_img = tkinter.PhotoImage(
+            name='Pixels', width=w, height=h
+        )
+        self.tk_canvas.create_image(
+            (w/2, h/2), image=self.tk_img, state='normal'
+        )
+
+        self.startup_barrier.wait()
+        if self.activate:
+            logging.info('Starting GUI canvas display with dimensions %sx%s', w, h)
+            self.tk.mainloop()
+
+
 def get_parser() -> argparse.ArgumentParser:
     """Get this script's parser."""
     parser = argparse.ArgumentParser(
@@ -321,29 +357,30 @@ def put_scaled_pixel(tk_img: tkinter.PhotoImage, colour: str, location: typing.T
             tk_img.put(fcolour, (slocation[0] + x, slocation[1] + y))
 
 
-def render_img_tk(tk_img: tkinter.PhotoImage, tk_canvas: tkinter.Canvas, img: img_type, scale: int = GUI_SCALE):
+def render_img_tk(gui_thread: GUIThread, img: img_type, scale: int = GUI_SCALE):
     for y_index, row in enumerate(img):
         for x_index, pixel in enumerate(row):
             if pixel:
-                tk_img.put(f'#{pixel}', (x_index, y_index))
+                gui_thread.tk_img.put(f'#{pixel}', (x_index, y_index))
 
-    w = tk_img.width()
-    h = tk_img.height()
-    tk_img = tk_img.zoom(scale)
-    tk_canvas.delete('Pixels')
-    tk_canvas.create_image(
+    w = gui_thread.tk_img.width()
+    h = gui_thread.tk_img.height()
+    tk_img = gui_thread.tk_img.zoom(scale)
+    gui_thread.tk_canvas.delete('Pixels')
+    gui_thread.tk_canvas.create_image(
         (w / 2, h / 2), image=tk_img, state='normal'
     )
+    tkinter.Label(gui_thread.tk, image=tk_img)
 
 
-def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, tk_canvas: tkinter.Canvas, headers: dict):
+def run_for_img(zone: Zone, canvas_size: dict, gui_thread: GUIThread, headers: dict):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     img = zone.img
     img_location = zone.location
 
     logging.info('Getting current canvas status')
     canvas = get_pixels(canvas_size, headers)
-    render_img_tk(tk_img, tk_canvas, canvas)
+    render_img_tk(gui_thread, canvas)
     logging.info('Got current canvas status')
 
     for y_index, row in enumerate(img):
@@ -361,7 +398,7 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, tk_ca
                 logging.info(f'Getting status of pixel at ({pix_x}, {pix_y})')
                 new_pixel = get_pixel(pix_x, pix_y, headers)
                 canvas[pix_y][pix_x] = new_pixel
-                put_scaled_pixel(tk_img, new_pixel, (pix_x, pix_y))
+                put_scaled_pixel(gui_thread.tk_img, new_pixel, (pix_x, pix_y))
                 logging.info(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
 
             if colour is None:
@@ -374,43 +411,7 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, tk_ca
                 hit_incorrect_pixel = True
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
                 set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
-                put_scaled_pixel(tk_img, colour, (pix_x, pix_y))
-
-
-class GUIThread(threading.Thread):
-    def __init__(self, canvas_size: dict, activate: bool = True, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.daemon = True
-        self.startup_barrier = threading.Barrier(2)
-
-        self.canvas_size = canvas_size
-        self.activate = activate
-
-        self.tk = None
-        self.tk_canvas = None
-        self.tk_img = None
-
-    def run(self) -> None:
-        w = self.canvas_size['width'] * GUI_SCALE
-        h = self.canvas_size['height'] * GUI_SCALE
-
-        self.tk = tkinter.Tk()
-        self.tk.title('pydis-pixels')
-        self.tk.resizable(width=False, height=False)
-        self.tk.geometry(f'{w}x{h}')
-        self.tk_canvas = tkinter.Canvas(self.tk, bg='#ffffff', width=w, height=h)
-        self.tk_canvas.pack()
-        self.tk_img = tkinter.PhotoImage(
-            name='Pixels', width=w, height=h
-        )
-        self.tk_canvas.create_image(
-            (w/2, h/2), image=self.tk_img, state='normal'
-        )
-
-        self.startup_barrier.wait()
-        if self.activate:
-            logging.info('Starting GUI canvas display with dimensions %sx%s', w, h)
-            self.tk.mainloop()
+                put_scaled_pixel(gui_thread.tk_img, colour, (pix_x, pix_y))
 
 
 def main():
@@ -455,7 +456,7 @@ def main():
                 logging.info(f'img dimension x: {zone.width}')
                 logging.info(f'img dimension y: {zone.height}')
                 logging.info(f'img pixels: {zone.area_not_transparent}')
-                run_for_img(zone, canvas_size, gui_thread.tk_img, gui_thread.tk_canvas, headers)
+                run_for_img(zone, canvas_size, gui_thread, headers)
         except Exception as error:
             logging.error(error)
 
