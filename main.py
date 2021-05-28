@@ -23,6 +23,13 @@ __version__ = '3.0.0'
 imgs = [
     "cmpc",
     "httpscmpclivetwitchtvcontrolmypc-utf-8",
+    "wbub",
+    "jmcb",
+    "voxelfox",
+    "httpsvflgg-utf-8",
+    "JMcB-utf-8",
+    "sqlitecult",
+    "pydispix",
 ]
 
 
@@ -30,6 +37,8 @@ CONFIG_FILE_PATH = Path('config.json')
 IMGS_FOLDER = Path('imgs')
 CANVAS_LOG_PATH = Path('canvas.log')
 DEBUG_LOG_PATH = Path('debug.log')
+CANVAS_IMAGE_PATH = Path('imgs') / 'upscale' / 'canvas.png'
+WORM_COLOUR = 'ff8983'
 BASE_URL = 'https://pixels.pythondiscord.com'
 SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
@@ -237,7 +246,7 @@ def set_pixel(x: int, y: int, rgb: str, headers: dict):
     ratelimit(r.headers)
 
 
-def get_pixels(canvas_size: dict, headers: dict) -> img_type:
+def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typing.Union[img_type, bytes]:
     """get_pixels endpoint wrapper.
 
     Returns as a 2d list of hex colour strings, like an img.
@@ -251,6 +260,9 @@ def get_pixels(canvas_size: dict, headers: dict) -> img_type:
     pixels_bytes = r.content
     with open(CANVAS_LOG_PATH, 'a', encoding='utf-8') as canvas_log_file:
         canvas_log_file.write(f'{time.asctime()}\n{pixels_bytes}\n')
+    if as_bytes:
+        return pixels_bytes
+
     canvas = []
     for y in range(canvas_size['height']):
         row = []
@@ -288,6 +300,19 @@ def get_size(headers: dict) -> typing.Dict[str, int]:
     return r.json()
 
 
+def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path] = None):
+    if path is None:
+        path = CANVAS_IMAGE_PATH
+
+    canvas_bytes = get_pixels(canvas_size, headers, as_bytes=True)
+    canvas_pil_img = PIL.Image.frombytes(
+        mode='RGB',
+        size=(canvas_size['width'], canvas_size['height']),
+        data=canvas_bytes
+    )
+    canvas_pil_img.save(path)
+
+
 def put_scaled_pixel(tk_img: tkinter.PhotoImage, colour: str, location: typing.Tuple[int, int], scale: int = GUI_SCALE):
     fcolour = f'#{colour}'
     slocation = [c * scale for c in location]
@@ -307,7 +332,7 @@ def render_img_tk(tk_img: tkinter.PhotoImage, tk_canvas: tkinter.Canvas, img: im
     tk_img = tk_img.zoom(x=scale, y=scale)
     tk_canvas.delete('Pixels')
     tk_canvas.create_image(
-        (w/2, h/2), image=tk_img, state='normal'
+        (w / 2, h / 2), image=tk_img, state='normal'
     )
 
 
@@ -343,6 +368,8 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, tk_ca
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
             elif canvas[pix_y][pix_x] == colour:
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) is {colour} as intended')
+            elif colour == WORM_COLOUR:
+                logging.info('Oh, worm')
             else:
                 hit_incorrect_pixel = True
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
@@ -399,6 +426,9 @@ def main():
     logging.info('Getting canvas size')
     canvas_size = get_size(headers)
     logging.info(f'Canvas size: {canvas_size}')
+
+    logging.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
+    save_canvas_as_png(canvas_size, headers)
 
     logging.info(f'Loading zones to do from {IMGS_FOLDER}')
     zones_to_do = load_zones(IMGS_FOLDER, imgs)
