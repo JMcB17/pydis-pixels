@@ -35,6 +35,7 @@ IMGS_FOLDER = Path('imgs')
 CANVAS_LOG_PATH = Path('canvas.log')
 DEBUG_LOG_PATH = Path('debug.log')
 CANVAS_IMAGE_PATH = Path('imgs') / 'upscale' / 'canvas.png'
+WORM_COLOUR = 'ff8983'
 BASE_URL = 'https://pixels.pythondiscord.com'
 SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
@@ -334,6 +335,8 @@ def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: d
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
             elif canvas[pix_y][pix_x] == colour:
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) is {colour} as intended')
+            elif colour == WORM_COLOUR:
+                logging.info('Oh, worm')
             else:
                 hit_incorrect_pixel = True
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
