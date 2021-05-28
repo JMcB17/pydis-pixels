@@ -126,10 +126,12 @@ Courtesy of Skylark#6969 a.k.a Pythot
 ![claptrap,10x,(,)](https://user-images.githubusercontent.com/26749912/119982429-bbc2f000-bfb6-11eb-8010-6d1ab861edeb.png)    
 Couldn't currently locate this on the canvas.    
 Courtesy of AaEnnDeeErrEeEss#5157
-### [golden heart upper - (87, 17)](#golden-heart-upper)
+### [butter heart upper - (87, 17)](#golden-heart-upper)
 ![golden-heart-upper,1x,(87,17)](https://user-images.githubusercontent.com/26749912/119984837-c7fc7c80-bfb9-11eb-92fc-b652ee8d36cd.png)
 ![golden-heart-upper,10x,(87,17)](https://user-images.githubusercontent.com/26749912/119984841-c9c64000-bfb9-11eb-863c-20eadeb6646f.png)    
+Courtesy of Artemis#2000    
 Lower at (60, 54).
 ### [Linode - (47, 73)](#linode)
 ![linode,1x,(47,73)](https://user-images.githubusercontent.com/26749912/119984917-e793a500-bfb9-11eb-883e-7523e9dbad8a.png)
 ![linode,10x,(47,73)](https://user-images.githubusercontent.com/26749912/119984920-e82c3b80-bfb9-11eb-987c-6611eaf8e7fa.png)    
+Courtesy of ItsDrike#5359
