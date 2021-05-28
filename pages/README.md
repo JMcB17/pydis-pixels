@@ -40,6 +40,9 @@ Courtesy of fix error#1642
 ![source,1x,(0,0)](https://user-images.githubusercontent.com/26749912/119981634-c3ce6000-bfb5-11eb-99fb-32547fd4772f.png)    
 Courtesy of laundmo#7544
 
+![bigplan1,1x,(0,0)](https://user-images.githubusercontent.com/26749912/119996761-f59bf280-bfc6-11eb-89c4-b3975a120b5c.png)
+Courtesy of Foxy#1259
+
 ### [trans pride upper - (40, 1)](#trans-pride-upper)
 ![trans-pride-upper,1x,(40,1)](https://user-images.githubusercontent.com/26749912/119976980-c2019e00-bfaf-11eb-81f6-08176cc2cc87.png)
 ![trans-pride-upper,10x,(40,1)](https://user-images.githubusercontent.com/26749912/119976977-c2019e00-bfaf-11eb-983c-c1785b20de77.png)
@@ -121,7 +124,7 @@ Courtesy of hahastinkypoop#8591
 ### [foxears - (90, 10)](#foxears)
 ![foxears,1x,(90,109)](https://user-images.githubusercontent.com/26749912/119996437-ac4ba300-bfc6-11eb-9adc-414c64d3859a.png)
 ![foxears,10x,(90,109)](https://user-images.githubusercontent.com/26749912/119996442-ad7cd000-bfc6-11eb-9ee9-653fa68519a3.png)
-Courtesy of Sedsarq#5109 and Bast#0006
+Courtesy of Sedsarq#5109 and Bast#0006 via [spreadshirt](https://image.spreadshirtmedia.net/image-server/v1/mp/compositions/T1456A1MPA4457PT10X35Y38D172654919FS8899/views/1,width=550,height=550,appearanceId=1,backgroundColor=FFFFFF,noPt=true/pixel-art-fox-fox-ansiktsmask.jpg)
 ### [PLS SOMEONE HUG ME - (59, 99)](#plshug)
 ![plshug,1x,(59,99)](https://user-images.githubusercontent.com/26749912/119982194-74d4fa80-bfb6-11eb-8670-dd6532385bd5.png)
 ![plshug,10x,(59,99)](https://user-images.githubusercontent.com/26749912/119982200-76062780-bfb6-11eb-8327-c3737d815856.png)
@@ -151,8 +154,12 @@ Courtesy of ItsDrike#5359
 ![theelutil,10x,(139,44)](https://user-images.githubusercontent.com/26749912/119990385-2c223f00-bfc0-11eb-99d0-fe09fc531a37.png)
 ### [HI - (0, 109)](#hi)
 ![HI,1x,(0,109)](https://user-images.githubusercontent.com/26749912/119995702-c3d65c00-bfc5-11eb-99c7-4c48b7559421.png)
-![HI,10x,(0,109)](https://user-images.githubusercontent.com/26749912/119995705-c5a01f80-bfc5-11eb-8020-0147cbcedb8d.png)
+![HI,10x,(0,109)](https://user-images.githubusercontent.com/26749912/119996594-ceddbc00-bfc6-11eb-8ada-e5a071e510f2.png)
 ### [Griff - (120, )46](#griff)
 ![griff,1x,(120,46)](https://user-images.githubusercontent.com/26749912/119996013-24659900-bfc6-11eb-9f43-8d9214d82f2f.png)
 ![griff,10x,(120,46)](https://user-images.githubusercontent.com/26749912/119996021-262f5c80-bfc6-11eb-9cae-a16b2934fa97.png)    
 Courtesy of Griff#9021
+### [yert - (0, 30)](#yert)
+![yert,1x,(0,30)](https://user-images.githubusercontent.com/26749912/119997272-7824b200-bfc7-11eb-917e-2e6efbaf10ca.png)
+![yert,10x,(0,30)](https://user-images.githubusercontent.com/26749912/119997279-79ee7580-bfc7-11eb-918b-f0833e7450cb.png)    
+Courtesy of LX#4932 via the Python Discord emote :yert:
