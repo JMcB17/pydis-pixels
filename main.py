@@ -427,6 +427,9 @@ def main():
         "Authorization": bearer_token
     }
 
+    print_sleep_time(STARTUP_DELAY)
+    time.sleep(STARTUP_DELAY)
+
     logging.info('Getting canvas size')
     canvas_size = get_size(headers)
     logging.info(f'Canvas size: {canvas_size}')
@@ -441,9 +444,6 @@ def main():
     canvas_area = canvas_size['width'] * canvas_size['height']
     total_area_percent = round(((total_area / canvas_area) * 100), 2)
     logging.info(f'Total area: {total_area_percent}% of canvas')
-
-    print_sleep_time(STARTUP_DELAY)
-    time.sleep(STARTUP_DELAY)
 
     gui_thread = GUIThread(canvas_size=canvas_size, activate=args.gui)
     gui_thread.start()
