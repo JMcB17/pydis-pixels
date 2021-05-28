@@ -329,7 +329,7 @@ def render_img_tk(tk_img: tkinter.PhotoImage, tk_canvas: tkinter.Canvas, img: im
 
     w = tk_img.width()
     h = tk_img.height()
-    tk_img = tk_img.zoom(x=scale, y=scale)
+    tk_img = tk_img.zoom(scale)
     tk_canvas.delete('Pixels')
     tk_canvas.create_image(
         (w / 2, h / 2), image=tk_img, state='normal'
@@ -396,6 +396,8 @@ class GUIThread(threading.Thread):
 
         self.tk = tkinter.Tk()
         self.tk.title('pydis-pixels')
+        self.tk.resizable(width=False, height=False)
+        self.tk.geometry(f'{w}x{h}')
         self.tk_canvas = tkinter.Canvas(self.tk, bg='#ffffff', width=w, height=h)
         self.tk_canvas.pack()
         self.tk_img = tkinter.PhotoImage(
@@ -407,6 +409,7 @@ class GUIThread(threading.Thread):
 
         self.startup_barrier.wait()
         if self.activate:
+            logging.info('Starting GUI canvas display with dimensions %sx%s', w, h)
             self.tk.mainloop()
 
 
