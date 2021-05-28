@@ -181,7 +181,8 @@ Courtesy of AaEnnDeeErrEeEss#5157
 ![rustlogopixels,10x,(,)](https://user-images.githubusercontent.com/26749912/120001064-51687a80-bfcb-11eb-9dd7-bdc4273d7f8c.png)    
 One of the oldest drawings.    
 Courtesy of Skylark#6969
-### [jeinistaw - (?, ?)](#jeinistaw)
+### [JelNiSław - (144, 1)](#jeinistaw)
 ![jeinistaw,1x,(,)](https://user-images.githubusercontent.com/26749912/120004314-83c7a700-bfce-11eb-9040-9c25abd96752.png)
 ![jeinistaw,10x,(,)](https://user-images.githubusercontent.com/26749912/120004320-84f8d400-bfce-11eb-953b-7f6724329ced.png)    
-Was one of the oldest and largest drawings. Attempted to move and upscale to the top right corner when the canvas expanded. Currently has its left side overwritten by pydispix and does not appear to be maintained. This restoration is likely not perfect.
+Was one of the oldest and largest drawings. Attempted to move and upscale to the top right corner when the canvas expanded. Currently has its left side overwritten by pydispix and does not appear to be maintained. This restoration is likely not perfect.    
+Courtesy of JelNiSław#6450
