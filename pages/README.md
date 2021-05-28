@@ -34,6 +34,9 @@ Image names are in the format used by my own script, which is in this same githu
 
 ## pride flags
 
+![source,1x,(0,0)](https://user-images.githubusercontent.com/26749912/119981634-c3ce6000-bfb5-11eb-99fb-32547fd4772f.png)
+Courtesy of laundmo#7544
+
 ### [trans pride upper - (40, 1)](#trans-pride-upper)
 ![trans-pride-upper,1x,(40,1)](https://user-images.githubusercontent.com/26749912/119976980-c2019e00-bfaf-11eb-81f6-08176cc2cc87.png)
 ![trans-pride-upper,10x,(40,1)](https://user-images.githubusercontent.com/26749912/119976977-c2019e00-bfaf-11eb-983c-c1785b20de77.png)
@@ -55,6 +58,36 @@ Todo: organise
 ### [pythons2 - (70, 73)](#pythons2)
 ![pythons2,1x,(70,63)](https://user-images.githubusercontent.com/26749912/119975715-1ad03700-bfae-11eb-83f7-a136237e16ff.png)
 ![pythons2,10x,(70,63)](https://user-images.githubusercontent.com/26749912/119975728-1d329100-bfae-11eb-919d-03e204debf9c.png)
+Courtesy of ambv#1804
 ### [osu - (93, 55)](#osu)
 ![osu,1x,(93,55)](https://user-images.githubusercontent.com/26749912/119977609-903d0700-bfb0-11eb-90a3-df83e2f51576.png)
 ![osu,10x,(93,55)](https://user-images.githubusercontent.com/26749912/119977615-9206ca80-bfb0-11eb-932c-d543747da228.png)
+### [amogus - (4, 54)](#amogus)
+![amogus-sprite,1x,(4,54)](https://user-images.githubusercontent.com/26749912/119981694-d3e63f80-bfb5-11eb-8b0f-f49013f819df.png)
+![amogus-sprite,10x,(4,54)](https://user-images.githubusercontent.com/26749912/119981700-d5176c80-bfb5-11eb-8428-32aa5bb47363.png)
+### [Brave browser - (0, 1)](#bravebrowser)
+![bravebrowser,1x,(0,1)](https://user-images.githubusercontent.com/26749912/119981749-e3658880-bfb5-11eb-856b-89d237df1499.png)
+![bravebrowser,10x,(0,1)](https://user-images.githubusercontent.com/26749912/119981760-e6607900-bfb5-11eb-9cb9-742e2aaf745e.png)
+### [Duck - (74, 19)](#Duck)
+![Duck,1x,(74,19)](https://user-images.githubusercontent.com/26749912/119981802-f5dfc200-bfb5-11eb-9091-d0a407118af9.png)
+![Duck,10x,(74,19)](https://user-images.githubusercontent.com/26749912/119981806-f6785880-bfb5-11eb-84ae-998019f08e37.png)
+Courtesy of hahastinkypoop#8591
+### [foxears - (90, 10)](#foxears)
+![foxears,1x,(90,109)](https://user-images.githubusercontent.com/26749912/119982120-5a028600-bfb6-11eb-9ceb-122ddcfd5a1d.png)
+![foxears,10x,(90,109)](https://user-images.githubusercontent.com/26749912/119982127-5b33b300-bfb6-11eb-92ea-f78757929463.png)
+Courtesy of Bast#0006
+### [PLS SOMEONE HUG ME - (59, 99)](#plshug)
+![plshug,1x,(59,99)](https://user-images.githubusercontent.com/26749912/119982194-74d4fa80-bfb6-11eb-8670-dd6532385bd5.png)
+![plshug,10x,(59,99)](https://user-images.githubusercontent.com/26749912/119982200-76062780-bfb6-11eb-8327-c3737d815856.png)
+### [Pythot - (176, 85)](#pythot)
+![pythot,1x,(176,85)](https://user-images.githubusercontent.com/26749912/119982259-84ecda00-bfb6-11eb-90c6-a0423887085a.png)
+![pythot,10x,(176,85)](https://user-images.githubusercontent.com/26749912/119982264-861e0700-bfb6-11eb-890f-a64c5ce676e2.png)
+Courtesy of Skylark#6969 a.k.a Pythot
+### [purple heart - (60, 77)](#purple-heart)
+![purple-heart,1x,(60,77)](https://user-images.githubusercontent.com/26749912/119982386-aea60100-bfb6-11eb-96d8-f5642e8b0a43.png)
+![purple-heart,10x,(60,77)](https://user-images.githubusercontent.com/26749912/119982392-afd72e00-bfb6-11eb-93b3-d4991eb7bebd.png)
+### [claptrap - (?, ?)](#claptrap)
+![claptrap,1x,(,)](https://user-images.githubusercontent.com/26749912/119982424-ba91c300-bfb6-11eb-9051-703734528790.png)
+![claptrap,10x,(,)](https://user-images.githubusercontent.com/26749912/119982429-bbc2f000-bfb6-11eb-8010-6d1ab861edeb.png)
+Couldn't currently locate this on the canvas.    
+Courtesy of AaEnnDeeErrEeEss#5157
