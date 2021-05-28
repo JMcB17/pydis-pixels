@@ -40,7 +40,7 @@ Courtesy of fix error#1642
 ![source,1x,(0,0)](https://user-images.githubusercontent.com/26749912/119981634-c3ce6000-bfb5-11eb-99fb-32547fd4772f.png)    
 Courtesy of laundmo#7544
 
-![bigplan1,1x,(0,0)](https://user-images.githubusercontent.com/26749912/119996761-f59bf280-bfc6-11eb-89c4-b3975a120b5c.png)
+![bigplan1,1x,(0,0)](https://user-images.githubusercontent.com/26749912/119996761-f59bf280-bfc6-11eb-89c4-b3975a120b5c.png)    
 Courtesy of Foxy#1259
 
 ### [trans pride upper - (40, 1)](#trans-pride-upper)
@@ -94,6 +94,11 @@ The largest images on the map. Currently only Rainbow Road
 ![oreo-the-mask-cat,1x,(41,20)](https://user-images.githubusercontent.com/26749912/119995801-e23c5780-bfc5-11eb-9a82-701200d1e58f.png)
 ![oreo-the-mask-cat,10x,(41,20)](https://user-images.githubusercontent.com/26749912/119995809-e36d8480-bfc5-11eb-82de-0c282f4c7c44.png)
 
+## Guido
+### [Guido - (41, 8)](#guido)
+![Guido,1x,(41,8)](https://user-images.githubusercontent.com/26749912/119999831-131e8b80-bfca-11eb-957d-77229f38b516.png)
+![Guido,10x,(41,8)](https://user-images.githubusercontent.com/26749912/119999838-144fb880-bfca-11eb-92a0-bb594a90d959.png)
+
 ## misc
 
 Todo: organise
@@ -123,7 +128,7 @@ Courtesy of BrightSkyz#2627 and stupid cat#8160
 Courtesy of hahastinkypoop#8591
 ### [foxears - (90, 10)](#foxears)
 ![foxears,1x,(90,109)](https://user-images.githubusercontent.com/26749912/119996437-ac4ba300-bfc6-11eb-9adc-414c64d3859a.png)
-![foxears,10x,(90,109)](https://user-images.githubusercontent.com/26749912/119996442-ad7cd000-bfc6-11eb-9ee9-653fa68519a3.png)
+![foxears,10x,(90,109)](https://user-images.githubusercontent.com/26749912/119996442-ad7cd000-bfc6-11eb-9ee9-653fa68519a3.png)    
 Courtesy of Sedsarq#5109 and Bast#0006 via [spreadshirt](https://image.spreadshirtmedia.net/image-server/v1/mp/compositions/T1456A1MPA4457PT10X35Y38D172654919FS8899/views/1,width=550,height=550,appearanceId=1,backgroundColor=FFFFFF,noPt=true/pixel-art-fox-fox-ansiktsmask.jpg)
 ### [PLS SOMEONE HUG ME - (59, 99)](#plshug)
 ![plshug,1x,(59,99)](https://user-images.githubusercontent.com/26749912/119982194-74d4fa80-bfb6-11eb-8670-dd6532385bd5.png)
@@ -163,3 +168,7 @@ Courtesy of Griff#9021
 ![yert,1x,(0,30)](https://user-images.githubusercontent.com/26749912/119997272-7824b200-bfc7-11eb-917e-2e6efbaf10ca.png)
 ![yert,10x,(0,30)](https://user-images.githubusercontent.com/26749912/119997279-79ee7580-bfc7-11eb-918b-f0833e7450cb.png)    
 Courtesy of LX#4932 via the Python Discord emote :yert:
+### [Wilson - (160, 16)](#wilson)
+![Wilson,1x,(160,16)](https://user-images.githubusercontent.com/26749912/119998731-e5851280-bfc8-11eb-8af2-8b61e99ab4b3.png)
+![Wilson,10x,(160,16)](https://user-images.githubusercontent.com/26749912/119998735-e61da900-bfc8-11eb-830a-1eae8c843baa.png)    
+Courtesy of LX#4932
