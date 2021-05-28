@@ -344,6 +344,22 @@ def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: d
                 set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
 
 
+def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, headers: dict):
+    while True:
+        try:
+            for zone in zones_to_do:
+                img = zone.img
+                img_location = zone.location
+
+                logging.info(f"img name: {zone.name}")
+                logging.info(f'img dimension x: {zone.width}')
+                logging.info(f'img dimension y: {zone.height}')
+                logging.info(f'img pixels: {zone.area_not_transparent}')
+                run_for_img(img, img_location, canvas_size, headers)
+        except Exception as error:
+            logging.exception(error)
+
+
 def main():
     """Run the program for all imgs."""
     parser = get_parser()
@@ -361,9 +377,6 @@ def main():
     canvas_size = get_size(headers)
     logging.info(f'Canvas size: {canvas_size}')
 
-    logging.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
-    save_canvas_as_png(canvas_size, headers)
-
     logging.info(f'Loading zones to do from {IMGS_FOLDER}')
     zones_to_do = load_zones(IMGS_FOLDER, imgs)
     total_area = sum(z.area_not_transparent for z in zones_to_do)
@@ -374,19 +387,9 @@ def main():
 
     print_sleep_time(STARTUP_DELAY)
     time.sleep(STARTUP_DELAY)
-    while True:
-        try:
-            for zone in zones_to_do:
-                img = zone.img
-                img_location = zone.location
-
-                logging.info(f"img name: {zone.name}")
-                logging.info(f'img dimension x: {zone.width}')
-                logging.info(f'img dimension y: {zone.height}')
-                logging.info(f'img pixels: {zone.area_not_transparent}')
-                run_for_img(img, img_location, canvas_size, headers)
-        except Exception as error:
-            logging.error(error)
+    logging.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
+    save_canvas_as_png(canvas_size, headers)
+    run_protections(zones_to_do, canvas_size, headers)
 
 
 if __name__ == '__main__':
