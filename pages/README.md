@@ -39,7 +39,7 @@ Courtesy of fix error#1642
 
 ## pride flags
 
-![source,1x,(0,0)](https://user-images.githubusercontent.com/26749912/119981634-c3ce6000-bfb5-11eb-99fb-32547fd4772f.png)    
+![source2,1x,(0,0)](https://user-images.githubusercontent.com/26749912/120018429-0eb09d80-bfdf-11eb-94d4-68cced36d739.png)    
 Courtesy of laundmo#7544
 
 ![bigplan1,1x,(0,0)](https://user-images.githubusercontent.com/26749912/119996761-f59bf280-bfc6-11eb-89c4-b3975a120b5c.png)    
