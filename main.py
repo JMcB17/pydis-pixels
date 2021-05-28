@@ -21,6 +21,7 @@ __version__ = '2.10.0'
 imgs = [
     "cmpc",
     "httpscmpclivetwitchtvcontrolmypc-utf-8",
+    "bub",
     "jmcb",
     "voxelfox",
     "httpsvflgg-utf-8",
