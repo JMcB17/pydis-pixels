@@ -16,8 +16,9 @@ def get_parser() -> argparse.ArgumentParser:
     """Get this script's parser."""
     parser = argparse.ArgumentParser(description='convert text to colours codes and an image')
 
+    parser.add_argument('--version', action='version', version=__version__)
     parser.add_argument('text', nargs='?', help='the text to convert')
-    parser.add_argument('-s', '--scale', type=int, default=1)
+    parser.add_argument('-s', '--scale', type=int, default=1, help='scale up the image this much before saving it')
 
     return parser
 

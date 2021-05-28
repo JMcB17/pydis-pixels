@@ -6,6 +6,7 @@ import typing
 import re
 import time
 import logging
+import argparse
 from pathlib import Path
 
 import requests
@@ -59,6 +60,18 @@ logging.basicConfig(
 # don't fill up debug.log with other loggers
 for logger_name in ['urllib3', 'PIL']:
     logging.getLogger(logger_name).setLevel(logging.ERROR)
+
+
+def get_parser() -> argparse.ArgumentParser:
+    """Get this script's parser."""
+    parser = argparse.ArgumentParser(
+        description=f'load images and their coords from {IMGS_FOLDER} and try to create/protect them'
+    )
+
+    parser.add_argument('--version', action='version', version=__version__)
+    parser.add_argument('-g', '--gui', action='store_true', help='run a live tkinter display of the canvas')
+
+    return parser
 
 
 def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
