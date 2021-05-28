@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
 import json
+import sys
 import typing
 import re
 import time
 import tkinter
 import threading
+import logging
 from pathlib import Path
 
 import requests
@@ -18,19 +20,15 @@ __version__ = '3.0.0'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
-    "httpscmpclivetwitchtvcontrolmypc-utf-8,1x,(13,38).png",
-    "httpsvflgg-utf-8,1x,(103,56).png",
-    "JMcB-utf-8,1x,(75,5).png",
-    "voxelfox,1x,(103,37).png",
-    "cmpc,1x,(13,35).png",
-    "jmcb,1x,(75,2).png",
-    "pydispix,1x,(139,0).png",
+    "cmpc",
+    "httpscmpclivetwitchtvcontrolmypc-utf-8",
 ]
 
 
 CONFIG_FILE_PATH = Path('config.json')
 IMGS_FOLDER = Path('imgs')
 CANVAS_LOG_PATH = Path('canvas.log')
+DEBUG_LOG_PATH = Path('debug.log')
 BASE_URL = 'https://pixels.pythondiscord.com'
 SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
@@ -42,6 +40,29 @@ STARTUP_DELAY = 0
 
 
 img_type = typing.List[typing.List[str]]
+
+
+# file handler for all debug logging with timestamps
+file_handler = logging.FileHandler(DEBUG_LOG_PATH, encoding='utf-8')
+file_handler.setLevel(logging.DEBUG)
+file_formatter = logging.Formatter('%(asctime)s:' + logging.BASIC_FORMAT)
+file_handler.setFormatter(file_formatter)
+# stream handler for info level print-like logging
+stream_handler = logging.StreamHandler(stream=sys.stdout)
+stream_handler.setLevel(logging.INFO)
+stream_formatter = logging.Formatter()
+stream_handler.setFormatter(stream_formatter)
+# noinspection PyArgumentList
+logging.basicConfig(
+    level=logging.DEBUG,
+    handlers=[
+        file_handler,
+        stream_handler,
+    ]
+)
+# don't fill up debug.log with other loggers
+for logger_name in ['urllib3', 'PIL']:
+    logging.getLogger(logger_name).setLevel(logging.ERROR)
 
 
 def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
@@ -144,7 +165,7 @@ class Zone:
                 if pixel is None:
                     self.area_not_transparent -= 1
 
-        print(
+        logging.info(
             f'Loaded zone {self.name}\n'
             f'    width:  {self.width}\n'
             f'    height: {self.height}\n'
@@ -158,29 +179,32 @@ def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
 
     for img in img_names:
         for file in directory.iterdir():
-            if file.name == img and file.is_file():
+            if file.name.startswith(img) and file.is_file():
                 zones.append(Zone(file))
                 break
 
     return zones
 
 
+def print_sleep_time(duration):
+    logging.info(f'sleeping for {duration} seconds')
+    sleep_finish_time = time.asctime(time.localtime(time.time() + duration))
+    logging.info(f'finish sleeping at {sleep_finish_time}')
+
+
 def ratelimit(headers: CaseInsensitiveDict):
     """Given headers from a response, print info and sleep if needed."""
     if 'requests-remaining' in headers:
         requests_remaining = int(headers['requests-remaining'])
-        print(f'{requests_remaining} requests remaining')
+        logging.info(f'{requests_remaining} requests remaining')
         if not requests_remaining:
             requests_reset = int(headers['requests-reset'])
-            print(f'sleeping for {requests_reset} seconds')
-            sleep_finish_time = time.asctime(time.localtime(time.time() + requests_reset))
-            print(f'finish sleeping at {sleep_finish_time}')
+            print_sleep_time(requests_reset)
             time.sleep(requests_reset)
     else:
         cooldown_reset = int(headers['cooldown-reset'])
-        print(f'on cooldown\nsleeping for {cooldown_reset} seconds')
-        sleep_finish_time = time.asctime(time.localtime(time.time() + cooldown_reset))
-        print(f'finish sleeping at {sleep_finish_time}')
+        logging.info('on cooldown')
+        print_sleep_time(cooldown_reset)
         time.sleep(cooldown_reset)
 
 
@@ -196,7 +220,7 @@ def set_pixel(x: int, y: int, rgb: str, headers: dict):
         json=payload,
         headers=headers
     )
-    print(r.json()['message'])
+    logging.info(r.json()['message'])
 
     ratelimit(r.headers)
 
@@ -213,12 +237,12 @@ def get_pixels(canvas_size: dict, headers: dict) -> img_type:
     ratelimit(r.headers)
 
     pixels_bytes = r.content
-    with open(CANVAS_LOG_PATH, 'a') as canvas_log_file:
+    with open(CANVAS_LOG_PATH, 'a', encoding='utf-8') as canvas_log_file:
         canvas_log_file.write(f'{time.asctime()}\n{pixels_bytes}\n')
     canvas = []
-    for y in range(canvas_size['height'] + 1):
+    for y in range(canvas_size['height']):
         row = []
-        for x in range(canvas_size['width'] + 1):
+        for x in range(canvas_size['width']):
             index = (y * canvas_size['width'] * 3) + (x * 3)
             pixel = pixels_bytes[index:index+3]
             row.append(three_bytes_to_rgb_hex_string(pixel))
@@ -280,12 +304,14 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, tk_ca
     img = zone.img
     img_location = zone.location
 
-    print('Getting current canvas status')
+    logging.info('Getting current canvas status')
     canvas = get_pixels(canvas_size, headers)
     render_img_tk(tk_img, tk_canvas, canvas)
-    print('Got current canvas status')
+    logging.info('Got current canvas status')
 
     for y_index, row in enumerate(img):
+        hit_incorrect_pixel = False
+
         for x_index, colour in enumerate(row):
             pix_y = img_location['y'] + y_index
             pix_x = img_location['x'] + x_index
@@ -293,19 +319,21 @@ def run_for_img(zone: Zone, canvas_size: dict, tk_img: tkinter.PhotoImage, tk_ca
             # get canvas every other time
             # getting it more often means better collaboration
             # but too often is too often
-            if x_index % 2 == 0:
-                print(f'Getting status of pixel at ({pix_x}, {pix_y})')
+            # also only do it if we've hit a zone that needs changing, to further prevent get_pixel rate limiting
+            if hit_incorrect_pixel and x_index % 2 == 0:
+                logging.info(f'Getting status of pixel at ({pix_x}, {pix_y})')
                 new_pixel = get_pixel(pix_x, pix_y, headers)
                 canvas[pix_y][pix_x] = new_pixel
                 put_scaled_pixel(tk_img, new_pixel, (pix_x, pix_y))
-                print(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
+                logging.info(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
 
             if colour is None:
-                print(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
+                logging.info(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
             elif canvas[pix_y][pix_x] == colour:
-                print(f'Pixel at ({pix_x}, {pix_y}) is {colour} as intended')
+                logging.info(f'Pixel at ({pix_x}, {pix_y}) is {colour} as intended')
             else:
-                print(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
+                hit_incorrect_pixel = True
+                logging.info(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
                 set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
                 put_scaled_pixel(tk_img, colour, (pix_x, pix_y))
 
@@ -345,25 +373,25 @@ def main():
     """Run the program for all imgs."""
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
-    print('Loaded config')
+    logging.info('Loaded config')
     bearer_token = f"Bearer {config['token']}"
     headers = {
         "Authorization": bearer_token
     }
 
-    print('Getting canvas size')
+    logging.info('Getting canvas size')
     canvas_size = get_size(headers)
-    print(f'Canvas size: {canvas_size}')
+    logging.info(f'Canvas size: {canvas_size}')
 
-    print(f'Loading zones to do from {IMGS_FOLDER}')
+    logging.info(f'Loading zones to do from {IMGS_FOLDER}')
     zones_to_do = load_zones(IMGS_FOLDER, imgs)
     total_area = sum(z.area_not_transparent for z in zones_to_do)
-    print(f'Total area: {total_area}')
+    logging.info(f'Total area: {total_area}')
     canvas_area = canvas_size['width'] * canvas_size['height']
     total_area_percent = round(((total_area / canvas_area) * 100), 2)
-    print(f'Total area: {total_area_percent}% of canvas')
+    logging.info(f'Total area: {total_area_percent}% of canvas')
 
-    print(f'sleeping for {STARTUP_DELAY} seconds')
+    print_sleep_time(STARTUP_DELAY)
     time.sleep(STARTUP_DELAY)
 
     startup_barrier = threading.Barrier(2)
@@ -372,12 +400,15 @@ def main():
     startup_barrier.wait()
 
     while True:
-        for zone in zones_to_do:
-            print(f"img name: {zone.name}")
-            print(f'img dimension x: {zone.width}')
-            print(f'img dimension y: {zone.height}')
-            print(f'img pixels: {zone.area_not_transparent}')
-            run_for_img(zone, canvas_size, gui_thread.tk_img, gui_thread.tk_canvas, headers)
+        try:
+            for zone in zones_to_do:
+                logging.info(f"img name: {zone.name}")
+                logging.info(f'img dimension x: {zone.width}')
+                logging.info(f'img dimension y: {zone.height}')
+                logging.info(f'img pixels: {zone.area_not_transparent}')
+                run_for_img(zone, canvas_size, gui_thread.tk_img, gui_thread.tk_canvas, headers)
+        except Exception as error:
+            logging.error(error)
 
 
 if __name__ == '__main__':
