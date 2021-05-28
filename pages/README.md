@@ -176,10 +176,11 @@ These images currently don't exist on the canvas.
 ![claptrap,10x,(,)](https://user-images.githubusercontent.com/26749912/119982429-bbc2f000-bfb6-11eb-8010-6d1ab861edeb.png)    
 Couldn't currently locate this on the canvas. Unsure if it was ever there.   
 Courtesy of AaEnnDeeErrEeEss#5157
-### [Rust logo - (?, ?)](#rustlogopixels)
+### [Rust logo - (131, 3)](#rustlogopixels)
 ![rustlogopixels,1x,(,)](https://user-images.githubusercontent.com/26749912/120001055-50374d80-bfcb-11eb-8190-7e1dfe2824e2.png)
 ![rustlogopixels,10x,(,)](https://user-images.githubusercontent.com/26749912/120001064-51687a80-bfcb-11eb-9dd7-bdc4273d7f8c.png)    
-One of the oldest drawings.
+One of the oldest drawings.    
+Courtesy of Skylark#6969
 ### [jeinistaw - (?, ?)](#jeinistaw)
 ![jeinistaw,1x,(,)](https://user-images.githubusercontent.com/26749912/120004314-83c7a700-bfce-11eb-9040-9c25abd96752.png)
 ![jeinistaw,10x,(,)](https://user-images.githubusercontent.com/26749912/120004320-84f8d400-bfce-11eb-953b-7f6724329ced.png)    
