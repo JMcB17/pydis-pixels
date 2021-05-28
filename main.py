@@ -44,7 +44,7 @@ SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
 GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
-GUI_SCALE = 5
+GUI_SCALE = 1
 STARTUP_DELAY = 120
 
 
@@ -86,6 +86,7 @@ class GUIThread(threading.Thread):
         self.tk = None
         self.tk_canvas = None
         self.tk_img = None
+        self.tk_img_id = None
 
     def run(self) -> None:
         w = self.canvas_size['width'] * GUI_SCALE
@@ -93,14 +94,14 @@ class GUIThread(threading.Thread):
 
         self.tk = tkinter.Tk()
         self.tk.title('pydis-pixels')
-        self.tk.resizable(width=False, height=False)
-        self.tk.geometry(f'{w}x{h}')
+        # self.tk.resizable(width=False, height=False)
+        # self.tk.geometry(f'{w}x{h}')
         self.tk_canvas = tkinter.Canvas(self.tk, bg='#ffffff', width=w, height=h)
         self.tk_canvas.pack()
         self.tk_img = tkinter.PhotoImage(
             name='Pixels', width=w, height=h
         )
-        self.tk_canvas.create_image(
+        self.tk_img_id = self.tk_canvas.create_image(
             (w/2, h/2), image=self.tk_img, state='normal'
         )
 
@@ -282,6 +283,19 @@ def set_pixel(x: int, y: int, rgb: str, headers: dict):
     ratelimit(r.headers)
 
 
+def img_bytes_to_dimensional_list(img_bytes: bytes, canvas_size: dict) -> img_type:
+    canvas = []
+    for y in range(canvas_size['height']):
+        row = []
+        for x in range(canvas_size['width']):
+            index = (y * canvas_size['width'] * 3) + (x * 3)
+            pixel = img_bytes[index:index + 3]
+            row.append(three_bytes_to_rgb_hex_string(pixel))
+        canvas.append(row)
+
+    return canvas
+
+
 def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typing.Union[img_type, bytes]:
     """get_pixels endpoint wrapper.
 
@@ -299,16 +313,7 @@ def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typi
     if as_bytes:
         return pixels_bytes
 
-    canvas = []
-    for y in range(canvas_size['height']):
-        row = []
-        for x in range(canvas_size['width']):
-            index = (y * canvas_size['width'] * 3) + (x * 3)
-            pixel = pixels_bytes[index:index+3]
-            row.append(three_bytes_to_rgb_hex_string(pixel))
-        canvas.append(row)
-
-    return canvas
+    return img_bytes_to_dimensional_list(pixels_bytes, canvas_size)
 
 
 def get_pixel(x: int, y: int, headers: dict) -> str:
@@ -357,20 +362,19 @@ def put_scaled_pixel(tk_img: tkinter.PhotoImage, colour: str, location: typing.T
             tk_img.put(fcolour, (slocation[0] + x, slocation[1] + y))
 
 
-def render_img_tk(gui_thread: GUIThread, img: img_type, scale: int = GUI_SCALE):
-    for y_index, row in enumerate(img):
-        for x_index, pixel in enumerate(row):
-            if pixel:
-                gui_thread.tk_img.put(f'#{pixel}', (x_index, y_index))
-
+def render_img_tk(gui_thread: GUIThread, img_bytes: bytes, canvas_size: dict, scale: int = GUI_SCALE):
     w = gui_thread.tk_img.width()
     h = gui_thread.tk_img.height()
-    tk_img = gui_thread.tk_img.zoom(scale)
-    gui_thread.tk_canvas.delete('Pixels')
-    gui_thread.tk_canvas.create_image(
-        (w / 2, h / 2), image=tk_img, state='normal'
+    img_pil = PIL.Image.frombytes(
+        mode='RGB',
+        size=(canvas_size['width'], canvas_size['height']),
+        data=img_bytes
     )
-    tkinter.Label(gui_thread.tk, image=tk_img)
+    gui_thread.tk_canvas.delete(gui_thread.tk_img_id)
+    gui_thread.tk_img = tkinter.PhotoImage(img_pil)
+    gui_thread.tk_img_id = gui_thread.tk_canvas.create_image(
+        (w / 2, h / 2), image=gui_thread.tk_img, state='normal'
+    )
 
 
 def run_for_img(zone: Zone, canvas_size: dict, gui_thread: GUIThread, headers: dict):
@@ -379,8 +383,9 @@ def run_for_img(zone: Zone, canvas_size: dict, gui_thread: GUIThread, headers: d
     img_location = zone.location
 
     logging.info('Getting current canvas status')
-    canvas = get_pixels(canvas_size, headers)
-    render_img_tk(gui_thread, canvas)
+    canvas_bytes = get_pixels(canvas_size, headers, as_bytes=True)
+    canvas = img_bytes_to_dimensional_list(canvas_bytes, canvas_size)
+    render_img_tk(gui_thread, canvas_bytes, canvas_size)
     logging.info('Got current canvas status')
 
     for y_index, row in enumerate(img):
