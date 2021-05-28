@@ -69,7 +69,7 @@ def get_parser() -> argparse.ArgumentParser:
     )
 
     parser.add_argument('--version', action='version', version=__version__)
-    parser.add_argument('-g', '--gui', action='store_true', help='run a live tkinter display of the canvas')
+    # parser.add_argument('-g', '--gui', action='store_true', help='run a live tkinter display of the canvas')
 
     return parser
 
@@ -319,6 +319,9 @@ def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: d
 
 def main():
     """Run the program for all imgs."""
+    parser = get_parser()
+    parser.parse_args()
+
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
     logging.info('Loaded config')
