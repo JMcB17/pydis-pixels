@@ -140,11 +140,6 @@ Courtesy of Skylark#6969 a.k.a Pythot
 ### [purple heart - (60, 77)](#purple-heart)
 ![purple-heart,1x,(60,77)](https://user-images.githubusercontent.com/26749912/119982386-aea60100-bfb6-11eb-96d8-f5642e8b0a43.png)
 ![purple-heart,10x,(60,77)](https://user-images.githubusercontent.com/26749912/119982392-afd72e00-bfb6-11eb-93b3-d4991eb7bebd.png)
-### [claptrap - (?, ?)](#claptrap)
-![claptrap,1x,(,)](https://user-images.githubusercontent.com/26749912/119982424-ba91c300-bfb6-11eb-9051-703734528790.png)
-![claptrap,10x,(,)](https://user-images.githubusercontent.com/26749912/119982429-bbc2f000-bfb6-11eb-8010-6d1ab861edeb.png)    
-Couldn't currently locate this on the canvas.    
-Courtesy of AaEnnDeeErrEeEss#5157
 ### [butter heart upper - (87, 17)](#golden-heart-upper)
 ![golden-heart-upper,1x,(87,17)](https://user-images.githubusercontent.com/26749912/119984837-c7fc7c80-bfb9-11eb-92fc-b652ee8d36cd.png)
 ![golden-heart-upper,10x,(87,17)](https://user-images.githubusercontent.com/26749912/119984841-c9c64000-bfb9-11eb-863c-20eadeb6646f.png)    
@@ -172,3 +167,15 @@ Courtesy of LX#4932 via the Python Discord emote :yert:
 ![Wilson,1x,(160,16)](https://user-images.githubusercontent.com/26749912/119998731-e5851280-bfc8-11eb-8af2-8b61e99ab4b3.png)
 ![Wilson,10x,(160,16)](https://user-images.githubusercontent.com/26749912/119998735-e61da900-bfc8-11eb-830a-1eae8c843baa.png)    
 Courtesy of LX#4932
+
+## obselete
+These images currently don't exist on the canvas.
+
+### [claptrap - (?, ?)](#claptrap)
+![claptrap,1x,(,)](https://user-images.githubusercontent.com/26749912/119982424-ba91c300-bfb6-11eb-9051-703734528790.png)
+![claptrap,10x,(,)](https://user-images.githubusercontent.com/26749912/119982429-bbc2f000-bfb6-11eb-8010-6d1ab861edeb.png)    
+Couldn't currently locate this on the canvas.    
+Courtesy of AaEnnDeeErrEeEss#5157
+### [Rust logo - (?, ?)](#rustlogopixels)
+![rustlogopixels,1x,(,)](https://user-images.githubusercontent.com/26749912/120001055-50374d80-bfcb-11eb-8190-7e1dfe2824e2.png)
+![rustlogopixels,10x,(,)](https://user-images.githubusercontent.com/26749912/120001064-51687a80-bfcb-11eb-9dd7-bdc4273d7f8c.png)
