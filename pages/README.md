@@ -215,3 +215,7 @@ Courtesy of JelNiSław#6450
 ![purple-heart,1x,(60,77)](https://user-images.githubusercontent.com/26749912/119982386-aea60100-bfb6-11eb-96d8-f5642e8b0a43.png)
 ![purple-heart,10x,(60,77)](https://user-images.githubusercontent.com/26749912/119982392-afd72e00-bfb6-11eb-93b3-d4991eb7bebd.png)    
 Replaced by pink heart.
+### [Ferris - (148, 81)](#ferris)
+![Ferris,1x,(148,81)](https://user-images.githubusercontent.com/26749912/120072367-7d4b3500-c08b-11eb-95f2-5b60ac8c7b89.png)
+![Ferris,10x,(148,81)](https://user-images.githubusercontent.com/26749912/120072369-7e7c6200-c08b-11eb-9275-0d0d792c4d9d.png)    
+Courtesy of Skylark#6969
