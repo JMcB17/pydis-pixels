@@ -156,7 +156,8 @@ Lower at (60, 54).
 Courtesy of ItsDrike#5359
 ### [TheelUtil - (139, 44)](#theelutil)
 ![theelutil,1x,(139,44)](https://user-images.githubusercontent.com/26749912/119990379-2af11200-bfc0-11eb-8295-d46b9a741cf0.png)
-![theelutil,10x,(139,44)](https://user-images.githubusercontent.com/26749912/119990385-2c223f00-bfc0-11eb-99d0-fe09fc531a37.png)
+![theelutil,10x,(139,44)](https://user-images.githubusercontent.com/26749912/119990385-2c223f00-bfc0-11eb-99d0-fe09fc531a37.png)    
+Courtesy of Theelx#4980
 ### [HI - (0, 109)](#hi)
 ![HI,1x,(0,109)](https://user-images.githubusercontent.com/26749912/119995702-c3d65c00-bfc5-11eb-99c7-4c48b7559421.png)
 ![HI,10x,(0,109)](https://user-images.githubusercontent.com/26749912/119996594-ceddbc00-bfc6-11eb-8ada-e5a071e510f2.png)
