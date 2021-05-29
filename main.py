@@ -17,7 +17,7 @@ import PIL.Image
 # todo: discord bot canvas mirror
 
 
-__version__ = '2.10.1'
+__version__ = '2.10.2'
 
 
 # modify this to change the order of priority or add/remove images
@@ -225,11 +225,11 @@ def ratelimit(headers: CaseInsensitiveDict):
         requests_remaining = int(headers['requests-remaining'])
         logging.info(f'{requests_remaining} requests remaining')
         if not requests_remaining:
-            requests_reset = int(headers['requests-reset'])
+            requests_reset = float(headers['requests-reset'])
             print_sleep_time(requests_reset)
             time.sleep(requests_reset)
     else:
-        cooldown_reset = int(headers['cooldown-reset'])
+        cooldown_reset = float(headers['cooldown-reset'])
         logging.info('on cooldown')
         print_sleep_time(cooldown_reset)
         time.sleep(cooldown_reset)
