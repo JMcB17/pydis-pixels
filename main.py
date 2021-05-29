@@ -40,6 +40,7 @@ CANVAS_LOG_PATH = Path('canvas.log')
 DEBUG_LOG_PATH = Path('debug.log')
 CANVAS_IMAGE_PATH = Path('imgs') / 'upscale' / 'canvas.png'
 WORM_COLOUR = 'ff8983'
+GMTIME = False
 BASE_URL = 'https://pixels.pythondiscord.com'
 SET_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
@@ -209,7 +210,12 @@ def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
 
 def print_sleep_time(duration):
     logging.info(f'sleeping for {duration} seconds')
-    sleep_finish_time = time.asctime(time.localtime(time.time() + duration))
+    sleep_finish_time_posix = time.time() + duration
+    if GMTIME:
+        sleep_finish_time_struct = time.gmtime(sleep_finish_time_posix)
+    else:
+        sleep_finish_time_struct = time.localtime(sleep_finish_time_posix)
+    sleep_finish_time = time.asctime(sleep_finish_time_struct)
     logging.info(f'finish sleeping at {sleep_finish_time}')
 
 
