@@ -188,7 +188,8 @@ Courtesy of AaEnnDeeErrEeEss#5157
 Courtesy of super#3000
 ### [flag of Greece - (177, 1)](#flag-greece)
 ![flag-greece,1x,(177,1)](https://user-images.githubusercontent.com/26749912/120065832-554bd980-c06b-11eb-9681-b6fba347ccff.png)
-![flag-greece,10x,(177,1)](https://user-images.githubusercontent.com/26749912/120065837-55e47000-c06b-11eb-9a2a-d43a2cfa7552.png)
+![flag-greece,10x,(177,1)](https://user-images.githubusercontent.com/26749912/120065837-55e47000-c06b-11eb-9a2a-d43a2cfa7552.png)    
+Courtesy of kafros#2346
 ### [pink heart - (60, 77)](#pink-heart)
 ![pink-heart,1x,(60,77)](https://user-images.githubusercontent.com/26749912/120065933-cd1a0400-c06b-11eb-83d6-947bd109e532.png)
 ![pink-heart,10x,(60,77)](https://user-images.githubusercontent.com/26749912/120065936-cdb29a80-c06b-11eb-99ab-9b32e3e63afd.png)
