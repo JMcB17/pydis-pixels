@@ -91,9 +91,10 @@ Courtesy of Max T.#7212 and NotC#6952
 ## terrain
 The largest images on the map. Currently only Rainbow Road
 
-### [rainbow road - (0, 114)](rainbow-road#)
-![rainbow-road,1x,(0,114)](https://user-images.githubusercontent.com/26749912/119987767-47d81600-bfbd-11eb-9283-4a54fc5e66ea.png)
-![rainbow-road,10x,(0,114)](https://user-images.githubusercontent.com/26749912/119987768-4870ac80-bfbd-11eb-9658-aa6b6eb97098.png)
+### [rainbow road - (0, 114)](#rainbow-road)
+![rainbow-road,1x,(0,114)](https://user-images.githubusercontent.com/26749912/120066031-73fea000-c06c-11eb-85de-fd071ff53185.png)
+![rainbow-road,10x,(0,114)](https://user-images.githubusercontent.com/26749912/120066033-74973680-c06c-11eb-9443-c45dc9ec3b3c.png)    
+Gaps are where it coexists with other works.
 
 ## oreo, the mask cat
 ### [oreo, the mask cat - (41, 20)](#oreo-the-mask-cat)
@@ -143,9 +144,7 @@ Courtesy of Sedsarq#5109 and Bast#0006 via [spreadshirt](https://image.spreadshi
 ![pythot,1x,(176,85)](https://user-images.githubusercontent.com/26749912/119982259-84ecda00-bfb6-11eb-90c6-a0423887085a.png)
 ![pythot,10x,(176,85)](https://user-images.githubusercontent.com/26749912/119982264-861e0700-bfb6-11eb-890f-a64c5ce676e2.png)    
 Courtesy of Skylark#6969 a.k.a Pythot
-### [purple heart - (60, 77)](#purple-heart)
-![purple-heart,1x,(60,77)](https://user-images.githubusercontent.com/26749912/119982386-aea60100-bfb6-11eb-96d8-f5642e8b0a43.png)
-![purple-heart,10x,(60,77)](https://user-images.githubusercontent.com/26749912/119982392-afd72e00-bfb6-11eb-93b3-d4991eb7bebd.png)
+
 ### [butter heart upper - (87, 17)](#golden-heart-upper)
 ![golden-heart-upper,1x,(87,17)](https://user-images.githubusercontent.com/26749912/119984837-c7fc7c80-bfb9-11eb-92fc-b652ee8d36cd.png)
 ![golden-heart-upper,10x,(87,17)](https://user-images.githubusercontent.com/26749912/119984841-c9c64000-bfb9-11eb-863c-20eadeb6646f.png)    
@@ -183,6 +182,16 @@ Courtesy of AaEnnDeeErrEeEss#5157
 ### [smiley - (79, 54)](#smiley)
 ![smiley,1x,(79,54)](https://user-images.githubusercontent.com/26749912/120036809-95be3f80-bff8-11eb-92fc-fcd8d31e2ab1.png)
 ![smiley,10x,(79,54)](https://user-images.githubusercontent.com/26749912/120036812-96ef6c80-bff8-11eb-9e96-a29b1921d810.png)
+### [kirby - (138, 100)](#lilkirby)
+![lilkirby,1x,(138,100)](https://user-images.githubusercontent.com/26749912/120065777-fede9b00-c06a-11eb-9cd5-3374a3c6bb54.png)
+![lilkirby,10x,(138,100)](https://user-images.githubusercontent.com/26749912/120065779-000fc800-c06b-11eb-9efe-aa24f4d6d10a.png)    
+Courtesy of super#3000
+### [flag of Greece - (177, 1)](#flag-greece)
+![flag-greece,1x,(177,1)](https://user-images.githubusercontent.com/26749912/120065832-554bd980-c06b-11eb-9681-b6fba347ccff.png)
+![flag-greece,10x,(177,1)](https://user-images.githubusercontent.com/26749912/120065837-55e47000-c06b-11eb-9a2a-d43a2cfa7552.png)
+### [pink heart - (60, 77)](#pink-heart)
+![pink-heart,1x,(60,77)](https://user-images.githubusercontent.com/26749912/120065933-cd1a0400-c06b-11eb-83d6-947bd109e532.png)
+![pink-heart,10x,(60,77)](https://user-images.githubusercontent.com/26749912/120065936-cdb29a80-c06b-11eb-99ab-9b32e3e63afd.png)
 
 ## obselete
 These images currently don't exist on the canvas.
@@ -202,3 +211,7 @@ Courtesy of Skylark#6969
 ![jeinistaw,10x,(,)](https://user-images.githubusercontent.com/26749912/120004320-84f8d400-bfce-11eb-953b-7f6724329ced.png)    
 Was one of the oldest and largest drawings. Attempted to move and upscale to the top right corner when the canvas expanded. Currently has its left side overwritten by pydispix and does not appear to be maintained. This restoration is likely not perfect.    
 Courtesy of JelNiSław#6450
+### [purple heart - (60, 77)](#purple-heart)
+![purple-heart,1x,(60,77)](https://user-images.githubusercontent.com/26749912/119982386-aea60100-bfb6-11eb-96d8-f5642e8b0a43.png)
+![purple-heart,10x,(60,77)](https://user-images.githubusercontent.com/26749912/119982392-afd72e00-bfb6-11eb-93b3-d4991eb7bebd.png)    
+Replaced by pink heart.
