@@ -14,6 +14,8 @@ import requests
 from requests.structures import CaseInsensitiveDict
 import PIL.Image
 
+import discord_mirror
+
 
 __version__ = '3.0.0'
 
@@ -256,6 +258,19 @@ def set_pixel(x: int, y: int, rgb: str, headers: dict):
     ratelimit(r.headers)
 
 
+def img_bytes_to_dimensional_list(img_bytes: bytes, canvas_size: dict) -> img_type:
+    canvas = []
+    for y in range(canvas_size['height']):
+        row = []
+        for x in range(canvas_size['width']):
+            index = (y * canvas_size['width'] * 3) + (x * 3)
+            pixel = img_bytes[index:index + 3]
+            row.append(three_bytes_to_rgb_hex_string(pixel))
+        canvas.append(row)
+
+    return canvas
+
+
 def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typing.Union[img_type, bytes]:
     """get_pixels endpoint wrapper.
 
@@ -274,16 +289,7 @@ def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typi
     if as_bytes:
         return pixels_bytes
 
-    canvas = []
-    for y in range(canvas_size['height']):
-        row = []
-        for x in range(canvas_size['width']):
-            index = (y * canvas_size['width'] * 3) + (x * 3)
-            pixel = pixels_bytes[index:index+3]
-            row.append(three_bytes_to_rgb_hex_string(pixel))
-        canvas.append(row)
-
-    return canvas
+    return img_bytes_to_dimensional_list(pixels_bytes, canvas_size)
 
 
 def get_pixel(x: int, y: int, headers: dict) -> str:
@@ -326,11 +332,15 @@ def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path] = Non
     canvas_pil_img.save(path)
 
 
-def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: dict):
+async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: dict, bot):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     logging.info('Getting current canvas status')
-    canvas = get_pixels(canvas_size, headers)
+    canvas_bytes = get_pixels(canvas_size, headers, as_bytes=True)
+    canvas = img_bytes_to_dimensional_list(canvas_bytes, canvas_size)
     logging.info('Got current canvas status')
+    if bot is not None:
+        logging.info('Updating canvas mirror')
+        await bot.update_mirror_from_id(canvas_bytes)
 
     for y_index, row in enumerate(img):
         hit_incorrect_pixel = False
@@ -360,7 +370,7 @@ def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: d
                 set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
 
 
-def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, headers: dict):
+async def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, headers: dict, bot):
     while True:
         try:
             for zone in zones_to_do:
@@ -371,7 +381,7 @@ def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, headers: 
                 logging.info(f'img dimension x: {zone.width}')
                 logging.info(f'img dimension y: {zone.height}')
                 logging.info(f'img pixels: {zone.area_not_transparent}')
-                run_for_img(img, img_location, canvas_size, headers)
+                await run_for_img(img, img_location, canvas_size, headers, bot)
         except Exception as error:
             logging.exception(error)
 
@@ -393,6 +403,16 @@ async def main():
     canvas_size = get_size(headers)
     logging.info(f'Canvas size: {canvas_size}')
 
+    if 'discord_mirror' in config:
+        bot = discord_mirror.MirrorBot(
+            channel_id=config['discord_mirror']['channel_id'], message_id=config['discord_mirror']['message_id'],
+            canvas_size=canvas_size
+        )
+        logging.info('Running discord bot for canvas mirror')
+        asyncio.create_task(bot.start(config['discord_mirror']['bot_token']))
+    else:
+        bot = None
+
     logging.info(f'Loading zones to do from {IMGS_FOLDER}')
     zones_to_do = load_zones(IMGS_FOLDER, imgs)
     total_area = sum(z.area_not_transparent for z in zones_to_do)
@@ -403,7 +423,7 @@ async def main():
 
     logging.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
     save_canvas_as_png(canvas_size, headers)
-    run_protections(zones_to_do, canvas_size, headers)
+    await run_protections(zones_to_do, canvas_size, headers, bot)
 
 
 if __name__ == '__main__':
