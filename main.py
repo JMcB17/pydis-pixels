@@ -13,8 +13,12 @@ from pathlib import Path
 import requests
 from requests.structures import CaseInsensitiveDict
 import PIL.Image
+import discord.ext.commands
 
 import discord_mirror
+
+
+# todo: switch to aiohttp
 
 
 __version__ = '3.0.0'
@@ -403,11 +407,17 @@ async def main():
     canvas_size = await get_size(headers)
     logging.info(f'Canvas size: {canvas_size}')
 
-    if 'discord_mirror' in config:
+    if 'discord_mirror' in config and config['discord_mirror']['bot_token']:
         bot = discord_mirror.MirrorBot(
             channel_id=config['discord_mirror']['channel_id'], message_id=config['discord_mirror']['message_id'],
             canvas_size=canvas_size
         )
+
+        # todo: move back to the subclass where it belongs, once I figure out how to do that
+        @bot.command()
+        async def startmirror(ctx: discord.ext.commands.Context, channel: discord.TextChannel):
+            message = await bot.create_canvas_mirror(channel)
+            await ctx.send(f'Done, message ID: {message.id}, channel ID: {channel.id}')
         logging.info('Running discord bot for canvas mirror')
         asyncio.create_task(bot.start(config['discord_mirror']['bot_token']))
     else:
