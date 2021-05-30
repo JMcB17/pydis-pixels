@@ -2,11 +2,24 @@ import io
 import time
 
 import discord
+import discord.ext.commands
 import PIL.Image
 
 
 EMBED_TITLE = 'Pixels State'
 EMBED_FOOTER = 'Last updated • Today at %H:%M'
+
+
+async def create_canvas_mirror(discord_channel: discord.TextChannel) -> discord.Message:
+    embed = discord.Embed(title=EMBED_TITLE)
+    mirror_message = await discord_channel.send(embed=embed)
+    return mirror_message
+
+
+@discord.ext.commands.command()
+async def startmirror(ctx: discord.ext.commands.Context, channel: discord.TextChannel):
+    message = await create_canvas_mirror(channel)
+    await ctx.send(f'Done, message ID: {message.id}')
 
 
 async def update_canvas_mirror(canvas_bytes: bytes, canvas_size: dict, discord_message: discord.Message):
