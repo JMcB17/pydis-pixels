@@ -1,3 +1,9 @@
 {
-  "token": ""
+  "token": "",
+  "discord_mirror": {
+    "info": "Ignore if you're not using this to run a mirror of the canvas. Will auto try to run if filled in.",
+    "bot_token": "",
+    "channel_id": 0,
+    "message_id": 0
+  }
 }

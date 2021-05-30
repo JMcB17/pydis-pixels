@@ -19,7 +19,7 @@ async def create_canvas_mirror(discord_channel: discord.TextChannel) -> discord.
 @discord.ext.commands.command()
 async def startmirror(ctx: discord.ext.commands.Context, channel: discord.TextChannel):
     message = await create_canvas_mirror(channel)
-    await ctx.send(f'Done, message ID: {message.id}')
+    await ctx.send(f'Done, message ID: {message.id}, channel ID: {channel.id}')
 
 
 async def update_canvas_mirror(canvas_bytes: bytes, canvas_size: dict, discord_message: discord.Message):
@@ -38,3 +38,12 @@ async def update_canvas_mirror(canvas_bytes: bytes, canvas_size: dict, discord_m
     embed.set_footer(embed_footer)
 
     await discord_message.edit(embed=embed)
+
+
+async def update_mirror_from_id(
+        canvas_bytes: bytes, canvas_size: dict,
+        message_id: int, channel_id: int, bot: discord.ext.commands.Bot
+):
+    channel = bot.get_channel(channel_id)
+    message = channel.fetch_message(message_id)
+    await update_canvas_mirror(canvas_bytes, canvas_size, message)
