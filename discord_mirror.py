@@ -32,7 +32,7 @@ class MirrorBot(discord.ext.commands.Bot):
         save_path = IGNORED_FOLDER / 'canvas-discord-upload.png'
         canvas_pil.save(save_path)
 
-        embed = discord_message.embeds[0]
+        embed = discord.Embed(title=EMBED_TITLE)
         embed.set_image(url=f'attachment://{save_path}')
         embed_footer = time.strftime(EMBED_FOOTER)
         embed.set_footer(text=embed_footer)
