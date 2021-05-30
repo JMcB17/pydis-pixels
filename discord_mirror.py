@@ -30,15 +30,15 @@ class MirrorBot(discord.ext.commands.Bot):
         with io.BytesIO() as byte_stream:
             canvas_pil.save(byte_stream, format='PNG')
             byte_stream.seek(0)
-            canvas_discord_file = discord.File(byte_stream)
+            canvas_discord_file = discord.File(byte_stream, filename='canvas.png')
             uploaded = await discord_message.channel.send(file=canvas_discord_file)
             uploaded_image = uploaded.attachments[0].url
             await uploaded.delete()
 
         embed = discord_message.embeds[0]
-        embed.set_image(uploaded_image)
+        embed.set_image(url=uploaded_image)
         embed_footer = time.strftime(EMBED_FOOTER)
-        embed.set_footer(embed_footer)
+        embed.set_footer(text=embed_footer)
 
         await discord_message.edit(embed=embed)
 
@@ -47,5 +47,5 @@ class MirrorBot(discord.ext.commands.Bot):
             return
 
         channel = self.get_channel(self.channel_id)
-        message = channel.fetch_message(self.message_id)
+        message = await channel.fetch_message(self.message_id)
         await self.update_canvas_mirror(canvas_bytes, message)

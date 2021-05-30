@@ -420,6 +420,7 @@ async def main():
             await ctx.send(f'Done, message ID: {message.id}, channel ID: {channel.id}')
         logging.info('Running discord bot for canvas mirror')
         asyncio.create_task(bot.start(config['discord_mirror']['bot_token']))
+        await bot.wait_until_ready()
     else:
         bot = None
 
