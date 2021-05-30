@@ -1,7 +1,6 @@
 import io
 import time
 
-import discord
 import discord.ext.commands
 import PIL.Image
 
@@ -10,40 +9,48 @@ EMBED_TITLE = 'Pixels State'
 EMBED_FOOTER = 'Last updated • Today at %H:%M'
 
 
-async def create_canvas_mirror(discord_channel: discord.TextChannel) -> discord.Message:
-    embed = discord.Embed(title=EMBED_TITLE)
-    mirror_message = await discord_channel.send(embed=embed)
-    return mirror_message
+class MirrorBot(discord.ext.commands.Bot):
+    def __init__(self, channel_id: int, message_id: int, canvas_size: dict, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.channel_id = channel_id
+        self.message_id = message_id
+        self.canvas_size = canvas_size
 
+    @staticmethod
+    async def create_canvas_mirror(discord_channel: discord.TextChannel) -> discord.Message:
+        embed = discord.Embed(title=EMBED_TITLE)
+        mirror_message = await discord_channel.send(embed=embed)
+        return mirror_message
 
-@discord.ext.commands.command()
-async def startmirror(ctx: discord.ext.commands.Context, channel: discord.TextChannel):
-    message = await create_canvas_mirror(channel)
-    await ctx.send(f'Done, message ID: {message.id}, channel ID: {channel.id}')
+    @discord.ext.commands.command()
+    async def startmirror(self, ctx: discord.ext.commands.Context, channel: discord.TextChannel):
+        message = await self.create_canvas_mirror(channel)
+        await ctx.send(f'Done, message ID: {message.id}, channel ID: {channel.id}')
 
+    async def update_canvas_mirror(self, canvas_bytes: bytes, discord_message: discord.Message):
+        canvas_pil = PIL.Image.frombytes(
+            'RGB',
+            (self.canvas_size['width'], self.canvas_size['height']),
+            canvas_bytes)
+        with io.BytesIO() as byte_stream:
+            canvas_pil.save(byte_stream, format='PNG')
+            byte_stream.seek(0)
+            canvas_discord_file = discord.File(byte_stream)
+            uploaded = await discord_message.channel.send(file=canvas_discord_file)
+            uploaded_image = uploaded.attachments[0].url
+            await uploaded.delete()
 
-async def update_canvas_mirror(canvas_bytes: bytes, canvas_size: dict, discord_message: discord.Message):
-    canvas_pil = PIL.Image.frombytes('RGB', (canvas_size['width'], canvas_size['height']), canvas_bytes)
-    with io.BytesIO() as byte_stream:
-        canvas_pil.save(byte_stream, format='PNG')
-        byte_stream.seek(0)
-        canvas_discord_file = discord.File(byte_stream)
-        uploaded = await discord_message.channel.send(file=canvas_discord_file)
-        uploaded_image = uploaded.attachments[0].url
-        await uploaded.delete()
+        embed = discord_message.embeds[0]
+        embed.set_image(uploaded_image)
+        embed_footer = time.strftime(EMBED_FOOTER)
+        embed.set_footer(embed_footer)
 
-    embed = discord_message.embeds[0]
-    embed.set_image(uploaded_image)
-    embed_footer = time.strftime(EMBED_FOOTER)
-    embed.set_footer(embed_footer)
+        await discord_message.edit(embed=embed)
 
-    await discord_message.edit(embed=embed)
+    async def update_mirror_from_id(self, canvas_bytes: bytes):
+        if not self.channel_id or not self.message_id:
+            return
 
-
-async def update_mirror_from_id(
-        canvas_bytes: bytes, canvas_size: dict,
-        message_id: int, channel_id: int, bot: discord.ext.commands.Bot
-):
-    channel = bot.get_channel(channel_id)
-    message = channel.fetch_message(message_id)
-    await update_canvas_mirror(canvas_bytes, canvas_size, message)
+        channel = self.get_channel(self.channel_id)
+        message = channel.fetch_message(self.message_id)
+        await self.update_canvas_mirror(canvas_bytes, message)

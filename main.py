@@ -7,6 +7,7 @@ import re
 import time
 import logging
 import argparse
+import asyncio
 from pathlib import Path
 
 import requests
@@ -14,10 +15,7 @@ from requests.structures import CaseInsensitiveDict
 import PIL.Image
 
 
-# todo: discord bot canvas mirror
-
-
-__version__ = '2.11.0'
+__version__ = '3.0.0'
 
 
 # modify this to change the order of priority or add/remove images
@@ -378,7 +376,7 @@ def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, headers: 
             logging.exception(error)
 
 
-def main():
+async def main():
     """Run the program for all imgs."""
     parser = get_parser()
     parser.parse_args()
@@ -409,4 +407,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
