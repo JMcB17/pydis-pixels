@@ -11,7 +11,7 @@ EMBED_FOOTER = 'Last updated • Today at %H:%M'
 
 class MirrorBot(discord.ext.commands.Bot):
     def __init__(self, channel_id: int, message_id: int, canvas_size: dict, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(command_prefix='pixels.', *args, **kwargs)
         self.channel_id = channel_id
         self.message_id = message_id
         self.canvas_size = canvas_size
