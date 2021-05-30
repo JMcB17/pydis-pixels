@@ -17,7 +17,7 @@ import PIL.Image
 # todo: discord bot canvas mirror
 
 
-__version__ = '2.10.2'
+__version__ = '2.11.0'
 
 
 # modify this to change the order of priority or add/remove images
@@ -42,11 +42,10 @@ CANVAS_IMAGE_PATH = Path('imgs') / 'upscale' / 'canvas.png'
 WORM_COLOUR = 'ff8983'
 GMTIME = False
 BASE_URL = 'https://pixels.pythondiscord.com'
-SET_URL = f'{BASE_URL}/set_pixel'
+SET_PIXEL_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
 GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
-STARTUP_DELAY = 120
 
 
 img_type = typing.List[typing.List[str]]
@@ -235,15 +234,22 @@ def ratelimit(headers: CaseInsensitiveDict):
         time.sleep(cooldown_reset)
 
 
+def head_request(url: str, headers: dict):
+    r = requests.head(url, headers=headers)
+    # todo: custom logging for head requests
+    ratelimit(r.headers)
+
+
 def set_pixel(x: int, y: int, rgb: str, headers: dict):
     """set_pixel endpoint wrapper."""
+    head_request(SET_PIXEL_URL, headers)
     payload = {
         'x': x,
         'y': y,
         'rgb': rgb,
     }
     r = requests.post(
-        SET_URL,
+        SET_PIXEL_URL,
         json=payload,
         headers=headers
     )
@@ -257,6 +263,7 @@ def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typi
 
     Returns as a 2d list of hex colour strings, like an img.
     """
+    head_request(GET_PIXELS_URL, headers)
     r = requests.get(
         GET_PIXELS_URL,
         headers=headers
@@ -283,6 +290,7 @@ def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typi
 
 def get_pixel(x: int, y: int, headers: dict) -> str:
     """get_pixel endpoint wrapper."""
+    head_request(GET_PIXEL_URL, headers)
     params = {
         'x': x,
         'y': y
@@ -395,8 +403,6 @@ def main():
     total_area_percent = round(((total_area / canvas_area) * 100), 2)
     logging.info(f'Total area: {total_area_percent}% of canvas')
 
-    print_sleep_time(STARTUP_DELAY)
-    time.sleep(STARTUP_DELAY)
     logging.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
     save_canvas_as_png(canvas_size, headers)
     run_protections(zones_to_do, canvas_size, headers)
