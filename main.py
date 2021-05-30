@@ -70,7 +70,7 @@ logging.basicConfig(
     ]
 )
 # don't fill up debug.log with other loggers
-for logger_name in ['urllib3', 'PIL']:
+for logger_name in ['urllib3', 'PIL', 'discord']:
     logging.getLogger(logger_name).setLevel(logging.ERROR)
 
 
