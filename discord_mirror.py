@@ -31,16 +31,16 @@ class MirrorBot(discord.ext.commands.Bot):
             canvas_pil.save(byte_stream, format='PNG')
             byte_stream.seek(0)
             canvas_discord_file = discord.File(byte_stream, filename='canvas.png')
-            uploaded = await discord_message.channel.send(file=canvas_discord_file)
-            uploaded_image = uploaded.attachments[0].url
-            await uploaded.delete()
+            # uploaded = await discord_message.channel.send(file=canvas_discord_file)
+            # uploaded_image = uploaded.attachments[0].url
+            # await uploaded.delete()
 
-        embed = discord_message.embeds[0]
-        embed.set_image(url=uploaded_image)
-        embed_footer = time.strftime(EMBED_FOOTER)
-        embed.set_footer(text=embed_footer)
+            embed = discord_message.embeds[0]
+            embed.set_image(url='attachment://canvas.png')
+            embed_footer = time.strftime(EMBED_FOOTER)
+            embed.set_footer(text=embed_footer)
 
-        await discord_message.edit(embed=embed)
+            await discord_message.edit(embed=embed, file=canvas_discord_file)
 
     async def update_mirror_from_id(self, canvas_bytes: bytes):
         if not self.channel_id or not self.message_id:
