@@ -1,5 +1,5 @@
-import io
 import time
+from pathlib import Path
 
 import discord.ext.commands
 import PIL.Image
@@ -7,6 +7,7 @@ import PIL.Image
 
 EMBED_TITLE = 'Pixels State'
 EMBED_FOOTER = 'Last updated • Today at %H:%M'
+IGNORED_FOLDER = Path('imgs') / 'upscale'
 
 
 class MirrorBot(discord.ext.commands.Bot):
@@ -26,21 +27,17 @@ class MirrorBot(discord.ext.commands.Bot):
         canvas_pil = PIL.Image.frombytes(
             'RGB',
             (self.canvas_size['width'], self.canvas_size['height']),
-            canvas_bytes)
-        with io.BytesIO() as byte_stream:
-            canvas_pil.save(byte_stream, format='PNG')
-            byte_stream.seek(0)
-            canvas_discord_file = discord.File(byte_stream, filename='canvas.png')
-            # uploaded = await discord_message.channel.send(file=canvas_discord_file)
-            # uploaded_image = uploaded.attachments[0].url
-            # await uploaded.delete()
+            canvas_bytes
+        )
+        save_path = IGNORED_FOLDER / 'canvas-discord-upload.png'
+        canvas_pil.save(save_path)
 
-            embed = discord_message.embeds[0]
-            embed.set_image(url='attachment://canvas.png')
-            embed_footer = time.strftime(EMBED_FOOTER)
-            embed.set_footer(text=embed_footer)
+        embed = discord_message.embeds[0]
+        embed.set_image(url=f'attachment://{save_path}')
+        embed_footer = time.strftime(EMBED_FOOTER)
+        embed.set_footer(text=embed_footer)
 
-            await discord_message.edit(embed=embed, file=canvas_discord_file)
+        await discord_message.edit(embed=embed)
 
     async def update_mirror_from_id(self, canvas_bytes: bytes):
         if not self.channel_id or not self.message_id:
