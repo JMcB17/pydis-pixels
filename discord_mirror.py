@@ -7,6 +7,7 @@ import PIL.Image
 
 EMBED_TITLE = 'Pixels State'
 EMBED_FOOTER = 'Last updated • Today at %H:%M'
+IMAGE_SCALE = 5
 
 
 class MirrorBot(discord.ext.commands.Bot):
@@ -27,6 +28,10 @@ class MirrorBot(discord.ext.commands.Bot):
             'RGB',
             (self.canvas_size['width'], self.canvas_size['height']),
             canvas_bytes)
+        canvas_pil = canvas_pil.resize(
+            (self.canvas_size['width'] * IMAGE_SCALE, self.canvas_size['height'] * IMAGE_SCALE),
+            resample=PIL.Image.NEAREST
+        )
         with io.BytesIO() as byte_stream:
             canvas_pil.save(byte_stream, format='PNG')
             byte_stream.seek(0)
