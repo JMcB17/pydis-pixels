@@ -218,7 +218,7 @@ def print_sleep_time(duration):
     logging.info(f'finish sleeping at {sleep_finish_time}')
 
 
-def ratelimit(headers: CaseInsensitiveDict):
+async def ratelimit(headers: CaseInsensitiveDict):
     """Given headers from a response, print info and sleep if needed."""
     if 'requests-remaining' in headers:
         requests_remaining = int(headers['requests-remaining'])
@@ -226,23 +226,23 @@ def ratelimit(headers: CaseInsensitiveDict):
         if not requests_remaining:
             requests_reset = float(headers['requests-reset'])
             print_sleep_time(requests_reset)
-            time.sleep(requests_reset)
+            await asyncio.sleep(requests_reset)
     else:
         cooldown_reset = float(headers['cooldown-reset'])
         logging.info('on cooldown')
         print_sleep_time(cooldown_reset)
-        time.sleep(cooldown_reset)
+        await asyncio.sleep(cooldown_reset)
 
 
-def head_request(url: str, headers: dict):
+async def head_request(url: str, headers: dict):
     r = requests.head(url, headers=headers)
     # todo: custom logging for head requests
-    ratelimit(r.headers)
+    await ratelimit(r.headers)
 
 
-def set_pixel(x: int, y: int, rgb: str, headers: dict):
+async def set_pixel(x: int, y: int, rgb: str, headers: dict):
     """set_pixel endpoint wrapper."""
-    head_request(SET_PIXEL_URL, headers)
+    await head_request(SET_PIXEL_URL, headers)
     payload = {
         'x': x,
         'y': y,
@@ -255,7 +255,7 @@ def set_pixel(x: int, y: int, rgb: str, headers: dict):
     )
     logging.info(r.json()['message'])
 
-    ratelimit(r.headers)
+    await ratelimit(r.headers)
 
 
 def img_bytes_to_dimensional_list(img_bytes: bytes, canvas_size: dict) -> img_type:
@@ -271,17 +271,17 @@ def img_bytes_to_dimensional_list(img_bytes: bytes, canvas_size: dict) -> img_ty
     return canvas
 
 
-def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typing.Union[img_type, bytes]:
+async def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typing.Union[img_type, bytes]:
     """get_pixels endpoint wrapper.
 
     Returns as a 2d list of hex colour strings, like an img.
     """
-    head_request(GET_PIXELS_URL, headers)
+    await head_request(GET_PIXELS_URL, headers)
     r = requests.get(
         GET_PIXELS_URL,
         headers=headers
     )
-    ratelimit(r.headers)
+    await ratelimit(r.headers)
 
     pixels_bytes = r.content
     with open(CANVAS_LOG_PATH, 'a', encoding='utf-8') as canvas_log_file:
@@ -292,9 +292,9 @@ def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typi
     return img_bytes_to_dimensional_list(pixels_bytes, canvas_size)
 
 
-def get_pixel(x: int, y: int, headers: dict) -> str:
+async def get_pixel(x: int, y: int, headers: dict) -> str:
     """get_pixel endpoint wrapper."""
-    head_request(GET_PIXEL_URL, headers)
+    await head_request(GET_PIXEL_URL, headers)
     params = {
         'x': x,
         'y': y
@@ -304,11 +304,11 @@ def get_pixel(x: int, y: int, headers: dict) -> str:
         params=params,
         headers=headers
     )
-    ratelimit(r.headers)
+    await ratelimit(r.headers)
     return r.json()['rgb']
 
 
-def get_size(headers: dict) -> typing.Dict[str, int]:
+async def get_size(headers: dict) -> typing.Dict[str, int]:
     """get_size endpoint wrapper."""
     r = requests.get(
         GET_SIZE_URL,
@@ -318,12 +318,12 @@ def get_size(headers: dict) -> typing.Dict[str, int]:
     return r.json()
 
 
-def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path] = None):
+async def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path] = None):
     if path is None:
         path = CANVAS_IMAGE_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    canvas_bytes = get_pixels(canvas_size, headers, as_bytes=True)
+    canvas_bytes = await get_pixels(canvas_size, headers, as_bytes=True)
     canvas_pil_img = PIL.Image.frombytes(
         mode='RGB',
         size=(canvas_size['width'], canvas_size['height']),
@@ -335,7 +335,7 @@ def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path] = Non
 async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: dict, bot):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     logging.info('Getting current canvas status')
-    canvas_bytes = get_pixels(canvas_size, headers, as_bytes=True)
+    canvas_bytes = await get_pixels(canvas_size, headers, as_bytes=True)
     canvas = img_bytes_to_dimensional_list(canvas_bytes, canvas_size)
     logging.info('Got current canvas status')
     if bot is not None:
@@ -355,7 +355,7 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
             # also only do it if we've hit a zone that needs changing, to further prevent get_pixel rate limiting
             if hit_incorrect_pixel and x_index % 2 == 0:
                 logging.info(f'Getting status of pixel at ({pix_x}, {pix_y})')
-                canvas[pix_y][pix_x] = get_pixel(pix_x, pix_y, headers)
+                canvas[pix_y][pix_x] = await get_pixel(pix_x, pix_y, headers)
                 logging.info(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
 
             if colour is None:
@@ -367,7 +367,7 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
             else:
                 hit_incorrect_pixel = True
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
-                set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
+                await set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
 
 
 async def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, headers: dict, bot):
@@ -400,7 +400,7 @@ async def main():
     }
 
     logging.info('Getting canvas size')
-    canvas_size = get_size(headers)
+    canvas_size = await get_size(headers)
     logging.info(f'Canvas size: {canvas_size}')
 
     if 'discord_mirror' in config:
@@ -422,7 +422,7 @@ async def main():
     logging.info(f'Total area: {total_area_percent}% of canvas')
 
     logging.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
-    save_canvas_as_png(canvas_size, headers)
+    await save_canvas_as_png(canvas_size, headers)
     await run_protections(zones_to_do, canvas_size, headers, bot)
 
 
