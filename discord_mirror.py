@@ -37,7 +37,9 @@ class MirrorBot(discord.ext.commands.Bot):
         embed.set_footer(text=embed_footer)
         embed_dict = embed.to_dict()
         payload_dict = {
-            'embed': embed_dict
+            'embed': embed_dict,
+            # get rid of the previous attachments
+            'attachments': []
         }
 
         canvas_pil = PIL.Image.frombytes(
