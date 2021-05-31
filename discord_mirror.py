@@ -7,7 +7,7 @@ import discord.http
 import PIL.Image
 
 
-__version__ = '2.0.0'
+__version__ = '2.1.0'
 
 
 EMBED_TITLE = 'Pixels State'
@@ -17,7 +17,7 @@ IMAGE_SCALE = 5
 
 class MirrorBot(discord.ext.commands.Bot):
     def __init__(self, channel_id: int, message_id: int, canvas_size: dict, *args, **kwargs):
-        super().__init__(command_prefix='pixels.', *args, **kwargs)
+        super().__init__(command_prefix='pixels.', help_command=None, *args, **kwargs)
         self.channel_id = channel_id
         self.message_id = message_id
         self.canvas_size = canvas_size
@@ -96,6 +96,7 @@ class MirrorBot(discord.ext.commands.Bot):
 
 
 @discord.ext.commands.command()
+@discord.ext.commands.is_owner()
 async def startmirror(ctx: discord.ext.commands.Context, channel: discord.TextChannel):
     message = await ctx.bot.create_canvas_mirror(channel)
     await ctx.send(f'Done, message ID: {message.id}, channel ID: {channel.id}')
