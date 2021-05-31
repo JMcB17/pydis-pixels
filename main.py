@@ -22,7 +22,6 @@ __version__ = '3.1.0'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
-    'noelon-2',
     'noelon-3',
     'cmpc',
     'httpscmpclivetwitchtvcontrolmypc-utf-8',
