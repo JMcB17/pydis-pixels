@@ -31,7 +31,17 @@ class MirrorBot(discord.ext.commands.Bot):
         message = await self.create_canvas_mirror(channel)
         await ctx.send(f'Done, message ID: {message.id}, channel ID: {channel.id}')
 
+    # noinspection PyProtectedMember
     async def update_canvas_mirror(self, canvas_bytes: bytes, discord_message: discord.Message):
+        file_name = f'pixels_mirror_{time.time()}.png'
+        embed = discord_message.embeds[0]
+        embed.set_image(url=f'attachment://{file_name}')
+        embed_footer = time.strftime(EMBED_FOOTER)
+        embed.set_footer(text=embed_footer)
+
+        embed_json = embed.to_dict()
+        fields = {'embed': embed_json}
+
         canvas_pil = PIL.Image.frombytes(
             'RGB',
             (self.canvas_size['width'], self.canvas_size['height']),
@@ -43,17 +53,19 @@ class MirrorBot(discord.ext.commands.Bot):
         with io.BytesIO() as byte_stream:
             canvas_pil.save(byte_stream, format='PNG')
             byte_stream.seek(0)
-            canvas_discord_file = discord.File(byte_stream, filename='canvas.png')
-            uploaded = await discord_message.channel.send(file=canvas_discord_file)
-            uploaded_image = uploaded.attachments[0].url
-            await uploaded.delete()
+            canvas_discord_file = discord.File(byte_stream, filename=file_name)
+            discord_file_json = {
+                'name': 'file',
+                'value': canvas_discord_file.fp,
+                'filename': canvas_discord_file.filename,
+                'content_type': 'application/octet-stream'
+            }
+            fields['file'] = discord_file_json
 
-        embed = discord_message.embeds[0]
-        embed.set_image(url=uploaded_image)
-        embed_footer = time.strftime(EMBED_FOOTER)
-        embed.set_footer(text=embed_footer)
-
-        await discord_message.edit(embed=embed)
+            data = await discord_message._state.http.edit_message(
+                discord_message.channel.id, discord_message.id, **fields
+            )
+            discord_message._update(data)
 
     async def update_mirror_from_id(self, canvas_bytes: bytes):
         if not self.channel_id or not self.message_id:
