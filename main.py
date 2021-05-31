@@ -26,15 +26,18 @@ __version__ = '3.0.0'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
-    "cmpc",
-    "httpscmpclivetwitchtvcontrolmypc-utf-8",
-    "wbub",
-    "jmcb",
-    "voxelfox",
-    "httpsvflgg-utf-8",
-    "JMcB-utf-8",
-    "sqlitecult",
-    "pydispix",
+    'noelon-1',
+    'noelon-2',
+    'noelon-3',
+    'cmpc',
+    'httpscmpclivetwitchtvcontrolmypc-utf-8',
+    'wbub',
+    'jmcb',
+    'voxelfox',
+    'httpsvflgg-utf-8',
+    'JMcB-utf-8',
+    'sqlitecult',
+    'pydispix',
 ]
 
 
