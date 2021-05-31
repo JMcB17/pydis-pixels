@@ -1,13 +1,17 @@
 import io
 import time
+import datetime
 
 import discord.ext.commands
 import discord.http
 import PIL.Image
 
 
+__version__ = '2.0.0'
+
+
 EMBED_TITLE = 'Pixels State'
-EMBED_FOOTER = 'Last updated • Today at %H:%M'
+EMBED_FOOTER = 'Last updated'
 IMAGE_SCALE = 5
 
 
@@ -21,10 +25,14 @@ class MirrorBot(discord.ext.commands.Bot):
         # noinspection PyTypeChecker
         self.add_command(startmirror)
 
-    @staticmethod
-    async def create_canvas_mirror(discord_channel: discord.TextChannel) -> discord.Message:
+    async def create_canvas_mirror(self, discord_channel: discord.TextChannel) -> discord.Message:
         embed = discord.Embed(title=EMBED_TITLE)
+        embed.set_footer(text=EMBED_FOOTER)
         mirror_message = await discord_channel.send(embed=embed)
+
+        self.channel_id = mirror_message.channel.id
+        self.message_id = mirror_message.id
+
         return mirror_message
 
     # noinspection PyProtectedMember
@@ -33,8 +41,7 @@ class MirrorBot(discord.ext.commands.Bot):
         file_name = f'pixels_mirror_{time.time()}.png'
         embed = discord_message.embeds[0]
         embed.set_image(url=f'attachment://{file_name}')
-        embed_footer = time.strftime(EMBED_FOOTER)
-        embed.set_footer(text=embed_footer)
+        embed.timestamp = datetime.datetime.now(datetime.timezone.utc)
         embed_dict = embed.to_dict()
         payload_dict = {
             'embed': embed_dict,
