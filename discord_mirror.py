@@ -2,6 +2,7 @@ import io
 import time
 
 import discord.ext.commands
+import discord.http
 import PIL.Image
 
 
@@ -33,14 +34,16 @@ class MirrorBot(discord.ext.commands.Bot):
 
     # noinspection PyProtectedMember
     async def update_canvas_mirror(self, canvas_bytes: bytes, discord_message: discord.Message):
+        # todo: redo this with official methods when new discord.py version releases
         file_name = f'pixels_mirror_{time.time()}.png'
         embed = discord_message.embeds[0]
         embed.set_image(url=f'attachment://{file_name}')
         embed_footer = time.strftime(EMBED_FOOTER)
         embed.set_footer(text=embed_footer)
-
-        embed_json = embed.to_dict()
-        fields = {'embed': embed_json}
+        embed_dict = embed.to_dict()
+        payload_dict = {
+            'embed': embed_dict
+        }
 
         canvas_pil = PIL.Image.frombytes(
             'RGB',
@@ -60,12 +63,24 @@ class MirrorBot(discord.ext.commands.Bot):
                 'filename': canvas_discord_file.filename,
                 'content_type': 'application/octet-stream'
             }
-            fields['file'] = discord_file_json
 
-            data = await discord_message._state.http.edit_message(
-                discord_message.channel.id, discord_message.id, **fields
+            form = [
+                {
+                    'name': 'payload_json',
+                    'value': discord.utils.to_json(payload_dict),
+                },
+                discord_file_json
+            ]
+
+            route = discord.http.Route(
+                'PATCH', '/channels/{channel_id}/messages/{message_id}',
+                channel_id=discord_message.channel.id, message_id=discord_message.id
+            )
+            data = await discord_message._state.http.request(
+                route, files=[canvas_discord_file], form=form,
             )
             discord_message._update(data)
+            canvas_discord_file.close()
 
     async def update_mirror_from_id(self, canvas_bytes: bytes):
         if not self.channel_id or not self.message_id:
