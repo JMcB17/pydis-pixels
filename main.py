@@ -10,18 +10,15 @@ import argparse
 import asyncio
 from pathlib import Path
 
-import requests
-from requests.structures import CaseInsensitiveDict
+import aiohttp
+import multidict
 import PIL.Image
 import discord.ext.commands
 
 import discord_mirror
 
 
-# todo: switch to aiohttp
-
-
-__version__ = '3.0.0'
+__version__ = '3.1.0'
 
 
 # modify this to change the order of priority or add/remove images
@@ -225,7 +222,7 @@ def print_sleep_time(duration):
     logging.info(f'finish sleeping at {sleep_finish_time}')
 
 
-async def ratelimit(headers: CaseInsensitiveDict):
+async def ratelimit(headers: multidict.CIMultiDictProxy):
     """Given headers from a response, print info and sleep if needed."""
     if 'requests-remaining' in headers:
         requests_remaining = int(headers['requests-remaining'])
@@ -242,9 +239,10 @@ async def ratelimit(headers: CaseInsensitiveDict):
 
 
 async def head_request(url: str, headers: dict):
-    r = requests.head(url, headers=headers)
-    # todo: custom logging for head requests
-    await ratelimit(r.headers)
+    async with aiohttp.ClientSession() as session:
+        async with session.head(url, headers=headers) as r:
+            # todo: custom logging for head requests
+            await ratelimit(r.headers)
 
 
 async def set_pixel(x: int, y: int, rgb: str, headers: dict):
@@ -255,14 +253,15 @@ async def set_pixel(x: int, y: int, rgb: str, headers: dict):
         'y': y,
         'rgb': rgb,
     }
-    r = requests.post(
-        SET_PIXEL_URL,
-        json=payload,
-        headers=headers
-    )
-    logging.info(r.json()['message'])
-
-    await ratelimit(r.headers)
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            SET_PIXEL_URL,
+            json=payload,
+            headers=headers
+        ) as r:
+            r_json = await r.json()
+            logging.info(r_json['message'])
+            await ratelimit(r.headers)
 
 
 def img_bytes_to_dimensional_list(img_bytes: bytes, canvas_size: dict) -> img_type:
@@ -284,13 +283,14 @@ async def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -
     Returns as a 2d list of hex colour strings, like an img.
     """
     await head_request(GET_PIXELS_URL, headers)
-    r = requests.get(
-        GET_PIXELS_URL,
-        headers=headers
-    )
-    await ratelimit(r.headers)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            GET_PIXELS_URL,
+            headers=headers
+        ) as r:
+            await ratelimit(r.headers)
+            pixels_bytes = await r.read()
 
-    pixels_bytes = r.content
     with open(CANVAS_LOG_PATH, 'a', encoding='utf-8') as canvas_log_file:
         canvas_log_file.write(f'{time.asctime()}\n{pixels_bytes}\n')
     if as_bytes:
@@ -306,23 +306,26 @@ async def get_pixel(x: int, y: int, headers: dict) -> str:
         'x': x,
         'y': y
     }
-    r = requests.get(
-        GET_PIXEL_URL,
-        params=params,
-        headers=headers
-    )
-    await ratelimit(r.headers)
-    return r.json()['rgb']
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            GET_PIXEL_URL,
+            params=params,
+            headers=headers
+        ) as r:
+            await ratelimit(r.headers)
+            r_json = await r.json()
+
+    return r_json['rgb']
 
 
 async def get_size(headers: dict) -> typing.Dict[str, int]:
     """get_size endpoint wrapper."""
-    r = requests.get(
-        GET_SIZE_URL,
-        headers=headers
-    )
-
-    return r.json()
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            GET_SIZE_URL,
+            headers=headers
+        ) as r:
+            return await r.json()
 
 
 async def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path] = None):
