@@ -13,7 +13,6 @@ from pathlib import Path
 import aiohttp
 import multidict
 import PIL.Image
-import discord.ext.commands
 
 import discord_mirror
 
@@ -417,12 +416,6 @@ async def main():
             channel_id=config['discord_mirror']['channel_id'], message_id=config['discord_mirror']['message_id'],
             canvas_size=canvas_size
         )
-
-        # todo: move back to the subclass where it belongs, once I figure out how to do that
-        @bot.command()
-        async def startmirror(ctx: discord.ext.commands.Context, channel: discord.TextChannel):
-            message = await bot.create_canvas_mirror(channel)
-            await ctx.send(f'Done, message ID: {message.id}, channel ID: {channel.id}')
         logging.info('Running discord bot for canvas mirror')
         asyncio.create_task(bot.start(config['discord_mirror']['bot_token']))
         await bot.wait_until_ready()

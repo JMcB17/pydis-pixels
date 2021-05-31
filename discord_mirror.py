@@ -17,11 +17,19 @@ class MirrorBot(discord.ext.commands.Bot):
         self.message_id = message_id
         self.canvas_size = canvas_size
 
+        # noinspection PyTypeChecker
+        self.add_command(self.startmirror)
+
     @staticmethod
     async def create_canvas_mirror(discord_channel: discord.TextChannel) -> discord.Message:
         embed = discord.Embed(title=EMBED_TITLE)
         mirror_message = await discord_channel.send(embed=embed)
         return mirror_message
+
+    @discord.ext.commands.command()
+    async def startmirror(self, ctx: discord.ext.commands.Context, channel: discord.TextChannel):
+        message = await self.create_canvas_mirror(channel)
+        await ctx.send(f'Done, message ID: {message.id}, channel ID: {channel.id}')
 
     async def update_canvas_mirror(self, canvas_bytes: bytes, discord_message: discord.Message):
         canvas_pil = PIL.Image.frombytes(
