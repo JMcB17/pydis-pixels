@@ -7,12 +7,15 @@ import discord.http
 import PIL.Image
 
 
-__version__ = '2.1.0'
+__version__ = '2.2.0'
 
 
 EMBED_TITLE = 'Pixels State'
 EMBED_FOOTER = 'Last updated'
 IMAGE_SCALE = 5
+GITHUB_REPO_URL = 'https://github.com/JMcB17/pydis-pixels'
+GITHUB_PAGE_URL = 'https://jmcb17.github.io/pydis-pixels/pages/'
+DISCORD_SERVER_URL = 'discord.gg/python'
 
 
 class MirrorBot(discord.ext.commands.Bot):
@@ -22,8 +25,9 @@ class MirrorBot(discord.ext.commands.Bot):
         self.message_id = message_id
         self.canvas_size = canvas_size
 
-        # noinspection PyTypeChecker
-        self.add_command(startmirror)
+        for command in [startmirror, repo, compendium, python_discord]:
+            # noinspection PyTypeChecker
+            self.add_command(command)
 
     async def create_canvas_mirror(self, discord_channel: discord.TextChannel) -> discord.Message:
         embed = discord.Embed(title=EMBED_TITLE)
@@ -100,3 +104,18 @@ class MirrorBot(discord.ext.commands.Bot):
 async def startmirror(ctx: discord.ext.commands.Context, channel: discord.TextChannel):
     message = await ctx.bot.create_canvas_mirror(channel)
     await ctx.send(f'Done, message ID: {message.id}, channel ID: {channel.id}')
+
+
+@discord.ext.commands.command(aliases=['github', 'source'])
+async def repo(ctx: discord.ext.commands.Context):
+    return await ctx.send(GITHUB_REPO_URL)
+
+
+@discord.ext.commands.command()
+async def compendium(ctx: discord.ext.commands.Context):
+    return await ctx.send(f'<{GITHUB_PAGE_URL}>')
+
+
+@discord.ext.commands.command(aliases=['discord', 'pydis'])
+async def python_discord(ctx: discord.ext.commands.Context):
+    return await ctx.send(DISCORD_SERVER_URL)
