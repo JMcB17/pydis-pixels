@@ -94,6 +94,21 @@ Courtesy of Max T.#7212 and NotC#6952
 ![Guido,1x,(41,8)](https://user-images.githubusercontent.com/26749912/119999831-131e8b80-bfca-11eb-957d-77229f38b516.png)
 ![Guido,10x,(41,8)](https://user-images.githubusercontent.com/26749912/119999838-144fb880-bfca-11eb-92a0-bb594a90d959.png)
 
+## programming
+### [Linode - (47, 73)](#linode)
+![linode,1x,(47,73)](https://user-images.githubusercontent.com/26749912/119984917-e793a500-bfb9-11eb-883e-7523e9dbad8a.png)
+![linode,10x,(47,73)](https://user-images.githubusercontent.com/26749912/119984920-e82c3b80-bfb9-11eb-987c-6611eaf8e7fa.png)    
+Courtesy of ItsDrike#5359
+### [cd - (200, 0)](#cd)
+![cd,1x,(200,0)](https://user-images.githubusercontent.com/26749912/120365953-f609f580-c306-11eb-8cca-b11eed04cec3.png)
+![cd,10x,(200,0)](https://user-images.githubusercontent.com/26749912/120365955-f73b2280-c306-11eb-9e46-e0479f7c91e4.png)
+### [sublime text - (134, 101)](#sublimetext)
+![sublimetext,1x,(134,101)](https://user-images.githubusercontent.com/26749912/120366053-18037800-c307-11eb-8ed0-47a98dc9531d.png)
+![sublimetext,10x,(134,101)](https://user-images.githubusercontent.com/26749912/120366059-1934a500-c307-11eb-93ce-474aff0220a0.png)
+### [visual studio - (86, 15)](#visualstudio)
+![visualstudio,1x,(86,15)](https://user-images.githubusercontent.com/26749912/120366098-25206700-c307-11eb-9739-4c915c46f015.png)
+![visualstudio,10x,(86,15)](https://user-images.githubusercontent.com/26749912/120366099-26519400-c307-11eb-8c41-b9ad92f0b7e1.png)
+
 ## browsers
 ### [Brave browser - (0, 1)](#bravebrowser)
 ![bravebrowser,1x,(0,1)](https://user-images.githubusercontent.com/26749912/119981749-e3658880-bfb5-11eb-856b-89d237df1499.png)
@@ -130,6 +145,9 @@ Courtesy of kafros#2346
 ### [flag of India - (55, 106)](#flag-india)
 ![flag-india,1x,(55,106)](https://user-images.githubusercontent.com/26749912/120348936-90f9d400-c2f5-11eb-91ef-db52173ae198.png)
 ![flag-india,10x,(55,106)](https://user-images.githubusercontent.com/26749912/120348942-922b0100-c2f5-11eb-9514-235c1cc13700.png)
+### [flag of Germany - (98, 117)](#flag-de)
+![flag-de,1x,(98,117)](https://user-images.githubusercontent.com/26749912/120366334-70d31080-c307-11eb-911e-82995b22af1c.png)
+![flag-de,10x,(98,117)](https://user-images.githubusercontent.com/26749912/120366337-716ba700-c307-11eb-9bb6-56f689e13e88.png)
 
 ## people/profile pictures
 ### [Griff - (120, )46](#griff)
@@ -144,6 +162,10 @@ Courtesy of Skylark#6969 a.k.a Pythot
 ![theelx,1x,(172,84)](https://user-images.githubusercontent.com/26749912/120349218-d3bbac00-c2f5-11eb-808e-c68241cba3c6.png)
 ![theelx,10x,(172,84)](https://user-images.githubusercontent.com/26749912/120349226-d4ecd900-c2f5-11eb-9e1f-559bee701c20.png)    
 Courtesy of Theelx#4980
+### [pfp on canvas - (209, 88)](#pfp-on-canvas)
+![pfp-on-canvas,1x,(209,88)](https://user-images.githubusercontent.com/26749912/120366406-89432b00-c307-11eb-9396-f033ae41dd22.png)
+![pfp-on-canvas,10x,(209,88)](https://user-images.githubusercontent.com/26749912/120366408-89dbc180-c307-11eb-8e91-4c62e0018b32.png)    
+Courtesy of hackerai#0691
 
 ## video games
 ### [osu - (93, 55)](#osu)
@@ -158,6 +180,9 @@ Courtesy of super#3000
 ### [minecraft dirt - (160, 0)](#minecraft-dirt)
 ![minecraft-dirt,1x,(160,0)](https://user-images.githubusercontent.com/26749912/120349467-0d8cb280-c2f6-11eb-8a00-cdde45a6e23c.png)
 ![minecraft-dirt,10x,(160,0)](https://user-images.githubusercontent.com/26749912/120349474-0e254900-c2f6-11eb-924a-c779064d7b91.png)
+### [games controller - (130, 66)](#games-controller)
+![games-controller,1x,(130,66)](https://user-images.githubusercontent.com/26749912/120366192-48e3ad00-c307-11eb-8b95-db143a9554ad.png)
+![games-controller,10x,(130,66)](https://user-images.githubusercontent.com/26749912/120366195-4a14da00-c307-11eb-8288-0b8e60396a68.png)
 
 ## misc
 
@@ -181,10 +206,6 @@ Courtesy of Sedsarq#5109 and Bast#0006 via [spreadshirt](https://image.spreadshi
 ![golden-heart-upper,10x,(87,17)](https://user-images.githubusercontent.com/26749912/119984841-c9c64000-bfb9-11eb-863c-20eadeb6646f.png)    
 Courtesy of Artemis#2000    
 Lower at (60, 54).
-### [Linode - (47, 73)](#linode)
-![linode,1x,(47,73)](https://user-images.githubusercontent.com/26749912/119984917-e793a500-bfb9-11eb-883e-7523e9dbad8a.png)
-![linode,10x,(47,73)](https://user-images.githubusercontent.com/26749912/119984920-e82c3b80-bfb9-11eb-987c-6611eaf8e7fa.png)    
-Courtesy of ItsDrike#5359
 ### [TheelUtil - (139, 44)](#theelutil)
 ![theelutil,1x,(139,44)](https://user-images.githubusercontent.com/26749912/119990379-2af11200-bfc0-11eb-8295-d46b9a741cf0.png)
 ![theelutil,10x,(139,44)](https://user-images.githubusercontent.com/26749912/119990385-2c223f00-bfc0-11eb-99d0-fe09fc531a37.png)    
@@ -218,6 +239,23 @@ Replaced the rm -rf
 ![pink-floyd,1x,(36,86)](https://user-images.githubusercontent.com/26749912/120348527-2d6fa680-c2f5-11eb-9dc8-b56ea6e359ff.png)
 ![pink-floyd,10x,(36,86)](https://user-images.githubusercontent.com/26749912/120348535-2e083d00-c2f5-11eb-8eb7-0744c5c7325e.png)    
 https://youtu.be/y7wyfTsIm1k
+### [cool duck - (189, 29)](#coolduck)
+![coolduck,1x,(189,29)](https://user-images.githubusercontent.com/26749912/120366594-c0b1d780-c307-11eb-80de-c093f15e737f.png)
+![coolduck,10x,(189,29)](https://user-images.githubusercontent.com/26749912/120366598-c14a6e00-c307-11eb-829a-8ab731fcec8d.png)
+### [blue beaever face or something I think joe is making this - (208, 11)](#buebeaverfaceorsomething)
+![bluebeaverfaceorsomething,1x,(208,11)](https://user-images.githubusercontent.com/26749912/120366656-d32c1100-c307-11eb-8b9a-dedadb6ad0db.png)
+![bluebeaverfaceorsomething,10x,(208,11)](https://user-images.githubusercontent.com/26749912/120366663-d7582e80-c307-11eb-9a73-59328bc57918.png)    
+Who's Joe?
+### [dog with green border - (50, 8)](#dog-green-border)
+![dog-green-border,1x,(50,8)](https://user-images.githubusercontent.com/26749912/120366721-e6d77780-c307-11eb-9830-f130b2707c8d.png)
+![dog-green-border,10x,(50,8)](https://user-images.githubusercontent.com/26749912/120366726-e808a480-c307-11eb-9797-921a4961b475.png)    
+Maybe a bernese mountain dog those are hella cute 🐕‍🦺
+### [heart cat - (2, 21)](#heartcat)
+![heartcat,1x,(2,21)](https://user-images.githubusercontent.com/26749912/120366790-fb1b7480-c307-11eb-868c-3a9d34d0a88c.png)
+![heartcat,10x,(2,21)](https://user-images.githubusercontent.com/26749912/120366793-fce53800-c307-11eb-9e56-405c5a984372.png)
+### [Lenny, the whale <3 - (73, 93)](#lenny-whale)
+![lenny-whale,1x,(73,93)](https://user-images.githubusercontent.com/26749912/120366822-09699080-c308-11eb-8995-caa1921e0c6d.png)
+![lenny-whale,10x,(73,93)](https://user-images.githubusercontent.com/26749912/120366828-0a022700-c308-11eb-94f6-bfc970b4df10.png)
 
 ## my images
 
@@ -283,3 +321,6 @@ Got redesigned.
 ![pink-heart,1x,(60,77)](https://user-images.githubusercontent.com/26749912/120065933-cd1a0400-c06b-11eb-83d6-947bd109e532.png)
 ![pink-heart,10x,(60,77)](https://user-images.githubusercontent.com/26749912/120065936-cdb29a80-c06b-11eb-99ab-9b32e3e63afd.png)    
 Replaced by white heart.
+### [a good idea - (20, 0)](#agoodidea)
+![agoodidea,1x,(208,0)](https://user-images.githubusercontent.com/26749912/120365829-d1ae1900-c306-11eb-9186-af43561fe55e.png)
+![agoodidea,10x,(208,0)](https://user-images.githubusercontent.com/26749912/120365831-d2df4600-c306-11eb-90e1-80be37d6de24.png)
