@@ -11,32 +11,6 @@ Images are provided at 1x scale and 10x scale.
 
 Image names are in the format used by my own script, which is in this same github repository.
 
-## my images
-
-### [voxelfox - (103, 37)](#voxelfox)
-![voxelfox,1x,(103,37)](https://user-images.githubusercontent.com/26749912/119971083-70094a00-bfa8-11eb-86f2-af1190569125.png)
-![voxelfox,10x,(103,37)](https://user-images.githubusercontent.com/26749912/119971096-74356780-bfa8-11eb-9bf0-6db2f2bc4451.png)    
-Via [Voxel Fox Ltd.](https://github.com/Voxel-Fox-Ltd/Meta/blob/master/assets/Voxel%20Fox%20Original%20(Pixels)/FOX%20EX%202.png)
-### [jmcb - (73, 1)](#jmcb)
-![jmcb,1x,(73,1)](https://user-images.githubusercontent.com/26749912/119992691-b8cdfc80-bfc2-11eb-8225-013ab5feac58.png)
-![jmcb,10x,(73,1)](https://user-images.githubusercontent.com/26749912/119992762-c4212800-bfc2-11eb-86d8-d91bd61ecb8a.png)
-### [cmpc - (112, 108)](#cmpc)
-![cmpc,1x,(112,108)](https://user-images.githubusercontent.com/26749912/119971425-db531c00-bfa8-11eb-826c-08e1909b0974.png)
-![cmpc,10x,(112,108)](https://user-images.githubusercontent.com/26749912/119971621-19504000-bfa9-11eb-9f21-ee62266c618b.png)    
-Via [controlmypc](https://cmpc.live/logo_old.png)
-
-By me, JMcB#7918
-
-## images I'm protecting
-
-### [pydispix - (139, 0)](#pydispix)
-![pydispix,1x,(139,0)](https://user-images.githubusercontent.com/26749912/119971663-2bca7980-bfa9-11eb-9876-ecd4cd116541.png)
-![pydispix,10x,(139,0)](https://user-images.githubusercontent.com/26749912/119971734-4270d080-bfa9-11eb-88d8-1b62867be7a2.png)
-### [sqlitecult - (0, 44)](#sqlitecult)
-![sqlitecult,1x,(0,44)](https://user-images.githubusercontent.com/26749912/119971804-5ae0eb00-bfa9-11eb-99b4-d8a57d1c70b2.png)
-![sqlitecult,10x,(0,44)](https://user-images.githubusercontent.com/26749912/119971860-69c79d80-bfa9-11eb-8d7c-e9b97e864cc0.png)    
-Courtesy of fix error#1642
-
 ## pride flags
 
 ![source2,1x,(0,0)](https://user-images.githubusercontent.com/26749912/120018429-0eb09d80-bfdf-11eb-94d4-68cced36d739.png)    
@@ -83,18 +57,32 @@ https://pixel-tasks.scoder12.repl.co/
 A protection of the Church, not an offical project.    
 ![Jason,1x,(135,26)](https://user-images.githubusercontent.com/26749912/119984644-8b308580-bfb9-11eb-94dd-9387fd05238f.png)
 ![Jason,10x,(135,26)](https://user-images.githubusercontent.com/26749912/119984647-8c61b280-bfb9-11eb-8fdf-ccef945a0430.png)    
-Courtesy of Jason Terror ♦#5889    
+Courtesy of Jason Terror ♦#5889
+### [Tux - (158, 38)](#gnulinux)
+![tux,1x,(158,38)](https://user-images.githubusercontent.com/26749912/120346792-9bb36980-c2f3-11eb-824b-0e3e471e7d78.png)
+![tux,10x,(158,38)](https://user-images.githubusercontent.com/26749912/120346798-9ce49680-c2f3-11eb-9fa2-abd92e05ef97.png)
+### [SNEK FREN - (12, 15)](#snek-fren)
+![snek-fren,1x,(12,15)](https://user-images.githubusercontent.com/26749912/120346861-ac63df80-c2f3-11eb-9318-1ac0b5651256.png)
+![snek-fren,10x,(12,15)](https://user-images.githubusercontent.com/26749912/120346880-af5ed000-c2f3-11eb-8f51-9cad593839ef.png)    
+A recreation of one of the earliest images.
+### [heads - (173, 118)](#heads)
+![heads,1x,(173,118)](https://user-images.githubusercontent.com/26749912/120347487-3b70f780-c2f4-11eb-80a8-c5039349df73.png)
+![heads,10x,(173,118)](https://user-images.githubusercontent.com/26749912/120347493-3ca22480-c2f4-11eb-9b71-9ffdfa8e87f9.png)
+### [cupcake - (215, 64)](#cupcake)
+![cupcake,1x,(215,64)](https://user-images.githubusercontent.com/26749912/120347567-504d8b00-c2f4-11eb-9236-670aeb6f9d80.png)
+![cupcake,10x,(215,64)](https://user-images.githubusercontent.com/26749912/120347574-517eb800-c2f4-11eb-9df7-78383705bd0f.png)
+
 The church also protects cmpc.
 
 Courtesy of Max T.#7212 and NotC#6952
 
-## terrain
-The largest images on the map. Currently only Rainbow Road
-
-### [rainbow road - (0, 114)](#rainbow-road)
-![rainbow-road,1x,(0,114)](https://user-images.githubusercontent.com/26749912/120066031-73fea000-c06c-11eb-85de-fd071ff53185.png)
-![rainbow-road,10x,(0,114)](https://user-images.githubusercontent.com/26749912/120066033-74973680-c06c-11eb-9443-c45dc9ec3b3c.png)    
-Gaps are where it coexists with other works.
+## enemies of the church
+### [CHUR CH SUS - (30, 57)](#church-sus)
+![church-sus,1x,(30,57)](https://user-images.githubusercontent.com/26749912/120347711-6eb38680-c2f4-11eb-8052-8d27d122e50b.png)
+![church-sus,10x,(30,57)](https://user-images.githubusercontent.com/26749912/120347721-707d4a00-c2f4-11eb-9b7c-7046b5503ebf.png)
+### [NO RiCK FOR YOU (feat. the ninja turtles) - (106, 0)](#no-rick-for-you)
+![no-rick-for-you,1x,(106,0)](https://user-images.githubusercontent.com/26749912/120347993-aa4e5080-c2f4-11eb-95ce-35ee5bcd6779.png)
+![no-rick-for-you,10x,(106,0)](https://user-images.githubusercontent.com/26749912/120347998-ac181400-c2f4-11eb-92ce-9e74ced5225f.png)
 
 ## oreo, the mask cat
 ### [oreo, the mask cat - (41, 20)](#oreo-the-mask-cat)
@@ -106,18 +94,22 @@ Gaps are where it coexists with other works.
 ![Guido,1x,(41,8)](https://user-images.githubusercontent.com/26749912/119999831-131e8b80-bfca-11eb-957d-77229f38b516.png)
 ![Guido,10x,(41,8)](https://user-images.githubusercontent.com/26749912/119999838-144fb880-bfca-11eb-92a0-bb594a90d959.png)
 
-## misc
+## browsers
+### [Brave browser - (0, 1)](#bravebrowser)
+![bravebrowser,1x,(0,1)](https://user-images.githubusercontent.com/26749912/119981749-e3658880-bfb5-11eb-856b-89d237df1499.png)
+![bravebrowser,10x,(0,1)](https://user-images.githubusercontent.com/26749912/119981760-e6607900-bfb5-11eb-9cb9-742e2aaf745e.png)
+### [Firefox - (0, 115)](#firefox)
+![firefox,1x,(0,115)](https://user-images.githubusercontent.com/26749912/120346327-2e073d80-c2f3-11eb-9740-58eab97bf8e0.png)
+![firefox,10x,(0,115)](https://user-images.githubusercontent.com/26749912/120346334-2f386a80-c2f3-11eb-8c92-6c38e64e718a.png)
+### [Edge - (0, 1)](#edge)
+![edge,1x,(0,1)](https://user-images.githubusercontent.com/26749912/120346341-32335b00-c2f3-11eb-80bf-0678b08970e8.png)
+![edge,10x,(0,1)](https://user-images.githubusercontent.com/26749912/120346346-33648800-c2f3-11eb-9fcb-eb05579e5c43.png)    
+I put firefox between brave and edge so they don't get at each others' throats like they always are on the canvas.
 
-Todo: organise
+![meme](https://user-images.githubusercontent.com/26749912/120347825-8559dd80-c2f4-11eb-81c7-a29223c20ea3.jpg)
 
-### [pythons2 - (70, 73)](#pythons2)
-![pythons2,1x,(70,63)](https://user-images.githubusercontent.com/26749912/119975715-1ad03700-bfae-11eb-83f7-a136237e16ff.png)
-![pythons2,10x,(70,63)](https://user-images.githubusercontent.com/26749912/119975728-1d329100-bfae-11eb-919d-03e204debf9c.png)    
-Courtesy of ambv#1804
-### [osu - (93, 55)](#osu)
-![osu,1x,(93,55)](https://user-images.githubusercontent.com/26749912/119977609-903d0700-bfb0-11eb-90a3-df83e2f51576.png)
-![osu,10x,(93,55)](https://user-images.githubusercontent.com/26749912/119977615-9206ca80-bfb0-11eb-932c-d543747da228.png)    
-Courtesy of Arisu#4829
+## memes
+
 ### [amogus - (4, 54)](#amogus)
 ![amogus-sprite,1x,(4,54)](https://user-images.githubusercontent.com/26749912/119981694-d3e63f80-bfb5-11eb-8b0f-f49013f819df.png)
 ![amogus-sprite,10x,(4,54)](https://user-images.githubusercontent.com/26749912/119981700-d5176c80-bfb5-11eb-8428-32aa5bb47363.png)    
@@ -126,9 +118,53 @@ Courtesy of stupid cat#8160
 ![amongdrip,1x,(23,56)](https://user-images.githubusercontent.com/26749912/119990447-3f350f00-bfc0-11eb-8560-ce099116c1c6.png)
 ![amongdrip,10x,(23,56)](https://user-images.githubusercontent.com/26749912/119990460-41976900-bfc0-11eb-88ae-b1373ddfb3ae.png)    
 Courtesy of BrightSkyz#2627 and stupid cat#8160
-### [Brave browser - (0, 1)](#bravebrowser)
-![bravebrowser,1x,(0,1)](https://user-images.githubusercontent.com/26749912/119981749-e3658880-bfb5-11eb-856b-89d237df1499.png)
-![bravebrowser,10x,(0,1)](https://user-images.githubusercontent.com/26749912/119981760-e6607900-bfb5-11eb-9cb9-742e2aaf745e.png)
+### [loss - (54, 118)](#lossjpg)
+![loss,1x,(54,118)](https://user-images.githubusercontent.com/26749912/120348178-d8339500-c2f4-11eb-897c-24c8d233d8de.png)
+![loss,10x,(54,118)](https://user-images.githubusercontent.com/26749912/120348180-d964c200-c2f4-11eb-8eca-d5ef6255e68a.png)
+
+## national flags
+### [flag of Greece - (177, 1)](#flag-greece)
+![flag-greece,1x,(177,1)](https://user-images.githubusercontent.com/26749912/120065832-554bd980-c06b-11eb-9681-b6fba347ccff.png)
+![flag-greece,10x,(177,1)](https://user-images.githubusercontent.com/26749912/120065837-55e47000-c06b-11eb-9a2a-d43a2cfa7552.png)    
+Courtesy of kafros#2346
+### [flag of India - (55, 106)](#flag-india)
+![flag-india,1x,(55,106)](https://user-images.githubusercontent.com/26749912/120348936-90f9d400-c2f5-11eb-91ef-db52173ae198.png)
+![flag-india,10x,(55,106)](https://user-images.githubusercontent.com/26749912/120348942-922b0100-c2f5-11eb-9514-235c1cc13700.png)
+
+## people/profile pictures
+### [Griff - (120, )46](#griff)
+![griff,1x,(120,46)](https://user-images.githubusercontent.com/26749912/119996013-24659900-bfc6-11eb-9f43-8d9214d82f2f.png)
+![griff,10x,(120,46)](https://user-images.githubusercontent.com/26749912/119996021-262f5c80-bfc6-11eb-9cae-a16b2934fa97.png)    
+Courtesy of Griff#9021
+### [Pythot - (176, 85)](#pythot)
+![pythot,1x,(176,85)](https://user-images.githubusercontent.com/26749912/119982259-84ecda00-bfb6-11eb-90c6-a0423887085a.png)
+![pythot,10x,(176,85)](https://user-images.githubusercontent.com/26749912/119982264-861e0700-bfb6-11eb-890f-a64c5ce676e2.png)    
+Courtesy of Skylark#6969 a.k.a Pythot
+### [Theelx - (172, 84)](#theelx)
+![theelx,1x,(172,84)](https://user-images.githubusercontent.com/26749912/120349218-d3bbac00-c2f5-11eb-808e-c68241cba3c6.png)
+![theelx,10x,(172,84)](https://user-images.githubusercontent.com/26749912/120349226-d4ecd900-c2f5-11eb-9e1f-559bee701c20.png)    
+Courtesy of Theelx#4980
+
+## video games
+### [osu - (93, 55)](#osu)
+![osu,1x,(93,55)](https://user-images.githubusercontent.com/26749912/119977609-903d0700-bfb0-11eb-90a3-df83e2f51576.png)
+![osu,10x,(93,55)](https://user-images.githubusercontent.com/26749912/119977615-9206ca80-bfb0-11eb-932c-d543747da228.png)    
+Another of the oldest pieces.
+Courtesy of Arisu#4829
+### [kirby - (138, 100)](#lilkirby)
+![lilkirby,1x,(138,100)](https://user-images.githubusercontent.com/26749912/120065777-fede9b00-c06a-11eb-9cd5-3374a3c6bb54.png)
+![lilkirby,10x,(138,100)](https://user-images.githubusercontent.com/26749912/120065779-000fc800-c06b-11eb-9efe-aa24f4d6d10a.png)    
+Courtesy of super#3000
+### [minecraft dirt - (160, 0)](#minecraft-dirt)
+![minecraft-dirt,1x,(160,0)](https://user-images.githubusercontent.com/26749912/120349467-0d8cb280-c2f6-11eb-8a00-cdde45a6e23c.png)
+![minecraft-dirt,10x,(160,0)](https://user-images.githubusercontent.com/26749912/120349474-0e254900-c2f6-11eb-924a-c779064d7b91.png)
+
+## misc
+
+### [pythons2 - (70, 73)](#pythons2)
+![pythons2,1x,(69,62)](https://user-images.githubusercontent.com/26749912/120348785-69a30700-c2f5-11eb-8337-8b02c5fa14c7.png)
+![pythons2,10x,(69,62)](https://user-images.githubusercontent.com/26749912/120348792-6b6cca80-c2f5-11eb-8e93-327120e615ff.png)    
+Courtesy of ambv#1804
 ### [Duck - (74, 19)](#Duck)
 ![Duck,1x,(74,19)](https://user-images.githubusercontent.com/26749912/119981802-f5dfc200-bfb5-11eb-9091-d0a407118af9.png)
 ![Duck,10x,(74,19)](https://user-images.githubusercontent.com/26749912/119981806-f6785880-bfb5-11eb-84ae-998019f08e37.png)    
@@ -140,11 +176,6 @@ Courtesy of Sedsarq#5109 and Bast#0006 via [spreadshirt](https://image.spreadshi
 ### [PLS SOMEONE HUG ME - (59, 99)](#plshug)
 ![plshug,1x,(59,99)](https://user-images.githubusercontent.com/26749912/119982194-74d4fa80-bfb6-11eb-8670-dd6532385bd5.png)
 ![plshug,10x,(59,99)](https://user-images.githubusercontent.com/26749912/119982200-76062780-bfb6-11eb-8327-c3737d815856.png)
-### [Pythot - (176, 85)](#pythot)
-![pythot,1x,(176,85)](https://user-images.githubusercontent.com/26749912/119982259-84ecda00-bfb6-11eb-90c6-a0423887085a.png)
-![pythot,10x,(176,85)](https://user-images.githubusercontent.com/26749912/119982264-861e0700-bfb6-11eb-890f-a64c5ce676e2.png)    
-Courtesy of Skylark#6969 a.k.a Pythot
-
 ### [butter heart upper - (87, 17)](#golden-heart-upper)
 ![golden-heart-upper,1x,(87,17)](https://user-images.githubusercontent.com/26749912/119984837-c7fc7c80-bfb9-11eb-92fc-b652ee8d36cd.png)
 ![golden-heart-upper,10x,(87,17)](https://user-images.githubusercontent.com/26749912/119984841-c9c64000-bfb9-11eb-863c-20eadeb6646f.png)    
@@ -161,10 +192,6 @@ Courtesy of Theelx#4980
 ### [HI - (0, 109)](#hi)
 ![HI,1x,(0,109)](https://user-images.githubusercontent.com/26749912/119995702-c3d65c00-bfc5-11eb-99c7-4c48b7559421.png)
 ![HI,10x,(0,109)](https://user-images.githubusercontent.com/26749912/119996594-ceddbc00-bfc6-11eb-8ada-e5a071e510f2.png)
-### [Griff - (120, )46](#griff)
-![griff,1x,(120,46)](https://user-images.githubusercontent.com/26749912/119996013-24659900-bfc6-11eb-9f43-8d9214d82f2f.png)
-![griff,10x,(120,46)](https://user-images.githubusercontent.com/26749912/119996021-262f5c80-bfc6-11eb-9cae-a16b2934fa97.png)    
-Courtesy of Griff#9021
 ### [yert - (0, 30)](#yert)
 ![yert,1x,(0,30)](https://user-images.githubusercontent.com/26749912/119997272-7824b200-bfc7-11eb-917e-2e6efbaf10ca.png)
 ![yert,10x,(0,30)](https://user-images.githubusercontent.com/26749912/119997279-79ee7580-bfc7-11eb-918b-f0833e7450cb.png)    
@@ -183,17 +210,40 @@ Courtesy of AaEnnDeeErrEeEss#5157
 ### [smiley - (79, 54)](#smiley)
 ![smiley,1x,(79,54)](https://user-images.githubusercontent.com/26749912/120036809-95be3f80-bff8-11eb-92fc-fcd8d31e2ab1.png)
 ![smiley,10x,(79,54)](https://user-images.githubusercontent.com/26749912/120036812-96ef6c80-bff8-11eb-9e96-a29b1921d810.png)
-### [kirby - (138, 100)](#lilkirby)
-![lilkirby,1x,(138,100)](https://user-images.githubusercontent.com/26749912/120065777-fede9b00-c06a-11eb-9cd5-3374a3c6bb54.png)
-![lilkirby,10x,(138,100)](https://user-images.githubusercontent.com/26749912/120065779-000fc800-c06b-11eb-9efe-aa24f4d6d10a.png)    
-Courtesy of super#3000
-### [flag of Greece - (177, 1)](#flag-greece)
-![flag-greece,1x,(177,1)](https://user-images.githubusercontent.com/26749912/120065832-554bd980-c06b-11eb-9681-b6fba347ccff.png)
-![flag-greece,10x,(177,1)](https://user-images.githubusercontent.com/26749912/120065837-55e47000-c06b-11eb-9a2a-d43a2cfa7552.png)    
-Courtesy of kafros#2346
-### [pink heart - (60, 77)](#pink-heart)
-![pink-heart,1x,(60,77)](https://user-images.githubusercontent.com/26749912/120065933-cd1a0400-c06b-11eb-83d6-947bd109e532.png)
-![pink-heart,10x,(60,77)](https://user-images.githubusercontent.com/26749912/120065936-cdb29a80-c06b-11eb-99ab-9b32e3e63afd.png)
+### [pink gradient - (208, 0)](#pink-gradient)
+![pink-gradient,1x,(208,0)](https://user-images.githubusercontent.com/26749912/120348417-13ce5f00-c2f5-11eb-9b69-07cf5c7eb1e4.png)
+![pink-gradient,10x,(208,0)](https://user-images.githubusercontent.com/26749912/120348425-1466f580-c2f5-11eb-9c14-ef5194b35f86.png)    
+Replaced the rm -rf
+### [pink floyd the wall - (36, 86)](#pink-floyd)
+![pink-floyd,1x,(36,86)](https://user-images.githubusercontent.com/26749912/120348527-2d6fa680-c2f5-11eb-9dc8-b56ea6e359ff.png)
+![pink-floyd,10x,(36,86)](https://user-images.githubusercontent.com/26749912/120348535-2e083d00-c2f5-11eb-8eb7-0744c5c7325e.png)    
+https://youtu.be/y7wyfTsIm1k
+
+## my images
+
+### [voxelfox - (103, 37)](#voxelfox)
+![voxelfox,1x,(103,37)](https://user-images.githubusercontent.com/26749912/119971083-70094a00-bfa8-11eb-86f2-af1190569125.png)
+![voxelfox,10x,(103,37)](https://user-images.githubusercontent.com/26749912/119971096-74356780-bfa8-11eb-9bf0-6db2f2bc4451.png)    
+Via [Voxel Fox Ltd.](https://github.com/Voxel-Fox-Ltd/Meta/blob/master/assets/Voxel%20Fox%20Original%20(Pixels)/FOX%20EX%202.png)
+### [jmcb - (73, 1)](#jmcb)
+![jmcb,1x,(73,1)](https://user-images.githubusercontent.com/26749912/119992691-b8cdfc80-bfc2-11eb-8225-013ab5feac58.png)
+![jmcb,10x,(73,1)](https://user-images.githubusercontent.com/26749912/119992762-c4212800-bfc2-11eb-86d8-d91bd61ecb8a.png)
+### [cmpc - (112, 108)](#cmpc)
+![cmpc,1x,(112,108)](https://user-images.githubusercontent.com/26749912/119971425-db531c00-bfa8-11eb-826c-08e1909b0974.png)
+![cmpc,10x,(112,108)](https://user-images.githubusercontent.com/26749912/119971621-19504000-bfa9-11eb-9f21-ee62266c618b.png)    
+Via [controlmypc](https://cmpc.live/logo_old.png)
+
+By me, JMcB#7918
+
+## my protected images
+
+### [pydispix - (139, 0)](#pydispix)
+![pydispix,1x,(139,0)](https://user-images.githubusercontent.com/26749912/119971663-2bca7980-bfa9-11eb-9876-ecd4cd116541.png)
+![pydispix,10x,(139,0)](https://user-images.githubusercontent.com/26749912/119971734-4270d080-bfa9-11eb-88d8-1b62867be7a2.png)
+### [sqlitecult - (0, 44)](#sqlitecult)
+![sqlitecult,1x,(0,44)](https://user-images.githubusercontent.com/26749912/119971804-5ae0eb00-bfa9-11eb-99b4-d8a57d1c70b2.png)
+![sqlitecult,10x,(0,44)](https://user-images.githubusercontent.com/26749912/119971860-69c79d80-bfa9-11eb-8d7c-e9b97e864cc0.png)    
+Courtesy of fix error#1642
 
 ## obselete
 These images currently don't exist on the canvas.
@@ -221,3 +271,15 @@ Replaced by pink heart.
 ![Ferris,1x,(148,81)](https://user-images.githubusercontent.com/26749912/120072367-7d4b3500-c08b-11eb-95f2-5b60ac8c7b89.png)
 ![Ferris,10x,(148,81)](https://user-images.githubusercontent.com/26749912/120072369-7e7c6200-c08b-11eb-9275-0d0d792c4d9d.png)    
 Courtesy of Skylark#6969
+### [rainbow road - (0, 114)](#rainbow-road)
+![rainbow-road,1x,(0,114)](https://user-images.githubusercontent.com/26749912/120066031-73fea000-c06c-11eb-85de-fd071ff53185.png)
+![rainbow-road,10x,(0,114)](https://user-images.githubusercontent.com/26749912/120066033-74973680-c06c-11eb-9443-c45dc9ec3b3c.png)    
+Gaps are where it coexists with other works.
+### [pythons2 - (70, 73)](#pythons2-old)
+![pythons2,1x,(70,63)](https://user-images.githubusercontent.com/26749912/119975715-1ad03700-bfae-11eb-83f7-a136237e16ff.png)
+![pythons2,10x,(70,63)](https://user-images.githubusercontent.com/26749912/119975728-1d329100-bfae-11eb-919d-03e204debf9c.png)    
+Got redesigned.
+### [pink heart - (60, 77)](#pink-heart)
+![pink-heart,1x,(60,77)](https://user-images.githubusercontent.com/26749912/120065933-cd1a0400-c06b-11eb-83d6-947bd109e532.png)
+![pink-heart,10x,(60,77)](https://user-images.githubusercontent.com/26749912/120065936-cdb29a80-c06b-11eb-99ab-9b32e3e63afd.png)    
+Replaced by white heart.
