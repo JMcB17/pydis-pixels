@@ -243,7 +243,8 @@ async def head_request(url: str, headers: dict):
     async with aiohttp.ClientSession() as session:
         async with session.head(url, headers=headers) as r:
             # todo: custom logging for head requests
-            await ratelimit(r.headers)
+            if r.ok:
+                await ratelimit(r.headers)
 
 
 async def set_pixel(x: int, y: int, rgb: str, headers: dict):
