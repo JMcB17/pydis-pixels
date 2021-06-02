@@ -15,6 +15,7 @@ import multidict
 import PIL.Image
 
 import discord_mirror
+import template_manager
 
 
 __version__ = '3.1.0'
@@ -31,6 +32,10 @@ imgs = [
     'JMcB-utf-8',
     'sqlitecult',
     'pydispix',
+]
+
+templates = [
+    'campfire'
 ]
 
 
@@ -145,7 +150,7 @@ class Zone:
     """
     img_name_regexp = re.compile(r'(.*),([0-9]*)x,\(([0-9]*),([0-9]*)\)')
 
-    def __init__(self, img_path: typing.Union[str, Path]):
+    def __init__(self, img_path: typing.Union[str, Path], properties: list = None):
         """Load an image and calulcate its attributes.
 
         Args:
@@ -162,7 +167,8 @@ class Zone:
         self.img_path = img_path
 
         filename = self.img_path.stem
-        properties = re.match(self.img_name_regexp, filename)
+        if properties is None:
+            properties = re.match(self.img_name_regexp, filename)
         self.name = properties[1]
         self.scale = int(properties[2])
         self.location = {
@@ -420,6 +426,24 @@ async def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, hea
             logging.exception(error)
 
 
+async def run_animation(template: template_manager.Template, canvas_size: dict, headers: dict, bot):
+    while True:
+        frame_path = template.get_current_frame_path()[0]
+        zone = Zone(
+            frame_path,
+            [
+                None,
+                'campfire',
+                1,
+                0,
+                0
+            ]
+        )
+        img = zone.img
+        location = zone.location
+        await run_for_img(img, location, canvas_size, headers, bot)
+
+
 async def main():
     """Run the program for all imgs."""
     parser = get_parser()
@@ -438,6 +462,7 @@ async def main():
     logging.info(f'Canvas size: {canvas_size}')
 
     if 'discord_mirror' in config and config['discord_mirror']['bot_token']:
+        # todo: implement shutdown
         bot = discord_mirror.MirrorBot(
             channel_id=config['discord_mirror']['channel_id'], message_id=config['discord_mirror']['message_id'],
             canvas_size=canvas_size
@@ -458,8 +483,8 @@ async def main():
 
     logging.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
     await save_canvas_as_png(canvas_size, headers)
-    await run_protections(zones_to_do, canvas_size, headers, bot)
-
+    # await run_protections(zones_to_do, canvas_size, headers, bot)
+    await run_animation(template_manager.get_template_for('imgs/campfire'), canvas_size, headers, bot)
 
 if __name__ == '__main__':
     asyncio.run(main())
