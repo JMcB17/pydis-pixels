@@ -46,6 +46,7 @@ SET_PIXEL_URL = f'{BASE_URL}/set_pixel'
 GET_SIZE_URL = f'{BASE_URL}/get_size'
 GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
 GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
+BLANK_PIXEL = 'ffffff'
 
 
 img_type = typing.List[typing.List[str]]
@@ -207,15 +208,19 @@ def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
     return zones
 
 
-def print_sleep_time(duration):
-    logging.info(f'sleeping for {duration} seconds')
+def print_sleep_time(
+        duration: float,
+        duration_msg: str = 'sleeping for {duration} seconds',
+        finish_msg: str = 'finish sleeping at {sleep_finish_time}'
+):
+    logging.info(duration_msg.format(duration))
     sleep_finish_time_posix = time.time() + duration
     if GMTIME:
         sleep_finish_time_struct = time.gmtime(sleep_finish_time_posix)
     else:
         sleep_finish_time_struct = time.localtime(sleep_finish_time_posix)
     sleep_finish_time = time.asctime(sleep_finish_time_struct)
-    logging.info(f'finish sleeping at {sleep_finish_time}')
+    logging.info(finish_msg.format(sleep_finish_time))
 
 
 async def ratelimit(headers: multidict.CIMultiDictProxy):
@@ -273,6 +278,10 @@ def img_bytes_to_dimensional_list(img_bytes: bytes, canvas_size: dict) -> img_ty
     return canvas
 
 
+def empty_canvas(canvas_size: dict) -> img_type:
+    return [[BLANK_PIXEL] * canvas_size['width']] * canvas_size['height']
+
+
 async def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typing.Union[img_type, bytes]:
     """get_pixels endpoint wrapper.
 
@@ -284,6 +293,16 @@ async def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -
             GET_PIXELS_URL,
             headers=headers
         ) as r:
+            if r.status == 410:
+
+                logging.debug('Rats! get_pixels will return a blank canvas as default.')
+                print_sleep_time(
+                    float(r.headers['endpoint-unlock']),
+                    'endpoint will unlock in {duration} seconds',
+                    'endpoint will unlock at {sleep_finish_time}'
+                )
+                return empty_canvas(canvas_size)
+
             await ratelimit(r.headers)
             pixels_bytes = await r.read()
 
@@ -308,6 +327,15 @@ async def get_pixel(x: int, y: int, headers: dict) -> str:
             params=params,
             headers=headers
         ) as r:
+            if r.status == 410:
+                logging.debug('Rats! get_pixel will return a black pixel as default.')
+                print_sleep_time(
+                    float(r.headers['endpoint-unlock']),
+                    'endpoint will unlock in {duration} seconds',
+                    'endpoint will unlock at {sleep_finish_time}'
+                )
+                return BLANK_PIXEL
+
             await ratelimit(r.headers)
             r_json = await r.json()
 
