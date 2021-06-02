@@ -29,7 +29,7 @@ imgs = [
     'voxelfox',
     'httpsvflgg-utf-8',
     'JMcB-utf-8',
-    'sqlitecult',
+    'sqlite-lgbt',
     'pydispix',
 ]
 
