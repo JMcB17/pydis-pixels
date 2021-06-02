@@ -30,7 +30,7 @@ imgs = [
     'voxelfox',
     'httpsvflgg-utf-8',
     'JMcB-utf-8',
-    'sqlitecult',
+    'sqlite-lgbt',
     'pydispix',
 ]
 
@@ -252,7 +252,8 @@ async def head_request(url: str, headers: dict):
     async with aiohttp.ClientSession() as session:
         async with session.head(url, headers=headers) as r:
             # todo: custom logging for head requests
-            await ratelimit(r.headers)
+            if r.ok:
+                await ratelimit(r.headers)
 
 
 async def set_pixel(x: int, y: int, rgb: str, headers: dict):
@@ -291,6 +292,10 @@ def empty_canvas(canvas_size: dict) -> img_type:
     return [[BLANK_PIXEL] * canvas_size['width']] * canvas_size['height']
 
 
+def empty_canvas_bytes(canvas_size: dict) -> bytes:
+    return b'ffffff' * canvas_size['height'] * canvas_size['width']
+
+
 async def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typing.Union[img_type, bytes]:
     """get_pixels endpoint wrapper.
 
@@ -310,10 +315,10 @@ async def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -
                     'endpoint will unlock in {duration} seconds',
                     'endpoint will unlock at {sleep_finish_time}'
                 )
-                return empty_canvas(canvas_size)
-
-            await ratelimit(r.headers)
-            pixels_bytes = await r.read()
+                pixels_bytes = empty_canvas_bytes(canvas_size)
+            else:
+                await ratelimit(r.headers)
+                pixels_bytes = await r.read()
 
     with open(CANVAS_LOG_PATH, 'a', encoding='utf-8') as canvas_log_file:
         canvas_log_file.write(f'{time.asctime()}\n{pixels_bytes}\n')
