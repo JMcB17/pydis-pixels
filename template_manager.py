@@ -2,7 +2,8 @@
 
 import datetime
 import json
-import os.path
+import typing
+from pathlib import Path
 
 from PIL import Image
 
@@ -12,10 +13,13 @@ templates = {}
 
 
 class Template:
-    def __init__(self, directory):
+    def __init__(self, directory: typing.Union[str, Path]):
+        if not isinstance(directory, Path):
+            directory = Path(directory)
+
         self.directory = directory
-        json_path = os.path.join(directory, 'canvas.json')
-        if not os.path.isfile(json_path):
+        json_path = self.directory / 'canvas.json'
+        if not json_path.is_file():
             raise ValueError("directory must contain canvas.json")
         with open(json_path) as json_in:
             json_data = json.load(json_in)
@@ -23,7 +27,7 @@ class Template:
         self.left = json_data['left']
         self.top = json_data['top']
         self.current_frame = None
-        self.length = len(os.listdir(self.directory)) - 1
+        self.length = len(list(self.directory.iterdir())) - 1
 
     def get_current_frame_index(self):
         if self.single_duration <= 0:
@@ -38,14 +42,11 @@ class Template:
 
     def get_current_frame_path(self):
         index, changed = self.get_current_frame_index()
-        return os.path.join(
-            self.directory,
-            sorted([i for i in os.listdir(self.directory) if i != 'canvas.json'])[index]
-        ), changed
+        return self.directory / sorted([i for i in self.directory.iterdir() if i != 'canvas.json'])[index], changed
 
 
-def get_template_for(directory):
-    abs_path = os.path.abspath(directory)
+def get_template_for(directory: Path):
+    abs_path = directory.resolve()
     return templates.setdefault(abs_path, Template(abs_path))
 
 
@@ -54,14 +55,14 @@ def reset_templates_cache():
     templates = {}
 
 
-def convert_frames_to_absolute(directory):
-    abs_path = os.path.abspath(directory)
+def convert_frames_to_absolute(directory: Path):
+    abs_path = directory.resolve()
     template = templates.setdefault(abs_path, Template(abs_path))
     ww = None
     hh = None
 
-    for i in os.listdir(abs_path):
-        img_path = os.path.join(abs_path, i)
+    for i in abs_path.iterdir():
+        img_path = abs_path / i
         if i == "canvas.json":
             continue
         img = Image.open(img_path)
@@ -75,7 +76,7 @@ def convert_frames_to_absolute(directory):
 
     template.left = 0
     template.top = 0
-    with open(os.path.join(abs_path, 'canvas.json'), 'w') as json_out:
+    with open(abs_path / 'canvas.json', 'w') as json_out:
         json.dump({
             "minutesPerFrame": template.single_duration / 60,
             "left": 0,
@@ -83,14 +84,21 @@ def convert_frames_to_absolute(directory):
         }, json_out)
 
 
-def convert_frames_to_relative(directory):
+def convert_frames_to_relative(directory: Path):
     raise NotImplemented('Join (0, 0) master race now')
 
 
+def main():
+    abs_conversion_path = Path('convert_to_absolute')
+    if abs_conversion_path.is_dir():
+        for i in abs_conversion_path.iterdir():
+            convert_frames_to_absolute(abs_conversion_path / i)
+
+    rel_conversion_path = Path('convert_to_relative')
+    if rel_conversion_path.is_dir():
+        for i in rel_conversion_path.iterdir():
+            convert_frames_to_relative(rel_conversion_path / i)
+
+
 if __name__ == '__main__':
-    if os.path.isdir('convert_to_absolute'):
-        for i in os.listdir('convert_to_absolute'):
-            convert_frames_to_absolute(os.path.join('convert_to_absolute', i))
-    if os.path.isdir('convert_to_relative'):
-        for i in os.listdir('convert_to_relative'):
-            convert_frames_to_relative(os.path.join('convert_to_relative', i))
+    main()
