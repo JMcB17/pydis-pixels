@@ -219,14 +219,14 @@ def print_sleep_time(
         duration_msg: str = 'sleeping for {duration} seconds',
         finish_msg: str = 'finish sleeping at {sleep_finish_time}'
 ):
-    logging.info(duration_msg.format(duration))
+    logging.info(duration_msg.format(duration=duration))
     sleep_finish_time_posix = time.time() + duration
     if GMTIME:
         sleep_finish_time_struct = time.gmtime(sleep_finish_time_posix)
     else:
         sleep_finish_time_struct = time.localtime(sleep_finish_time_posix)
     sleep_finish_time = time.asctime(sleep_finish_time_struct)
-    logging.info(finish_msg.format(sleep_finish_time))
+    logging.info(finish_msg.format(sleep_finish_time=sleep_finish_time))
 
 
 async def ratelimit(headers: multidict.CIMultiDictProxy):
@@ -429,6 +429,7 @@ async def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, hea
 async def run_animation(template: template_manager.Template, canvas_size: dict, headers: dict, bot):
     while True:
         frame_path = template.get_current_frame_path()[0]
+        logging.info(frame_path)
         zone = Zone(
             frame_path,
             [
