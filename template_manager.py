@@ -45,7 +45,9 @@ class Template:
         return self.directory / sorted([i for i in self.directory.iterdir() if i != 'canvas.json'])[index], changed
 
 
-def get_template_for(directory: Path):
+def get_template_for(directory: typing.Union[str, Path]):
+    if not isinstance(directory, Path):
+        directory = Path(directory)
     abs_path = directory.resolve()
     return templates.setdefault(abs_path, Template(abs_path))
 
