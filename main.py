@@ -53,6 +53,9 @@ GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
 GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
 BLANK_PIXEL = 'ffffff'
 
+CAMPFIRE_MEMBERS = 4
+CAMPFIRE_MY_ID = 1
+
 
 img_type = typing.List[typing.List[str]]
 
@@ -372,7 +375,10 @@ async def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path]
     canvas_pil_img.save(path)
 
 
-async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: dict, bot):
+async def run_for_img(
+        img: img_type, img_location: dict, canvas_size: dict, headers: dict, bot,
+        pixel_check: typing.Callable = lambda x, y: True
+):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     logging.info('Getting current canvas status')
     canvas_bytes = await get_pixels(canvas_size, headers, as_bytes=True)
@@ -397,6 +403,10 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
                 logging.info(f'Getting status of pixel at ({pix_x}, {pix_y})')
                 canvas[pix_y][pix_x] = await get_pixel(pix_x, pix_y, headers)
                 logging.info(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
+
+            if not pixel_check(pix_x, pix_y):
+                logging.info(f'Pixel at ({pix_x}, {pix_y}) is not for ID {CAMPFIRE_MY_ID}, skipping')
+                continue
 
             if colour is None:
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
@@ -426,6 +436,10 @@ async def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, hea
             logging.exception(error)
 
 
+def campfire_id_check(x: int, y: int) -> bool:
+    return (x + y) % CAMPFIRE_MEMBERS == CAMPFIRE_MY_ID
+
+
 async def run_animation(template: template_manager.Template, canvas_size: dict, headers: dict, bot):
     while True:
         frame_path = template.get_current_frame_path()[0]
@@ -442,7 +456,7 @@ async def run_animation(template: template_manager.Template, canvas_size: dict, 
         )
         img = zone.img
         location = zone.location
-        await run_for_img(img, location, canvas_size, headers, bot)
+        await run_for_img(img, location, canvas_size, headers, bot, pixel_check=campfire_id_check)
 
 
 async def main():
