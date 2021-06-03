@@ -23,15 +23,7 @@ __version__ = '3.1.0'
 # modify this to change the order of priority or add/remove images
 imgs = [
     'pride-whole-canvas-mask',
-    'cmpc',
-    'httpscmpclivetwitchtvcontrolmypc-utf-8',
-    'wbub',
-    'jmcb',
-    'voxelfox',
-    'httpsvflgg-utf-8',
-    'JMcB-utf-8',
     'sqlite-lgbt',
-    'pydispix',
 ]
 
 
