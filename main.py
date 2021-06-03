@@ -8,6 +8,7 @@ import time
 import logging
 import argparse
 import asyncio
+import tkinter
 from pathlib import Path
 
 import aiohttp
@@ -463,7 +464,9 @@ async def main():
 
     logging.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
     await save_canvas_as_png(canvas_size, headers)
-    await run_protections(zones_to_do, canvas_size, headers, bot)
+    asyncio.create_task(run_protections(zones_to_do, canvas_size, headers, bot))
+    tk = tkinter.Tk()
+    tk.mainloop()
 
 
 if __name__ == '__main__':
