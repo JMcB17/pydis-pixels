@@ -42,7 +42,7 @@ class Template:
 
     def get_current_frame_path(self):
         index, changed = self.get_current_frame_index()
-        return self.directory / sorted([i for i in self.directory.iterdir() if i != 'canvas.json'])[index], changed
+        return self.directory / sorted([i for i in self.directory.iterdir() if i.stem != 'canvas.json'])[index], changed
 
 
 def get_template_for(directory: typing.Union[str, Path]):
