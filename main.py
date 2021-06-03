@@ -381,6 +381,9 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
             pix_y = img_location['y'] + y_index
             pix_x = img_location['x'] + x_index
 
+            if colour is None:
+                logging.info(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
+                continue
             # get canvas every other time
             # getting it more often means better collaboration
             # but too often is too often
@@ -389,10 +392,7 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
                 logging.info(f'Getting status of pixel at ({pix_x}, {pix_y})')
                 canvas[pix_y][pix_x] = await get_pixel(pix_x, pix_y, headers)
                 logging.info(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
-
-            if colour is None:
-                logging.info(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
-            elif canvas[pix_y][pix_x] == colour:
+            if canvas[pix_y][pix_x] == colour:
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) is {colour} as intended')
             elif colour == WORM_COLOUR:
                 logging.info('Oh, worm')
