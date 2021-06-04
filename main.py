@@ -22,6 +22,7 @@ __version__ = '3.1.0'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
+    'pythons2',
     'pride-whole-canvas-mask',
     'cmpc',
     'httpscmpclivetwitchtvcontrolmypc-utf-8',
@@ -205,6 +206,8 @@ def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
             if file.name.startswith(img) and file.is_file():
                 zones.append(Zone(file))
                 break
+        else:
+            logging.error('Unable to find file for zone with name %s', img)
 
     return zones
 
