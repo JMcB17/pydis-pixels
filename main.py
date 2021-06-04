@@ -15,6 +15,7 @@ import multidict
 import PIL.Image
 
 import discord_mirror
+import gui_canvas_display
 
 
 __version__ = '3.1.0'
@@ -456,6 +457,8 @@ async def main():
         await bot.wait_until_ready()
     else:
         bot = None
+
+    gui = gui_canvas_display.GUICanvasDisplay(canvas_size)
 
     logging.info(f'Loading zones to do from {IMGS_FOLDER}')
     zones_to_do = load_zones(IMGS_FOLDER, imgs)
