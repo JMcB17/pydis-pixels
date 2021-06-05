@@ -22,8 +22,7 @@ __version__ = '3.1.0'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
-    'lost-the-game-no-bg',
-    'lost-the-game',
+    'neil2',
     'cmpc',
     'httpscmpclivetwitchtvcontrolmypc-utf-8',
     'wbub',
@@ -35,6 +34,8 @@ imgs = [
     'pythons2',
     'pride-whole-canvas-mask',
     'pydispix',
+    'lost-the-game-no-bg',
+    'lost-the-game',
 ]
 
 
