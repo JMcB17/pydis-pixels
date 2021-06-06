@@ -26,7 +26,6 @@ imgs = [
     'neil2',
     'cmpc',
     'httpscmpclivetwitchtvcontrolmypc-utf-8',
-    'wbub',
     'jmcb',
     'voxelfox',
     'httpsvflgg-utf-8',
