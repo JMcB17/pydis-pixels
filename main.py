@@ -34,8 +34,6 @@ imgs = [
     'pythons2',
     'pride-whole-canvas-mask',
     'pydispix',
-    'lost-the-game-no-bg',
-    'lost-the-game',
 ]
 
 
