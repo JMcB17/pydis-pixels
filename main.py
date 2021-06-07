@@ -391,6 +391,14 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
         for x_index, colour in enumerate(row):
             pix_y = img_location['y'] + y_index
             pix_x = img_location['x'] + x_index
+            
+            coords_str_template = '({x}, {y})'
+            max_coords_str = coords_str_template.format(
+                x=canvas_size['height'], y=canvas_size['width']
+            )
+            max_coords_str_length = len(max_coords_str)
+            pix_coords_str = coords_str_template.format(x=pix_x, y=pix_y)
+            pix_coords_str = pix_coords_str.ljust(max_coords_str_length)
 
             if colour is None:
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
@@ -400,16 +408,16 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
             # but too often is too often
             # also only do it if we've hit a zone that needs changing, to further prevent get_pixel rate limiting
             if hit_incorrect_pixel and x_index % 2 == 0:
-                logging.info(f'Getting status of pixel at ({pix_x}, {pix_y})')
+                logging.info(f'Getting status of pixel at {pix_coords_str}')
                 canvas[pix_y][pix_x] = await get_pixel(pix_x, pix_y, headers)
-                logging.info(f'Got status of pixel at ({pix_x}, {pix_y}), {canvas[pix_y][pix_x]}')
+                logging.info(f'Got status of pixel at {pix_coords_str}, {canvas[pix_y][pix_x]}')
             if canvas[pix_y][pix_x] == colour:
-                logging.info(f'Pixel at ({pix_x}, {pix_y}) is {colour} as intended')
+                logging.info(f'Pixel at {pix_coords_str} is {colour} as intended')
             elif colour == WORM_COLOUR:
                 logging.info('Oh, worm')
             else:
                 hit_incorrect_pixel = True
-                logging.info(f'Pixel at ({pix_x}, {pix_y}) will be made {colour}')
+                logging.info(f'Pixel at {pix_coords_str} will be made {colour}')
                 await set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
 
 
