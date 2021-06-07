@@ -418,6 +418,7 @@ async def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, hea
                 img = zone.img
                 img_location = zone.location
 
+                logging.info('working on next img'.center(100, '='))
                 logging.info(f"img name: {zone.name}")
                 logging.info(f'img dimension x: {zone.width}')
                 logging.info(f'img dimension y: {zone.height}')
