@@ -267,7 +267,10 @@ async def set_pixel(x: int, y: int, rgb: str, headers: dict):
         ) as r:
             r_json = await r.json()
             logging.info(r_json['message'])
-            await ratelimit(r.headers)
+            if r.status == 503:
+                logging.error('Failed to write pixel')
+            else:
+                await ratelimit(r.headers)
 
 
 def img_bytes_to_dimensional_list(img_bytes: bytes, canvas_size: dict) -> img_type:
