@@ -24,15 +24,6 @@ __version__ = '3.1.0'
 imgs = [
     'cmpc',
     'httpscmpclivetwitchtvcontrolmypc-utf-8',
-    'neil2',
-    'jmcb',
-    'voxelfox',
-    'httpsvflgg-utf-8',
-    'JMcB-utf-8',
-    'sqlite-lgbt',
-    'pythons2',
-    'pride-whole-canvas-mask',
-    'pydispix',
 ]
 
 
