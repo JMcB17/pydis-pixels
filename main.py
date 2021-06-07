@@ -22,10 +22,7 @@ __version__ = '3.1.0'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
-    'lemon-pleased',
     'neil2',
-    'cmpc',
-    'httpscmpclivetwitchtvcontrolmypc-utf-8',
     'jmcb',
     'voxelfox',
     'httpsvflgg-utf-8',
