@@ -17,7 +17,7 @@ import PIL.Image
 import discord_mirror
 
 
-__version__ = '3.1.0'
+__version__ = '3.1.1'
 
 
 # modify this to change the order of priority or add/remove images
