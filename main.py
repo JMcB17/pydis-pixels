@@ -30,6 +30,7 @@ imgs = [
     'voxelfox',
     'httpsvflgg-utf-8',
     'JMcB-utf-8',
+    'sqlite-lgbt',
     'pythons2',
     'pride-whole-canvas-mask',
     'pydispix',
