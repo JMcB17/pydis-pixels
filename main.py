@@ -22,12 +22,12 @@ __version__ = '3.1.1'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
+    'neil2',
+    'voxelfox',
     'wbub2',
     'cmpc',
     'httpscmpclivetwitchtvcontrolmypc-utf-8',
-    'neil2',
     'jmcb',
-    'voxelfox',
     'httpsvflgg-utf-8',
     'JMcB-utf-8',
     'sqlite-lgbt',
