@@ -405,7 +405,7 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
             pix_coords_str = pix_coords_str.ljust(max_coords_str_length)
 
             if colour is None:
-                logging.info(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
+                logging.info(f'Pixel at {pix_coords_str} is intended to be transparent, skipping')
                 continue
             try:
                 canvas[pix_y][pix_x]
