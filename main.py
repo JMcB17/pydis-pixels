@@ -406,6 +406,10 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
             if colour is None:
                 logging.info(f'Pixel at ({pix_x}, {pix_y}) is intended to be transparent, skipping')
                 continue
+            try:
+                canvas[pix_y][pix_x]
+            except IndexError:
+                logging.error(f'Pixel at {pix_coords_str} is outside of the canvas')
             # get canvas every other time
             # getting it more often means better collaboration
             # but too often is too often
