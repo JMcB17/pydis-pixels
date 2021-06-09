@@ -488,4 +488,5 @@ async def main():
 
 
 if __name__ == '__main__':
+    # todo: clean keyboardinterrupt shutdown
     asyncio.run(main())
