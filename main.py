@@ -22,7 +22,18 @@ __version__ = '3.1.1'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
-    'BIBI-no-bg',
+    'neil2',
+    'voxelfox',
+    'wbub2',
+    'cmpc',
+    'httpscmpclivetwitchtvcontrolmypc-utf-8',
+    'jmcb',
+    'httpsvflgg-utf-8',
+    'JMcB-utf-8',
+    'sqlite-lgbt',
+    'pythons2',
+    'pride-whole-canvas-mask',
+    'pydispix',
 
 ]
 
