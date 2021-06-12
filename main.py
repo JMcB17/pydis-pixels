@@ -321,8 +321,8 @@ async def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -
                 await ratelimit(r.headers)
                 pixels_bytes = await r.read()
 
-    with open(CANVAS_LOG_PATH, 'a', encoding='utf-8') as canvas_log_file:
-        canvas_log_file.write(f'{time.asctime()}\n{pixels_bytes}\n')
+    # with open(CANVAS_LOG_PATH, 'a', encoding='utf-8') as canvas_log_file:
+    #     canvas_log_file.write(f'{time.asctime()}\n{pixels_bytes}\n')
     if as_bytes:
         return pixels_bytes
 
