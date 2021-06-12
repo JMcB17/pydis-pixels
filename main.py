@@ -22,6 +22,7 @@ __version__ = '3.1.1'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
+    'bibi-big',
     'neil2',
     'voxelfox',
     'wbub2',
