@@ -2,10 +2,16 @@
 Python Discord server thing
 
 https://pixels.pythondiscord.com/info/
+
 ## Usage
 Get your token from here https://pixels.pythondiscord.com/info/authentication
 
 Create `config.json` from `config.template.json` and fill in your token.
+
+Install dependencies with the `python -m pip install -r requirements.txt` command
+
+Then run main.py
+
 ### Your own images
 Add your image to the `imgs` folder.
 
