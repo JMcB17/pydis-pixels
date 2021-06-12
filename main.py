@@ -22,18 +22,8 @@ __version__ = '3.1.1'
 
 # modify this to change the order of priority or add/remove images
 imgs = [
-    'neil2',
-    'voxelfox',
-    'wbub2',
-    'cmpc',
-    'httpscmpclivetwitchtvcontrolmypc-utf-8',
-    'jmcb',
-    'httpsvflgg-utf-8',
-    'JMcB-utf-8',
-    'sqlite-lgbt',
-    'pythons2',
-    'pride-whole-canvas-mask',
-    'pydispix',
+    'BIBI',
+
 ]
 
 
@@ -415,7 +405,7 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
             # getting it more often means better collaboration
             # but too often is too often
             # also only do it if we've hit a zone that needs changing, to further prevent get_pixel rate limiting
-            if hit_incorrect_pixel and x_index % 2 == 0:
+            if hit_incorrect_pixel and x_index % 1 == 0:
                 logging.info(f'Getting status of pixel at {pix_coords_str}')
                 canvas[pix_y][pix_x] = await get_pixel(pix_x, pix_y, headers)
                 logging.info(f'Got status of pixel at {pix_coords_str}, {canvas[pix_y][pix_x]}')
