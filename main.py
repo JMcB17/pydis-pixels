@@ -33,7 +33,7 @@ imgs = [
     'JMcB-utf-8',
     'sqlite-lgbt',
     'pythons2',
-    'pride-whole-canvas-mask',
+    'pride-zone',
     'pydispix',
 
 ]
