@@ -53,6 +53,8 @@ GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
 GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
 BLANK_PIXEL = 'ffffff'
 
+with open(CONFIG_FILE_PATH) as config_file:
+    config = json.load(config_file)
 
 img_type = typing.List[typing.List[str]]
 
