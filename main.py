@@ -463,8 +463,6 @@ async def main():
     parser = get_parser()
     parser.parse_args()
 
-    with open(CONFIG_FILE_PATH) as config_file:
-        config = json.load(config_file)
     logging.info('Loaded config')
     bearer_token = f"Bearer {config['token']}"
     headers = {
