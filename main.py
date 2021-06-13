@@ -68,7 +68,7 @@ stream_handler.setLevel(logging.INFO)
 stream_formatter = logging.Formatter()
 stream_handler.setFormatter(stream_formatter)
 # noinspection PyArgumentList
-if logtofile == "True":
+if config['logtofile'] == "True":
 	logging.basicConfig(
 	    level=logging.DEBUG,
 	    handlers=[
