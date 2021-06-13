@@ -68,13 +68,21 @@ stream_handler.setLevel(logging.INFO)
 stream_formatter = logging.Formatter()
 stream_handler.setFormatter(stream_formatter)
 # noinspection PyArgumentList
-logging.basicConfig(
-    level=logging.DEBUG,
-    handlers=[
-        file_handler,
-        stream_handler,
-    ]
-)
+if logtofile == "True":
+	logging.basicConfig(
+	    level=logging.DEBUG,
+	    handlers=[
+	        file_handler,
+	        stream_handler,
+	    ]
+	)
+else:
+	logging.basicConfig(
+	    level=logging.DEBUG,
+	    handlers=[
+	        stream_handler
+	    ]
+	)
 # don't fill up debug.log with other loggers
 for logger_name in ['urllib3', 'PIL', 'discord']:
     logging.getLogger(logger_name).setLevel(logging.ERROR)
