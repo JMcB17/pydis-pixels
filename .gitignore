@@ -1,8 +1,9 @@
-config.json
-imgs/upscale
+*.log
+*.zip
+*.json
+!*.template.json
 
-canvas.log
-debug.log
+imgs/upscale
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
