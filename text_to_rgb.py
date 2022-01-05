@@ -9,7 +9,7 @@ from main import three_bytes_to_rgb_hex_string
 __version__ = '1.1.0'
 
 
-IGNORED_FOLDER = Path('imgs') / 'upscale'
+IGNORED_FOLDER = Path('images/ignore')
 
 
 def get_parser() -> argparse.ArgumentParser:

@@ -41,10 +41,10 @@ imgs = [
 
 
 CONFIG_FILE_PATH = Path('config.json')
-IMGS_FOLDER = Path('imgs')
+IMAGES_FOLDER = Path('images')
 CANVAS_LOG_PATH = Path('canvas.log')
 DEBUG_LOG_PATH = Path('debug.log')
-CANVAS_IMAGE_PATH = Path('imgs') / 'upscale' / 'canvas.png'
+CANVAS_IMAGE_PATH = IMAGES_FOLDER / 'ignore' / 'canvas.png'
 WORM_COLOUR = 'ff8983'
 GMTIME = False
 BASE_URL = 'https://pixels.pythondiscord.com'
@@ -84,7 +84,7 @@ for logger_name in ['urllib3', 'PIL', 'discord']:
 def get_parser() -> argparse.ArgumentParser:
     """Get this script's parser."""
     parser = argparse.ArgumentParser(
-        description=f'load images and their coords from {IMGS_FOLDER} and try to create/protect them'
+        description=f'load images and their coords from {IMAGES_FOLDER} and try to create/protect them'
     )
 
     parser.add_argument('--version', action='version', version=__version__)
@@ -477,8 +477,8 @@ async def main():
     else:
         bot = None
 
-    logging.info(f'Loading zones to do from {IMGS_FOLDER}')
-    zones_to_do = load_zones(IMGS_FOLDER, imgs)
+    logging.info(f'Loading zones to do from {IMAGES_FOLDER}')
+    zones_to_do = load_zones(IMAGES_FOLDER, imgs)
     total_area = sum(z.area_not_transparent for z in zones_to_do)
     logging.info(f'Total area: {total_area}')
     canvas_area = canvas_size['width'] * canvas_size['height']
