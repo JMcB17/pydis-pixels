@@ -1,7 +1,6 @@
 *.log
 *.zip
-*.json
-!*.template.json
+config.json
 
 images/ignore
 
