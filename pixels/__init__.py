@@ -3,39 +3,25 @@ import sys
 import typing
 import re
 import time
-import logging
 import argparse
 import asyncio
+import logging as log
 from pathlib import Path
 
-import aiohttp
-import multidict
 import PIL.Image
 
+import api
 import discord_mirror
 
 
-__version__ = '3.1.1'
+# todo: further cleaning up
+# todo: modularise to support different apis
+# todo: cmpc pixels support
+# todo: better rate limit handling?
+# todo: legacy r/place support for kicks
 
 
-# modify this to change the order of priority or add/remove images
-imgs = [
-    'bibi2',
-    'goldCookie',
-    'neil2',
-    'voxelfox',
-    'wbub2',
-    'cmpc',
-    'httpscmpclivetwitchtvcontrolmypc-utf-8',
-    'jmcb',
-    'httpsvflgg-utf-8',
-    'JMcB-utf-8',
-    'sqlite-lgbt',
-    'pythons2',
-    'pride-zone',
-    'pydispix',
-
-]
+__version__ = '4.0.0a'
 
 
 CONFIG_FILE_PATH = Path('config.json')
@@ -45,11 +31,7 @@ DEBUG_LOG_PATH = Path('debug.log')
 CANVAS_IMAGE_PATH = IMAGES_FOLDER / 'ignore' / 'canvas.png'
 WORM_COLOUR = 'ff8983'
 GMTIME = False
-BASE_URL = 'https://pixels.pythondiscord.com'
-SET_PIXEL_URL = f'{BASE_URL}/set_pixel'
-GET_SIZE_URL = f'{BASE_URL}/get_size'
-GET_PIXELS_URL = f'{BASE_URL}/get_pixels'
-GET_PIXEL_URL = f'{BASE_URL}/get_pixel'
+
 BLANK_PIXEL = 'ffffff'
 
 
@@ -57,18 +39,18 @@ img_type = typing.List[typing.List[str]]
 
 
 # file handler for all debug logging with timestamps
-file_handler = logging.FileHandler(DEBUG_LOG_PATH, encoding='utf-8')
-file_handler.setLevel(logging.DEBUG)
-file_formatter = logging.Formatter('%(asctime)s:' + logging.BASIC_FORMAT)
+file_handler = log.FileHandler(DEBUG_LOG_PATH, encoding='utf-8')
+file_handler.setLevel(log.DEBUG)
+file_formatter = log.Formatter('%(asctime)s:' + log.BASIC_FORMAT)
 file_handler.setFormatter(file_formatter)
 # stream handler for info level print-like logging
-stream_handler = logging.StreamHandler(stream=sys.stdout)
-stream_handler.setLevel(logging.INFO)
-stream_formatter = logging.Formatter()
+stream_handler = log.StreamHandler(stream=sys.stdout)
+stream_handler.setLevel(log.INFO)
+stream_formatter = log.Formatter()
 stream_handler.setFormatter(stream_formatter)
 # noinspection PyArgumentList
-logging.basicConfig(
-    level=logging.DEBUG,
+log.basicConfig(
+    level=log.DEBUG,
     handlers=[
         file_handler,
         stream_handler,
@@ -76,7 +58,7 @@ logging.basicConfig(
 )
 # don't fill up debug.log with other loggers
 for logger_name in ['urllib3', 'PIL', 'discord']:
-    logging.getLogger(logger_name).setLevel(logging.ERROR)
+    log.getLogger(logger_name).setLevel(log.ERROR)
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -191,7 +173,7 @@ class Zone:
                 if pixel is None:
                     self.area_not_transparent -= 1
 
-        logging.info(
+        log.info(
             f'Loaded zone {self.name}\n'
             f'    width:  {self.width}\n'
             f'    height: {self.height}\n'
@@ -209,70 +191,9 @@ def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
                 zones.append(Zone(file))
                 break
         else:
-            logging.error('Unable to find file for zone with name %s', img)
+            log.error('Unable to find file for zone with name %s', img)
 
     return zones
-
-
-def print_sleep_time(
-        duration: float,
-        duration_msg: str = 'sleeping for {duration} seconds',
-        finish_msg: str = 'finish sleeping at {sleep_finish_time}'
-):
-    logging.info(duration_msg.format(duration=duration))
-    sleep_finish_time_posix = time.time() + duration
-    if GMTIME:
-        sleep_finish_time_struct = time.gmtime(sleep_finish_time_posix)
-    else:
-        sleep_finish_time_struct = time.localtime(sleep_finish_time_posix)
-    sleep_finish_time = time.asctime(sleep_finish_time_struct)
-    logging.info(finish_msg.format(sleep_finish_time=sleep_finish_time))
-
-
-async def ratelimit(headers: multidict.CIMultiDictProxy):
-    """Given headers from a response, print info and sleep if needed."""
-    if 'requests-remaining' in headers:
-        requests_remaining = int(headers['requests-remaining'])
-        logging.info(f'{requests_remaining} requests remaining')
-        if not requests_remaining:
-            requests_reset = float(headers['requests-reset'])
-            print_sleep_time(requests_reset)
-            await asyncio.sleep(requests_reset)
-    else:
-        cooldown_reset = float(headers['cooldown-reset'])
-        logging.info('on cooldown')
-        print_sleep_time(cooldown_reset)
-        await asyncio.sleep(cooldown_reset)
-
-
-async def head_request(url: str, headers: dict):
-    async with aiohttp.ClientSession() as session:
-        async with session.head(url, headers=headers) as r:
-            # todo: custom logging for head requests
-            if r.ok:
-                await ratelimit(r.headers)
-
-
-async def set_pixel(x: int, y: int, rgb: str, headers: dict):
-    """set_pixel endpoint wrapper."""
-    await head_request(SET_PIXEL_URL, headers)
-    payload = {
-        'x': x,
-        'y': y,
-        'rgb': rgb,
-    }
-    async with aiohttp.ClientSession() as session:
-        async with session.post(
-            SET_PIXEL_URL,
-            json=payload,
-            headers=headers
-        ) as r:
-            r_json = await r.json()
-            logging.info(r_json['message'])
-            if r.status == 503:
-                logging.error('Failed to write pixel')
-            else:
-                await ratelimit(r.headers)
 
 
 def img_bytes_to_dimensional_list(img_bytes: bytes, canvas_size: dict) -> img_type:
@@ -296,82 +217,12 @@ def empty_canvas_bytes(canvas_size: dict) -> bytes:
     return b'ffffff' * canvas_size['height'] * canvas_size['width']
 
 
-async def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typing.Union[img_type, bytes]:
-    """get_pixels endpoint wrapper.
-
-    Returns as a 2d list of hex colour strings, like an img.
-    """
-    await head_request(GET_PIXELS_URL, headers)
-    async with aiohttp.ClientSession() as session:
-        async with session.get(
-            GET_PIXELS_URL,
-            headers=headers
-        ) as r:
-            if r.status == 410:
-
-                logging.debug('Rats! get_pixels will return a blank canvas as default.')
-                print_sleep_time(
-                    float(r.headers['endpoint-unlock']),
-                    'endpoint will unlock in {duration} seconds',
-                    'endpoint will unlock at {sleep_finish_time}'
-                )
-                pixels_bytes = empty_canvas_bytes(canvas_size)
-            else:
-                await ratelimit(r.headers)
-                pixels_bytes = await r.read()
-
-    # with open(CANVAS_LOG_PATH, 'a', encoding='utf-8') as canvas_log_file:
-    #     canvas_log_file.write(f'{time.asctime()}\n{pixels_bytes}\n')
-    if as_bytes:
-        return pixels_bytes
-
-    return img_bytes_to_dimensional_list(pixels_bytes, canvas_size)
-
-
-async def get_pixel(x: int, y: int, headers: dict) -> str:
-    """get_pixel endpoint wrapper."""
-    await head_request(GET_PIXEL_URL, headers)
-    params = {
-        'x': x,
-        'y': y
-    }
-    async with aiohttp.ClientSession() as session:
-        async with session.get(
-            GET_PIXEL_URL,
-            params=params,
-            headers=headers
-        ) as r:
-            if r.status == 410:
-                logging.debug('Rats! get_pixel will return a black pixel as default.')
-                print_sleep_time(
-                    float(r.headers['endpoint-unlock']),
-                    'endpoint will unlock in {duration} seconds',
-                    'endpoint will unlock at {sleep_finish_time}'
-                )
-                return BLANK_PIXEL
-
-            await ratelimit(r.headers)
-            r_json = await r.json()
-
-    return r_json['rgb']
-
-
-async def get_size(headers: dict) -> typing.Dict[str, int]:
-    """get_size endpoint wrapper."""
-    async with aiohttp.ClientSession() as session:
-        async with session.get(
-            GET_SIZE_URL,
-            headers=headers
-        ) as r:
-            return await r.json()
-
-
 async def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path] = None):
     if path is None:
         path = CANVAS_IMAGE_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    canvas_bytes = await get_pixels(canvas_size, headers, as_bytes=True)
+    canvas_bytes = await api.get_pixels(canvas_size, headers, as_bytes=True)
     canvas_pil_img = PIL.Image.frombytes(
         mode='RGB',
         size=(canvas_size['width'], canvas_size['height']),
@@ -382,12 +233,12 @@ async def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path]
 
 async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: dict, bot):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
-    logging.info('Getting current canvas status')
-    canvas_bytes = await get_pixels(canvas_size, headers, as_bytes=True)
+    log.info('Getting current canvas status')
+    canvas_bytes = await api.get_pixels(canvas_size, headers, as_bytes=True)
     canvas = img_bytes_to_dimensional_list(canvas_bytes, canvas_size)
-    logging.info('Got current canvas status')
+    log.info('Got current canvas status')
     if bot is not None:
-        logging.info('Updating canvas mirror')
+        log.info('Updating canvas mirror')
         await bot.update_mirror_from_id(canvas_bytes)
 
     for y_index, row in enumerate(img):
@@ -406,28 +257,28 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
             pix_coords_str = pix_coords_str.ljust(max_coords_str_length)
 
             if colour is None:
-                logging.info(f'Pixel at {pix_coords_str} is intended to be transparent, skipping')
+                log.info(f'Pixel at {pix_coords_str} is intended to be transparent, skipping')
                 continue
             try:
                 canvas[pix_y][pix_x]
             except IndexError:
-                logging.error(f'Pixel at {pix_coords_str} is outside of the canvas')
+                log.error(f'Pixel at {pix_coords_str} is outside of the canvas')
             # get canvas every other time
             # getting it more often means better collaboration
             # but too often is too often
             # also only do it if we've hit a zone that needs changing, to further prevent get_pixel rate limiting
             if hit_incorrect_pixel and x_index % 1 == 0:
-                logging.info(f'Getting status of pixel at {pix_coords_str}')
-                canvas[pix_y][pix_x] = await get_pixel(pix_x, pix_y, headers)
-                logging.info(f'Got status of pixel at {pix_coords_str}, {canvas[pix_y][pix_x]}')
+                log.info(f'Getting status of pixel at {pix_coords_str}')
+                canvas[pix_y][pix_x] = await api.get_pixel(pix_x, pix_y, headers)
+                log.info(f'Got status of pixel at {pix_coords_str}, {canvas[pix_y][pix_x]}')
             if canvas[pix_y][pix_x] == colour:
-                logging.info(f'Pixel at {pix_coords_str} is {colour} as intended')
+                log.info(f'Pixel at {pix_coords_str} is {colour} as intended')
             elif colour == WORM_COLOUR:
-                logging.info('Oh, worm')
+                log.info('Oh, worm')
             else:
                 hit_incorrect_pixel = True
-                logging.info(f'Pixel at {pix_coords_str} will be made {colour}')
-                await set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
+                log.info(f'Pixel at {pix_coords_str} will be made {colour}')
+                await api.set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
 
 
 async def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, headers: dict, bot):
@@ -437,14 +288,14 @@ async def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, hea
                 img = zone.img
                 img_location = zone.location
 
-                logging.info('working on next img'.center(100, '='))
-                logging.info(f"img name: {zone.name}")
-                logging.info(f'img dimension x: {zone.width}')
-                logging.info(f'img dimension y: {zone.height}')
-                logging.info(f'img pixels: {zone.area_not_transparent}')
+                log.info('working on next img'.center(100, '='))
+                log.info(f"img name: {zone.name}")
+                log.info(f'img dimension x: {zone.width}')
+                log.info(f'img dimension y: {zone.height}')
+                log.info(f'img pixels: {zone.area_not_transparent}')
                 await run_for_img(img, img_location, canvas_size, headers, bot)
         except Exception as error:
-            logging.exception(error)
+            log.exception(error)
 
 
 async def main():
@@ -454,36 +305,36 @@ async def main():
 
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
-    logging.info('Loaded config')
+    log.info('Loaded config')
     bearer_token = f"Bearer {config['token']}"
     headers = {
         "Authorization": bearer_token
     }
 
-    logging.info('Getting canvas size')
-    canvas_size = await get_size(headers)
-    logging.info(f'Canvas size: {canvas_size}')
+    log.info('Getting canvas size')
+    canvas_size = await api.get_size(headers)
+    log.info(f'Canvas size: {canvas_size}')
 
     if 'discord_mirror' in config and config['discord_mirror']['bot_token']:
         bot = discord_mirror.MirrorBot(
             channel_id=config['discord_mirror']['channel_id'], message_id=config['discord_mirror']['message_id'],
             canvas_size=canvas_size
         )
-        logging.info('Running discord bot for canvas mirror')
+        log.info('Running discord bot for canvas mirror')
         asyncio.create_task(bot.start(config['discord_mirror']['bot_token']))
         await bot.wait_until_ready()
     else:
         bot = None
 
-    logging.info(f'Loading zones to do from {IMAGES_FOLDER}')
+    log.info(f'Loading zones to do from {IMAGES_FOLDER}')
     zones_to_do = load_zones(IMAGES_FOLDER, imgs)
     total_area = sum(z.area_not_transparent for z in zones_to_do)
-    logging.info(f'Total area: {total_area}')
+    log.info(f'Total area: {total_area}')
     canvas_area = canvas_size['width'] * canvas_size['height']
     total_area_percent = round(((total_area / canvas_area) * 100), 2)
-    logging.info(f'Total area: {total_area_percent}% of canvas')
+    log.info(f'Total area: {total_area_percent}% of canvas')
 
-    logging.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
+    log.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
     await save_canvas_as_png(canvas_size, headers)
     await run_protections(zones_to_do, canvas_size, headers, bot)
 
