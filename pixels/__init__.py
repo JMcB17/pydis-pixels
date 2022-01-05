@@ -1,17 +1,16 @@
 import json
 import sys
-import typing
-import re
-import time
 import argparse
 import asyncio
 import logging as log
 from pathlib import Path
+from typing import Union
 
-import PIL.Image
+from PIL import Image
 
 import api
 import discord_mirror
+import zone
 
 
 # todo: further cleaning up
@@ -35,7 +34,7 @@ GMTIME = False
 BLANK_PIXEL = 'ffffff'
 
 
-img_type = typing.List[typing.List[str]]
+image_type = list[list[str]]
 
 
 # file handler for all debug logging with timestamps
@@ -48,7 +47,6 @@ stream_handler = log.StreamHandler(stream=sys.stdout)
 stream_handler.setLevel(log.INFO)
 stream_formatter = log.Formatter()
 stream_handler.setFormatter(stream_formatter)
-# noinspection PyArgumentList
 log.basicConfig(
     level=log.DEBUG,
     handlers=[
@@ -57,7 +55,7 @@ log.basicConfig(
     ]
 )
 # don't fill up debug.log with other loggers
-for logger_name in ['urllib3', 'PIL', 'discord']:
+for logger_name in ('urllib3', 'PIL', 'discord'):
     log.getLogger(logger_name).setLevel(log.ERROR)
 
 
@@ -73,162 +71,23 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def three_ints_to_rgb_hex_string(rgb_ints: typing.List[int]) -> str:
+def rgb_to_hex(rgb_ints: list[int]) -> str:
     """Take a list of ints and convert it to a colour e.g. [255, 255, 255] -> ffffff."""
-    rgb_hex = [hex(i) for i in rgb_ints]
-    rgb_hex_strings = [str(h)[2:].rjust(2, '0') for h in rgb_hex]
-    rgb_hex_string = ''.join(rgb_hex_strings)
-
-    return rgb_hex_string
+    return '{:0<2x}{:0<2x}{:0<2x}'.format(*rgb_ints)
 
 
-def three_bytes_to_rgb_hex_string(pixel: bytes) -> str:
-    """Take three bytes and convert them to a colour."""
-    rgb_ints = [b for b in pixel]
-    return three_ints_to_rgb_hex_string(rgb_ints)
-
-
-# mode of pil_img should be RGBA
-def img_to_lists(pil_img: PIL.Image.Image) -> img_type:
-    """Convert a PIL image to a 2d list of hex colour strings (None for transparent pixels)."""
-    pixel_list_img = []
-    for p in pil_img.getdata():
-        # if alpha channel shows pixel is transparent, save None instead
-        if p[3] == 0:
-            pixel_list_img.append(None)
-        else:
-            pixel_list_img.append(three_ints_to_rgb_hex_string(p[:3]))
-
-    dimensional_list_img = []
-    for i in range(pil_img.height):
-        w = pil_img.width
-        dimensional_list_img.append(pixel_list_img[i*w:i*w + w])
-
-    return dimensional_list_img
-
-
-def scale_img(pil_img: PIL.Image.Image, scale: int) -> PIL.Image.Image:
-    """Calculate the new size of a PIL image, resize and return it."""
-    new_size = (
-        pil_img.width // scale,
-        pil_img.height // scale
-    )
-    return pil_img.resize(size=new_size, resample=PIL.Image.NEAREST)
-
-
-class Zone:
-    """An area of pixels on the canvas, to be maintained.
-
-    Attrs:
-        img_path -- path provided to constructor
-        name -- name from filename
-        scale -- scale from filename
-        location -- co-ordinates on canvas of top-left corner
-        width
-        height
-        area
-        img -- a 2d list of hex colour strings, like run_for_img takes
-    """
-    img_name_regexp = re.compile(r'(.*),([0-9]*)x,\(([0-9]*),([0-9]*)\)')
-
-    def __init__(self, img_path: typing.Union[str, Path]):
-        """Load an image and calulcate its attributes.
-
-        Args:
-            img_path -- str or Path object to an image
-        Its name should match Zone.img_name_regexp:
-        name,scalex,(x,y)
-        e.g.
-        jmcb,10x,(75,2)
-        This is used by the code.
-        The image is resized and converted to a 2d list of hex colour strings.
-        """
-        if not isinstance(img_path, Path):
-            img_path = Path(img_path)
-        self.img_path = img_path
-
-        filename = self.img_path.stem
-        properties = re.match(self.img_name_regexp, filename)
-        self.name = properties[1]
-        self.scale = int(properties[2])
-        self.location = {
-            'x': int(properties[3]),
-            'y': int(properties[4])
-        }
-
-        pil_img = PIL.Image.open(self.img_path)
-        pil_img_rgb = pil_img.convert('RGBA')
-        if self.scale != 1:
-            pil_img_scaled = scale_img(pil_img_rgb, self.scale)
-        else:
-            pil_img_scaled = pil_img_rgb
-        self.width = pil_img_scaled.width
-        self.height = pil_img_scaled.height
-        self.area = self.width * self.height
-        self.img = img_to_lists(pil_img_scaled)
-
-        self.area_not_transparent = self.area
-        for row in self.img:
-            for pixel in row:
-                if pixel is None:
-                    self.area_not_transparent -= 1
-
-        log.info(
-            f'Loaded zone {self.name}\n'
-            f'    width:  {self.width}\n'
-            f'    height: {self.height}\n'
-            f'    area:   {self.area}'
-        )
-
-
-def load_zones(directory: Path, img_names: list) -> typing.List[Zone]:
-    """Load zones that match img_names from directory and return them."""
-    zones = []
-
-    for img in img_names:
-        for file in directory.iterdir():
-            if file.name.startswith(img) and file.is_file():
-                zones.append(Zone(file))
-                break
-        else:
-            log.error('Unable to find file for zone with name %s', img)
-
-    return zones
-
-
-def img_bytes_to_dimensional_list(img_bytes: bytes, canvas_size: dict) -> img_type:
-    canvas = []
-    for y in range(canvas_size['height']):
-        row = []
-        for x in range(canvas_size['width']):
-            index = (y * canvas_size['width'] * 3) + (x * 3)
-            pixel = img_bytes[index:index + 3]
-            row.append(three_bytes_to_rgb_hex_string(pixel))
-        canvas.append(row)
-
-    return canvas
-
-
-def empty_canvas(canvas_size: dict) -> img_type:
-    return [[BLANK_PIXEL] * canvas_size['width']] * canvas_size['height']
-
-
-def empty_canvas_bytes(canvas_size: dict) -> bytes:
-    return b'ffffff' * canvas_size['height'] * canvas_size['width']
-
-
-async def save_canvas_as_png(canvas_size, headers, path: typing.Union[str, Path] = None):
+async def save_canvas_as_png(canvas_size, headers, path: Union[str, Path] = None):
     if path is None:
         path = CANVAS_IMAGE_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
 
     canvas_bytes = await api.get_pixels(canvas_size, headers, as_bytes=True)
-    canvas_pil_img = PIL.Image.frombytes(
+    canvas_image = Image.frombytes(
         mode='RGB',
         size=(canvas_size['width'], canvas_size['height']),
         data=canvas_bytes
     )
-    canvas_pil_img.save(path)
+    canvas_image.save(path)
 
 
 async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: dict, bot):
@@ -281,19 +140,16 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
                 await api.set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
 
 
-async def run_protections(zones_to_do: typing.List[Zone], canvas_size: dict, headers: dict, bot):
+async def run_protections(zones_to_do: list[zone.Zone], canvas_size: dict, headers: dict, bot):
     while True:
         try:
-            for zone in zones_to_do:
-                img = zone.img
-                img_location = zone.location
-
+            for z in zones_to_do:
                 log.info('working on next img'.center(100, '='))
-                log.info(f"img name: {zone.name}")
-                log.info(f'img dimension x: {zone.width}')
-                log.info(f'img dimension y: {zone.height}')
-                log.info(f'img pixels: {zone.area_not_transparent}')
-                await run_for_img(img, img_location, canvas_size, headers, bot)
+                log.info(f"img name: {z.name}")
+                log.info(f'img dimension x: {z.width}')
+                log.info(f'img dimension y: {z.height}')
+                log.info(f'img pixels: {z.area_not_transparent}')
+                await run_for_img(z.image, z.location, canvas_size, headers, bot)
         except Exception as error:
             log.exception(error)
 
@@ -327,7 +183,7 @@ async def main():
         bot = None
 
     log.info(f'Loading zones to do from {IMAGES_FOLDER}')
-    zones_to_do = load_zones(IMAGES_FOLDER, imgs)
+    zones_to_do = zone.load_zones(IMAGES_FOLDER, imgs)
     total_area = sum(z.area_not_transparent for z in zones_to_do)
     log.info(f'Total area: {total_area}')
     canvas_area = canvas_size['width'] * canvas_size['height']
