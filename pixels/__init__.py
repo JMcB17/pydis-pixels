@@ -171,7 +171,3 @@ def main():
     except KeyboardInterrupt:
         log.info('Stopping.')
         api_instance.loop.run_until_complete(api_instance.close())
-
-
-if __name__ == '__main__':
-    main()
