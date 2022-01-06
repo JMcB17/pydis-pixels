@@ -68,10 +68,8 @@ async def save_canvas_as_png(api_instance: APIBase, path: Union[str, Path] = Non
         path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    canvas_bytes = await api_instance.get_pixels()
-    canvas_size = await api_instance.get_size()
-    canvas_image = util.bytes_to_image(canvas_bytes, canvas_size['width'], canvas_size['height'])
-    canvas_image.save(path)
+    canvas = await api_instance.get_pixels()
+    canvas.save(path)
 
 
 def pad_coords_str(x: int, y: int, max_x: int, max_y: int, template: str = '({x}, {y})') -> str:
@@ -85,9 +83,7 @@ def pad_coords_str(x: int, y: int, max_x: int, max_y: int, template: str = '({x}
 async def run_for_zone(z: zone.Zone, api_instance: APIBase):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     log.info('Getting current canvas status')
-    canvas_bytes = await api_instance.get_pixels()
-    canvas_size = await api_instance.get_size()
-    canvas = util.bytes_to_image(canvas_bytes, canvas_size['width'], canvas_size['height'])
+    canvas = await api_instance.get_pixels()
     log.info('Got current canvas status')
 
     for index_y in range(z.image.height):

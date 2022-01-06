@@ -4,8 +4,10 @@ import time
 from typing import Optional
 
 import aiohttp
+from PIL import Image
 
-from .. import util
+
+# todo: docstrings
 
 
 Pixel = list[int]
@@ -51,13 +53,10 @@ class APIBase:
         raise NotImplementedError
 
     async def get_pixel(self, x: int, y: int) -> Pixel:
-        canvas_bytes = await self.get_pixels()
-        canvas_size = await self.get_size()
-        canvas = util.bytes_to_image(canvas_bytes, canvas_size['width'], canvas_size['height'])
-
+        canvas = await self.get_pixels()
         return canvas.getpixel((x, y))
 
-    async def get_pixels(self) -> bytes:
+    async def get_pixels(self) -> Image.Image:
         raise NotImplementedError
 
     async def get_size(self) -> dict[str, int]:
