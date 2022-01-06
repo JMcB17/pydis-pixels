@@ -11,7 +11,8 @@ from .api import APIBase
 from .api import cmpc
 
 
-# todo: better rate limit handling?
+# todo: script to mockup placing zone on canvas
+# todo: script to make json file
 # todo: legacy r/place support for kicks
 # todo: try adding tk display again? might kill me
 
@@ -94,7 +95,7 @@ async def run_for_zone(z: zone.Zone, api_instance: APIBase):
             pix_y = z.coords[1] + index_y
             pix_coords_str = pad_coords_str(pix_x, pix_y, canvas.width, canvas.height)
 
-            colour = z.image.getpixel((pix_x, pix_y))
+            colour = z.image.getpixel((index_x, index_y))
 
             if not colour[3]:
                 log.info(f'Pixel at {pix_coords_str} is intended to be transparent, skipping')
@@ -112,7 +113,7 @@ async def run_for_zone(z: zone.Zone, api_instance: APIBase):
                 log.info(f'Getting status of pixel at {pix_coords_str}')
                 pix_status = await api_instance.get_pixel(pix_x, pix_y)
                 log.info(f'Got status of pixel at {pix_coords_str}, {pix_status}')
-                canvas.putpixel((pix_x, pix_y), list(pix_status))
+                canvas.putpixel((pix_x, pix_y), pix_status)
             if canvas.getpixel((pix_x, pix_y)) == colour:
                 log.info(f'Pixel at {pix_coords_str} is {colour} as intended')
             else:
