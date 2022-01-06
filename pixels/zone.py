@@ -3,23 +3,14 @@ import logging
 from pathlib import Path
 from typing import Union
 
-
 from PIL import Image
+from . import scale_image
 
 
 Image2D = list[list[str]]
 
 
 log = logging.getLogger(__name__)
-
-
-def scale_image(image: Image.Image, scale: int) -> Image.Image:
-    """Calculate the new size of a PIL image, resize and return it."""
-    new_size = (
-        image.width // scale,
-        image.height // scale
-    )
-    return image.resize(size=new_size, resample=Image.NEAREST)
 
 
 def image_to_list(image: Image.Image) -> Image2D:
