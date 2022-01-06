@@ -8,9 +8,9 @@ from typing import Union
 
 from PIL import Image
 
-import api
-import discord_mirror
-import zone
+from . import api
+from . import discord_mirror
+from . import zone
 
 
 # todo: further cleaning up
