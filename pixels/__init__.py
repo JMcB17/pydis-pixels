@@ -1,7 +1,6 @@
 import json
 import sys
 import argparse
-import asyncio
 import logging
 from pathlib import Path
 from typing import Union
@@ -140,17 +139,7 @@ async def run_protections(zones_to_do: list[zone.Zone], api_instance: APIBase):
             log.exception(error)
 
 
-async def main_async():
-    """Run the program for all imgs."""
-    parser = get_parser()
-    parser.parse_args()
-
-    with open(CONFIG_FILE_PATH) as config_file:
-        config = json.load(config_file)
-    log.info('Loaded config')
-
-    api_instance = cmpc.APICMPC(token=config['token'], username=config['username'])
-
+async def run(api_instance: APIBase):
     log.info('Getting canvas size')
     canvas_size = await api_instance.get_size()
     log.info(f'Canvas size: {canvas_size}')
@@ -169,9 +158,20 @@ async def main_async():
 
 
 def main():
-    asyncio.run(main_async())
+    parser = get_parser()
+    parser.parse_args()
+
+    with open(CONFIG_FILE_PATH) as config_file:
+        config = json.load(config_file)
+    log.info('Loaded config')
+
+    api_instance = cmpc.APICMPC(token=config['token'], username=config['username'])
+    try:
+        api_instance.loop.run_until_complete(run(api_instance))
+    except KeyboardInterrupt:
+        log.info('Stopping.')
+        api_instance.loop.run_until_complete(api_instance.close())
 
 
 if __name__ == '__main__':
-    # todo: clean keyboardinterrupt shutdown
     main()

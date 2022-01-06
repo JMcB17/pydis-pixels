@@ -23,10 +23,10 @@ class APIBase:
             "Authorization": 'Bearer ' + self.token,
         }
 
-        self.log = logging.getLogger(__name__)
-
-        self.session: Optional[aiohttp.ClientSession] = None
         self.loop = asyncio.get_event_loop()
+
+        self.log = logging.getLogger(__name__)
+        self.session: Optional[aiohttp.ClientSession] = None
         self.loop.run_until_complete(self.open())
 
     async def open(self):
