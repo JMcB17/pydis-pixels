@@ -1,11 +1,10 @@
-import json
 import io
 from datetime import datetime, timezone
 
 import aiohttp
 from PIL import Image
 
-from . import scale_image
+from . import util
 
 
 __version__ = '3.0.0'
@@ -42,41 +41,40 @@ async def create_mirror(webhook_url: str) -> int:
         'username': WEBHOOK_USERNAME,
         'avatar_url': WEBHOOK_AVATAR_URL,
     }
-    data = {'payload_json': json.dumps(payload_json)}
 
     async with aiohttp.ClientSession() as session:
-        r = await session.post(url=webhook_url, data=data)
+        r = await session.post(url=webhook_url, json=payload_json)
         r_json = await r.json()
 
     return r_json['id']
 
 
-async def edit_embed_file(webhook_url: str, embed: dict, stream: io.BytesIO, now: datetime):
-    file_name = FILE_NAME_FORMAT.format(timestamp=now.timestamp())
-    embed['image'] = {'url': f'attachment://{file_name}'}
-    discord_file = {
-        'name': 'file',
-        'value': stream.getvalue(),
-        'filename': file_name,
-        'content_type': 'application/octet-stream'
-    }
-
-    payload_json = {
-        'content': '',
-        'embeds': [embed],
-        # get rid of the previous attachments
-        'attachments': []
-    }
-
-    async with aiohttp.ClientSession() as session:
-        await session.patch(url=webhook_url, data=data)
-
-
-async def update_mirror(canvas: Image.Image, message_id: int, webhook_url: str):
-    canvas_scaled = scale_image(canvas, IMAGE_SCALE)
-    with io.BytesIO() as byte_stream:
-        canvas_scaled.save(byte_stream, format='PNG')
-        byte_stream.seek(0)
-
-    now = datetime.now(timezone.utc)
-    embed = get_embed(now)
+# async def edit_embed_file(webhook_url: str, embed: dict, stream: io.BytesIO, now: datetime):
+#     file_name = FILE_NAME_FORMAT.format(timestamp=now.timestamp())
+#     embed['image'] = {'url': f'attachment://{file_name}'}
+#     discord_file = {
+#         'name': 'file',
+#         'value': stream.getvalue(),
+#         'filename': file_name,
+#         'content_type': 'application/octet-stream'
+#     }
+#
+#     payload_json = {
+#         'content': '',
+#         'embeds': [embed],
+#         # get rid of the previous attachments
+#         'attachments': []
+#     }
+#
+#     async with aiohttp.ClientSession() as session:
+#         await session.patch(url=webhook_url, data=data)
+#
+#
+# async def update_mirror(canvas: Image.Image, message_id: int, webhook_url: str):
+#     canvas_scaled = util.scale_image(canvas, IMAGE_SCALE)
+#     with io.BytesIO() as byte_stream:
+#         canvas_scaled.save(byte_stream, format='PNG')
+#         byte_stream.seek(0)
+#
+#     now = datetime.now(timezone.utc)
+#     embed = get_embed(now)

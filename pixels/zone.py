@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Union
 
 from PIL import Image
-from . import scale_image
+from . import util
 
 
 Image2D = list[list[str]]
@@ -36,7 +36,7 @@ class Zone:
         try:
             self.name = zone_definition['name']
             self.image_path = Path(zone_definition['image'])
-            self.coords = zone_definition['coords']
+            self.coords = tuple(zone_definition['coords'])
             self.scale = zone_definition['scale']
         except KeyError as error:
             raise ValueError(
@@ -47,7 +47,7 @@ class Zone:
         image = image.convert('RGBA')
         self.image_unscaled = image
         if self.scale != 1:
-            self.image = scale_image(self.image_unscaled, self.scale)
+            self.image = util.scale_image(self.image_unscaled, self.scale)
         else:
             self.image = self.image_unscaled
         self.width, self.height = self.image.size

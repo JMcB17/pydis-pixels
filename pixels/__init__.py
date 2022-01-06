@@ -6,11 +6,9 @@ import logging
 from pathlib import Path
 from typing import Union
 
-from PIL import Image
-
 from . import api
-from . import discord_mirror
 from . import zone
+from . import util
 
 
 # todo: modularise to support different apis
@@ -64,28 +62,6 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def rgb_to_hex(rgb_ints: Union[list[int], bytes]) -> str:
-    """Take a list of ints and convert it to a colour e.g. [255, 255, 255] -> ffffff."""
-    return '{:0<2x}{:0<2x}{:0<2x}'.format(*rgb_ints)
-
-
-def bytes_to_image(image_bytes: bytes, width: int, height: int) -> Image.Image:
-    return Image.frombytes(
-        mode='RGB',
-        size=(width, height),
-        data=image_bytes
-    )
-
-
-def scale_image(image: Image.Image, scale: int) -> Image.Image:
-    """Calculate the new size of a PIL image, resize and return it."""
-    new_size = (
-        image.width // scale,
-        image.height // scale
-    )
-    return image.resize(size=new_size, resample=Image.NEAREST)
-
-
 async def save_canvas_as_png(canvas_size, headers, path: Union[str, Path] = None):
     if path is None:
         path = CANVAS_IMAGE_PATH
@@ -94,26 +70,23 @@ async def save_canvas_as_png(canvas_size, headers, path: Union[str, Path] = None
     path.parent.mkdir(parents=True, exist_ok=True)
 
     canvas_bytes = await api.get_pixels(headers)
-    canvas_image = bytes_to_image(canvas_bytes, canvas_size['width'], canvas_size['height'])
+    canvas_image = util.bytes_to_image(canvas_bytes, canvas_size['width'], canvas_size['height'])
     canvas_image.save(path)
 
 
-async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict, bot):
+async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     log.info('Getting current canvas status')
     canvas_bytes = await api.get_pixels(headers)
-    canvas = img_bytes_to_dimensional_list(canvas_bytes, canvas_size)
+    canvas = util.bytes_to_image(canvas_bytes, canvas_size['width'], canvas_size['height'])
     log.info('Got current canvas status')
-    if bot is not None:
-        log.info('Updating canvas mirror')
-        await bot.update_mirror_from_id(canvas_bytes)
 
-    for y_index, row in enumerate(img):
+    for y_index, row in enumerate(z.image_2d):
         hit_incorrect_pixel = False
 
         for x_index, colour in enumerate(row):
-            pix_y = img_location['y'] + y_index
-            pix_x = img_location['x'] + x_index
+            pix_y = z.coords[1] + y_index
+            pix_x = z.coords[0] + x_index
             
             coords_str_template = '({x}, {y})'
             max_coords_str = coords_str_template.format(
@@ -127,7 +100,7 @@ async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict, bot):
                 log.info(f'Pixel at {pix_coords_str} is intended to be transparent, skipping')
                 continue
             try:
-                canvas[pix_y][pix_x]
+                canvas.getpixel((pix_x, pix_y))
             except IndexError:
                 log.error(f'Pixel at {pix_coords_str} is outside of the canvas')
             # get canvas every other time
@@ -136,9 +109,10 @@ async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict, bot):
             # also only do it if we've hit a zone that needs changing, to further prevent get_pixel rate limiting
             if hit_incorrect_pixel and x_index % 1 == 0:
                 log.info(f'Getting status of pixel at {pix_coords_str}')
-                canvas[pix_y][pix_x] = await api.get_pixel(pix_x, pix_y, headers)
-                log.info(f'Got status of pixel at {pix_coords_str}, {canvas[pix_y][pix_x]}')
-            if canvas[pix_y][pix_x] == colour:
+                pix_status = await api.get_pixel(pix_x, pix_y, headers)
+                log.info(f'Got status of pixel at {pix_coords_str}, {pix_status}')
+                canvas.putpixel((pix_x, pix_y), list(pix_status))
+            if canvas.getpixel((pix_x, pix_y)) == colour:
                 log.info(f'Pixel at {pix_coords_str} is {colour} as intended')
             else:
                 hit_incorrect_pixel = True
@@ -146,7 +120,7 @@ async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict, bot):
                 await api.set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
 
 
-async def run_protections(zones_to_do: list[zone.Zone], canvas_size: dict, headers: dict, bot):
+async def run_protections(zones_to_do: list[zone.Zone], canvas_size: dict, headers: dict):
     while True:
         try:
             for z in zones_to_do:
@@ -155,7 +129,7 @@ async def run_protections(zones_to_do: list[zone.Zone], canvas_size: dict, heade
                 log.info(f'img dimension x: {z.width}')
                 log.info(f'img dimension y: {z.height}')
                 log.info(f'img pixels: {z.area_opaque}')
-                await run_for_zone(z, canvas_size, headers, bot)
+                await run_for_zone(z, canvas_size, headers)
         except Exception as error:
             log.exception(error)
 
@@ -177,17 +151,6 @@ async def main_async():
     canvas_size = await api.get_size(headers)
     log.info(f'Canvas size: {canvas_size}')
 
-    if 'discord_mirror' in config and config['discord_mirror']['bot_token']:
-        bot = discord_mirror.MirrorBot(
-            channel_id=config['discord_mirror']['channel_id'], message_id=config['discord_mirror']['message_id'],
-            canvas_size=canvas_size
-        )
-        log.info('Running discord bot for canvas mirror')
-        asyncio.create_task(bot.start(config['discord_mirror']['bot_token']))
-        await bot.wait_until_ready()
-    else:
-        bot = None
-
     log.info(f'Loading zones to do from {IMAGES_FOLDER}')
     zones_to_do = zone.load_zones(IMAGES_FOLDER)
     total_area = sum(z.area_opaque for z in zones_to_do)
@@ -198,7 +161,7 @@ async def main_async():
 
     log.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
     await save_canvas_as_png(canvas_size, headers)
-    await run_protections(zones_to_do, canvas_size, headers, bot)
+    await run_protections(zones_to_do, canvas_size, headers)
 
 
 def main():

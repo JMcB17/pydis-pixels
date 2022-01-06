@@ -74,10 +74,7 @@ async def set_pixel(x: int, y: int, rgb: str, headers: dict):
 
 
 async def get_pixels(headers: dict) -> bytes:
-    """get_pixels endpoint wrapper.
-
-    Returns as a 2d list of hex colour strings, like an img.
-    """
+    """get_pixels endpoint wrapper."""
     await head_request(GET_PIXELS_URL, headers)
     async with aiohttp.ClientSession() as session:
         async with session.get(
