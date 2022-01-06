@@ -47,7 +47,6 @@ async def ratelimit(headers: CIMultiDictProxy):
 async def head_request(url: str, headers: dict):
     async with aiohttp.ClientSession() as session:
         async with session.head(url, headers=headers) as r:
-            # todo: custom logging for head requests
             if r.ok:
                 await ratelimit(r.headers)
 
@@ -74,7 +73,7 @@ async def set_pixel(x: int, y: int, rgb: str, headers: dict):
                 await ratelimit(r.headers)
 
 
-async def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -> typing.Union[img_type, bytes]:
+async def get_pixels(headers: dict) -> bytes:
     """get_pixels endpoint wrapper.
 
     Returns as a 2d list of hex colour strings, like an img.
@@ -85,25 +84,10 @@ async def get_pixels(canvas_size: dict, headers: dict, as_bytes: bool = False) -
             GET_PIXELS_URL,
             headers=headers
         ) as r:
-            if r.status == 410:
+            await ratelimit(r.headers)
+            pixels_bytes = await r.read()
 
-                logging.debug('Rats! get_pixels will return a blank canvas as default.')
-                print_sleep_time(
-                    float(r.headers['endpoint-unlock']),
-                    'endpoint will unlock in {duration} seconds',
-                    'endpoint will unlock at {sleep_finish_time}'
-                )
-                pixels_bytes = empty_canvas_bytes(canvas_size)
-            else:
-                await ratelimit(r.headers)
-                pixels_bytes = await r.read()
-
-    # with open(CANVAS_LOG_PATH, 'a', encoding='utf-8') as canvas_log_file:
-    #     canvas_log_file.write(f'{time.asctime()}\n{pixels_bytes}\n')
-    if as_bytes:
-        return pixels_bytes
-
-    return img_bytes_to_dimensional_list(pixels_bytes, canvas_size)
+    return pixels_bytes
 
 
 async def get_pixel(x: int, y: int, headers: dict) -> str:
@@ -119,15 +103,6 @@ async def get_pixel(x: int, y: int, headers: dict) -> str:
             params=params,
             headers=headers
         ) as r:
-            if r.status == 410:
-                logging.debug('Rats! get_pixel will return a black pixel as default.')
-                print_sleep_time(
-                    float(r.headers['endpoint-unlock']),
-                    'endpoint will unlock in {duration} seconds',
-                    'endpoint will unlock at {sleep_finish_time}'
-                )
-                return BLANK_PIXEL
-
             await ratelimit(r.headers)
             r_json = await r.json()
 

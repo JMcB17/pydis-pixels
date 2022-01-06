@@ -66,7 +66,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def rgb_to_hex(rgb_ints: list[int]) -> str:
+def rgb_to_hex(rgb_ints: Union[list[int], bytes]) -> str:
     """Take a list of ints and convert it to a colour e.g. [255, 255, 255] -> ffffff."""
     return '{:0<2x}{:0<2x}{:0<2x}'.format(*rgb_ints)
 

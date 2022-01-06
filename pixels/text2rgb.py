@@ -1,12 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
 from pathlib import Path
-import PIL.Image
-from main import three_bytes_to_rgb_hex_string
+
+from PIL import Image
+from pixels import rgb_to_hex
 
 
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
 
 IGNORED_FOLDER = Path('images/ignore')
@@ -24,14 +25,13 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def sanitise_filename(string: str) -> str:
-    """Remove non alphanumeric characters."""
-    chars_to_remove = []
+    """Remove non-alphanumeric characters."""
+    sanitised_list = []
     for char in string:
-        if not char.isalnum():
-            chars_to_remove.append(char)
-    for char in chars_to_remove:
-        string = string.replace(char, '')
-    return string
+        if char.isalnum():
+            sanitised_list.append(char)
+
+    return ''.join(sanitised_list)
 
 
 def main():
@@ -51,21 +51,24 @@ def main():
     text_encoded = text.encode('utf-8')
 
     padded_length = len(text_encoded) + (3 - len(text_encoded) % 3)
-    text_encoded_padded = text_encoded.ljust(padded_length, b' ')
+    text_encoded_padded = text_encoded.ljust(padded_length, bytes([0]))
 
     for i in range(len(text_encoded_padded) // 3):
-        colour = three_bytes_to_rgb_hex_string(text_encoded_padded[i*3:i*3 + 3])
+        colour = rgb_to_hex(text_encoded_padded[(i*3):(i*3 + 3)])
         print(colour)
 
-    img_size = (len(text_encoded_padded) // 3, 1)
-    img = PIL.Image.frombytes(mode='RGB', size=img_size, data=text_encoded_padded)
+    image_size = (len(text_encoded_padded) // 3, 1)
+    image = Image.frombytes(mode='RGB', size=image_size, data=text_encoded_padded)
     if scale != 1:
-        new_size = (img.width*scale, img.height*scale)
-        img_scaled = img.resize(new_size, resample=PIL.Image.NEAREST)
+        new_size = (image.width*scale, image.height*scale)
+        image_scaled = image.resize(new_size, resample=Image.NEAREST)
     else:
-        img_scaled = img
-    img_name = f'{sanitise_filename(text)}-utf-8,{scale}x,(,).png'
-    img_scaled.save(IGNORED_FOLDER / img_name)
+        image_scaled = image
+    image_name = f'{sanitise_filename(text)}-utf-8,{scale}x,(,).png'
+    image_path = IGNORED_FOLDER / image_name
+    print(f'Writing image to "{image_path}".')
+    image_scaled.save(image_path)
+    print('Done!')
 
 
 if __name__ == '__main__':
