@@ -62,7 +62,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-async def save_canvas_as_png(canvas_size, headers, path: Union[str, Path] = None):
+async def save_canvas_as_png(canvas_size: dict, headers: dict, path: Union[str, Path] = None):
     if path is None:
         path = CANVAS_IMAGE_PATH
     else:
@@ -74,6 +74,14 @@ async def save_canvas_as_png(canvas_size, headers, path: Union[str, Path] = None
     canvas_image.save(path)
 
 
+def pad_coords_str(x: int, y: int, max_x: int, max_y: int, template: str = '({x}, {y})') -> str:
+    max_coords_str = template.format(x=max_x, y=max_y)
+    max_coords_str_length = len(max_coords_str)
+    coords_str = template.format(x=x, y=y)
+    coords_str_padded = coords_str.ljust(max_coords_str_length)
+    return coords_str_padded
+
+
 async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     log.info('Getting current canvas status')
@@ -81,24 +89,20 @@ async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict):
     canvas = util.bytes_to_image(canvas_bytes, canvas_size['width'], canvas_size['height'])
     log.info('Got current canvas status')
 
-    for y_index, row in enumerate(z.image_2d):
+    for index_y in range(z.image.height):
         hit_incorrect_pixel = False
 
-        for x_index, colour in enumerate(row):
-            pix_y = z.coords[1] + y_index
-            pix_x = z.coords[0] + x_index
-            
-            coords_str_template = '({x}, {y})'
-            max_coords_str = coords_str_template.format(
-                x=canvas_size['height'], y=canvas_size['width']
-            )
-            max_coords_str_length = len(max_coords_str)
-            pix_coords_str = coords_str_template.format(x=pix_x, y=pix_y)
-            pix_coords_str = pix_coords_str.ljust(max_coords_str_length)
+        for index_x in range(z.image.width):
+            pix_x = z.coords[0] + index_x
+            pix_y = z.coords[1] + index_y
+            pix_coords_str = pad_coords_str(pix_x, pix_y, canvas.width, canvas.height)
 
-            if colour is None:
+            colour = z.image.getpixel((pix_x, pix_y))
+
+            if not colour[3]:
                 log.info(f'Pixel at {pix_coords_str} is intended to be transparent, skipping')
                 continue
+
             try:
                 canvas.getpixel((pix_x, pix_y))
             except IndexError:
@@ -107,7 +111,7 @@ async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict):
             # getting it more often means better collaboration
             # but too often is too often
             # also only do it if we've hit a zone that needs changing, to further prevent get_pixel rate limiting
-            if hit_incorrect_pixel and x_index % 1 == 0:
+            if hit_incorrect_pixel and index_x % 1 == 0:
                 log.info(f'Getting status of pixel at {pix_coords_str}')
                 pix_status = await api.get_pixel(pix_x, pix_y, headers)
                 log.info(f'Got status of pixel at {pix_coords_str}, {pix_status}')
@@ -124,7 +128,7 @@ async def run_protections(zones_to_do: list[zone.Zone], canvas_size: dict, heade
     while True:
         try:
             for z in zones_to_do:
-                log.info('working on next img'.center(100, '='))
+                log.info(' working on next img '.center(100, '='))
                 log.info(f"img name: {z.name}")
                 log.info(f'img dimension x: {z.width}')
                 log.info(f'img dimension y: {z.height}')

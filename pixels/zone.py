@@ -54,7 +54,6 @@ class Zone:
         self.area = self.width * self.height
 
         self.image_2d = image_to_list(self.image)
-
         self.area_opaque = self.area
         for row in self.image_2d:
             for pixel in row:
