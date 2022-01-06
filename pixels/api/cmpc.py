@@ -1,3 +1,4 @@
+import asyncio
 import base64
 
 from .. import util
@@ -12,6 +13,11 @@ class APICMPC(APIBase):
     base_url = 'https://pixels.cmpc.live/'
     endpoint_set_pixel = base_url + 'set'
     endpoint_get_pixels = base_url + 'fetch'
+    endpoint_auth = base_url + 'auth'
+    endpoint_stayalive = base_url + 'stayalive'
+
+    stayalive_interval_ms = 10000
+    stayalive_interval_seconds = stayalive_interval_ms // 1000
 
     def __init__(self, username: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -19,6 +25,20 @@ class APICMPC(APIBase):
         self.username = username
         self.subscriber = False
         self.moderator = False
+
+    async def open(self):
+        await super().open()
+        await self.session.post(self.endpoint_auth, headers=self.headers)
+        self.loop.create_task(self.stayalive(), name='stayalive')
+
+    async def close(self):
+        await super().close()
+        self.loop.stop()
+
+    async def stayalive(self):
+        while True:
+            await asyncio.sleep(self.stayalive_interval_seconds)
+            await self.session.post(self.endpoint_stayalive, headers=self.headers)
 
     async def get_pixels(self) -> bytes:
         async with self.session.get(
@@ -40,5 +60,6 @@ class APICMPC(APIBase):
         }
         return await self.session.post(
             self.endpoint_set_pixel,
+            headers=self.headers,
             json=payload
         )
