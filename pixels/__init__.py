@@ -15,6 +15,7 @@ from . import util
 # todo: cmpc pixels support
 # todo: better rate limit handling?
 # todo: legacy r/place support for kicks
+# todo: try adding tk display again? might kill me
 
 
 __version__ = '4.0.0a'
@@ -45,7 +46,7 @@ logging.basicConfig(
     ]
 )
 # don't fill up debug.log with other loggers
-for logger_name in ('urllib3', 'PIL', 'discord'):
+for logger_name in ('asyncio', 'urllib3', 'PIL',):
     logging.getLogger(logger_name).setLevel(logging.ERROR)
 log = logging.getLogger(__name__)
 
