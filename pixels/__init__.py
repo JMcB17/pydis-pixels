@@ -6,19 +6,18 @@ import logging
 from pathlib import Path
 from typing import Union
 
-from . import api
 from . import zone
 from . import util
+from .api import APIBase
+from .api import cmpc
 
 
-# todo: modularise to support different apis
-# todo: cmpc pixels support
 # todo: better rate limit handling?
 # todo: legacy r/place support for kicks
 # todo: try adding tk display again? might kill me
 
 
-__version__ = '4.0.0a'
+__version__ = '4.0.0b'
 
 
 CONFIG_FILE_PATH = Path('config.json')
@@ -63,14 +62,15 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-async def save_canvas_as_png(canvas_size: dict, headers: dict, path: Union[str, Path] = None):
+async def save_canvas_as_png(api_instance: APIBase, path: Union[str, Path] = None):
     if path is None:
         path = CANVAS_IMAGE_PATH
     else:
         path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    canvas_bytes = await api.get_pixels(headers)
+    canvas_bytes = await api_instance.get_pixels()
+    canvas_size = await api_instance.get_size()
     canvas_image = util.bytes_to_image(canvas_bytes, canvas_size['width'], canvas_size['height'])
     canvas_image.save(path)
 
@@ -83,10 +83,11 @@ def pad_coords_str(x: int, y: int, max_x: int, max_y: int, template: str = '({x}
     return coords_str_padded
 
 
-async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict):
+async def run_for_zone(z: zone.Zone, api_instance: APIBase):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     log.info('Getting current canvas status')
-    canvas_bytes = await api.get_pixels(headers)
+    canvas_bytes = await api_instance.get_pixels()
+    canvas_size = await api_instance.get_size()
     canvas = util.bytes_to_image(canvas_bytes, canvas_size['width'], canvas_size['height'])
     log.info('Got current canvas status')
 
@@ -114,7 +115,7 @@ async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict):
             # also only do it if we've hit a zone that needs changing, to further prevent get_pixel rate limiting
             if hit_incorrect_pixel and index_x % 1 == 0:
                 log.info(f'Getting status of pixel at {pix_coords_str}')
-                pix_status = await api.get_pixel(pix_x, pix_y, headers)
+                pix_status = await api_instance.get_pixel(pix_x, pix_y)
                 log.info(f'Got status of pixel at {pix_coords_str}, {pix_status}')
                 canvas.putpixel((pix_x, pix_y), list(pix_status))
             if canvas.getpixel((pix_x, pix_y)) == colour:
@@ -122,10 +123,10 @@ async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict):
             else:
                 hit_incorrect_pixel = True
                 log.info(f'Pixel at {pix_coords_str} will be made {colour}')
-                await api.set_pixel(x=pix_x, y=pix_y, rgb=colour, headers=headers)
+                await api_instance.set_pixel(x=pix_x, y=pix_y, colour=colour)
 
 
-async def run_protections(zones_to_do: list[zone.Zone], canvas_size: dict, headers: dict):
+async def run_protections(zones_to_do: list[zone.Zone], api_instance: APIBase):
     while True:
         try:
             for z in zones_to_do:
@@ -134,7 +135,7 @@ async def run_protections(zones_to_do: list[zone.Zone], canvas_size: dict, heade
                 log.info(f'img dimension x: {z.width}')
                 log.info(f'img dimension y: {z.height}')
                 log.info(f'img pixels: {z.area_opaque}')
-                await run_for_zone(z, canvas_size, headers)
+                await run_for_zone(z, api_instance)
         except Exception as error:
             log.exception(error)
 
@@ -147,13 +148,11 @@ async def main_async():
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
     log.info('Loaded config')
-    bearer_token = f"Bearer {config['token']}"
-    headers = {
-        "Authorization": bearer_token
-    }
+
+    api_instance = cmpc.APICMPC(token=config['token'], username=config['username'])
 
     log.info('Getting canvas size')
-    canvas_size = await api.get_size(headers)
+    canvas_size = await api_instance.get_size()
     log.info(f'Canvas size: {canvas_size}')
 
     log.info(f'Loading zones to do from {IMAGES_FOLDER}')
@@ -165,8 +164,8 @@ async def main_async():
     log.info(f'Total area: {total_area_percent}% of canvas')
 
     log.info(f'Saving current canvas as png to {CANVAS_IMAGE_PATH}')
-    await save_canvas_as_png(canvas_size, headers)
-    await run_protections(zones_to_do, canvas_size, headers)
+    await save_canvas_as_png(api_instance)
+    await run_protections(zones_to_do, api_instance)
 
 
 def main():

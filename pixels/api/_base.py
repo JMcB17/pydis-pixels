@@ -4,7 +4,8 @@ import time
 from typing import Optional
 
 import aiohttp
-from PIL import Image
+
+from .. import util
 
 
 Pixel = list[int]
@@ -18,8 +19,12 @@ class APIBase:
 
     def __init__(self, token: str = ''):
         self.token = token
+        self.headers = {
+            "Authorization": 'Bearer ' + self.token,
+        }
 
         self.log = logging.getLogger(__name__)
+
         self.session: Optional[aiohttp.ClientSession] = None
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(self.open())
@@ -45,10 +50,14 @@ class APIBase:
     async def set_pixel(self, x: int, y: int, colour: Pixel):
         raise NotImplementedError
 
-    async def get_pixel(self) -> Pixel:
-        raise NotImplementedError
+    async def get_pixel(self, x: int, y: int) -> Pixel:
+        canvas_bytes = await self.get_pixels()
+        canvas_size = await self.get_size()
+        canvas = util.bytes_to_image(canvas_bytes, canvas_size['width'], canvas_size['height'])
 
-    async def get_pixels(self) -> Image.Image:
+        return canvas.getpixel((x, y))
+
+    async def get_pixels(self) -> bytes:
         raise NotImplementedError
 
     async def get_size(self) -> dict[str, int]:

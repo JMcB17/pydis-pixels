@@ -2,9 +2,9 @@ from typing import Union
 from PIL import Image
 
 
-def rgb_to_hex(rgb_ints: Union[list[int], bytes]) -> str:
+def rgb_to_hex(rgb_ints: Union[list[int], bytes], prefix: str = '#') -> str:
     """Take a list of ints and convert it to a colour e.g. [255, 255, 255] -> ffffff."""
-    return '{:02x}{:02x}{:02x}'.format(*rgb_ints)
+    return '{prefix}{:02x}{:02x}{:02x}'.format(*rgb_ints, prefix=prefix)
 
 
 def bytes_to_image(image_bytes: bytes, width: int, height: int) -> Image.Image:
