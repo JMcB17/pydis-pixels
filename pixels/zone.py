@@ -9,18 +9,7 @@ from . import util
 
 Image2D = list[list[str]]
 
-
 log = logging.getLogger(__name__)
-
-
-def image_to_list(image: Image.Image) -> Image2D:
-    """Convert a PIL Image to a two dimensional list."""
-    w = image.width
-    pixels_1d_list = image.getdata()
-    pixels_2d_list = []
-    for row in range(image.height):
-        pixels_2d_list.append(pixels_1d_list[(row * w):(row * w + w)])
-    return pixels_2d_list
 
 
 class Zone:
@@ -53,12 +42,13 @@ class Zone:
         self.width, self.height = self.image.size
         self.area = self.width * self.height
 
-        self.image_2d = image_to_list(self.image)
-        self.area_opaque = self.area
-        for row in self.image_2d:
-            for pixel in row:
-                if not pixel[3]:
-                    self.area_opaque -= 1
+        area_opaque = self.area
+        for y in range(self.image.height):
+            for x in range(self.image.width):
+                pixel = self.image.getpixel((x, y))
+                if pixel[3]:
+                    area_opaque -= 1
+        self.area_opaque = area_opaque
 
         log.info(
             f'Loaded zone {self.name}\n'
