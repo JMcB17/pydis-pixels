@@ -18,6 +18,10 @@ class APICMPC(APIBase):
 
     stayalive_interval_ms = 10000
     stayalive_interval_seconds = stayalive_interval_ms // 1000
+    canvas_size_assumed = {
+        'width': 961,
+        'height': 541,
+    }
 
     def __init__(self, username: str, *args, **kwargs):
         super().__init__(*args, **kwargs)

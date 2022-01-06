@@ -7,6 +7,7 @@ from PIL import Image
 from . import util
 
 
+IMAGES_FOLDER = Path('images')
 Image2D = list[list[str]]
 
 log = logging.getLogger(__name__)
@@ -24,7 +25,7 @@ class Zone:
             zone_definition = json.load(json_file)
         try:
             self.name = zone_definition['name']
-            self.image_path = Path(zone_definition['image'])
+            self.image_path = IMAGES_FOLDER / zone_definition['image']
             self.coords = tuple(zone_definition['coords'])
             self.scale = zone_definition['scale']
         except KeyError as error:
