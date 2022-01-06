@@ -1,10 +1,11 @@
+import json
 import io
 from datetime import datetime, timezone
 
 import aiohttp
-import discord
+from PIL import Image
 
-from . import bytes_to_image, scale_image
+from . import scale_image
 
 
 __version__ = '3.0.0'
@@ -12,70 +13,70 @@ __version__ = '3.0.0'
 
 EMBED_TITLE = 'Pixels State'
 EMBED_FOOTER = 'Last updated'
+WEBHOOK_USERNAME = 'Pixels-mirror'
+WEBHOOK_AVATAR_URL = 'https://cdn.discordapp.com/app-icons/848597264192110622/7cbfb4c8580b767fb167a209aa1e2587.png'
 FILE_NAME_FORMAT = 'pixels_mirror_{timestamp}.png'
 IMAGE_SCALE = 5
 
 
-def get_embed() -> discord.Embed:
-    embed = discord.Embed(title=EMBED_TITLE)
-    embed.set_footer(text=EMBED_FOOTER)
-    embed.timestamp = datetime.now(timezone.utc)
+# https://discord.com/developers/docs/resources/webhook
+# https://github.com/python-discord/pixels/blob/main/pixels/endpoints/moderation.py
+
+
+def get_embed(now: datetime) -> dict:
+    embed = {
+        'title': EMBED_TITLE,
+        'footer': {'text': EMBED_FOOTER},
+        'timestamp': now.isoformat()
+    }
     return embed
 
 
 async def create_mirror(webhook_url: str) -> int:
-    embed = get_embed()
+    now = datetime.now(timezone.utc)
+    embed = get_embed(now)
+
+    payload_json = {
+        'content': '',
+        'embeds': [embed],
+        'username': WEBHOOK_USERNAME,
+        'avatar_url': WEBHOOK_AVATAR_URL,
+    }
+    data = {'payload_json': json.dumps(payload_json)}
+
     async with aiohttp.ClientSession() as session:
-        webhook = discord.Webhook.from_url(
-            webhook_url, adapter=discord.AsyncWebhookAdapter(session)
-        )
-        webhook_message = await webhook.send(embed=embed)
+        r = await session.post(url=webhook_url, data=data)
+        r_json = await r.json()
 
-    return webhook_message.id
+    return r_json['id']
 
 
-# todo: avatar url
-async def edit_embed_file(embed: discord.Embed):
-    # todo: redo this with official methods when new discord.py version releases
-    embed_dict = embed.to_dict()
-    payload_dict = {
-        'embed': embed_dict,
+async def edit_embed_file(webhook_url: str, embed: dict, stream: io.BytesIO, now: datetime):
+    file_name = FILE_NAME_FORMAT.format(timestamp=now.timestamp())
+    embed['image'] = {'url': f'attachment://{file_name}'}
+    discord_file = {
+        'name': 'file',
+        'value': stream.getvalue(),
+        'filename': file_name,
+        'content_type': 'application/octet-stream'
+    }
+
+    payload_json = {
+        'content': '',
+        'embeds': [embed],
         # get rid of the previous attachments
         'attachments': []
     }
 
-    discord_file_json = {
-        'name': 'file',
-        'value': canvas_discord_file.fp,
-        'filename': canvas_discord_file.filename,
-        'content_type': 'application/octet-stream'
-    }
-
-    form = [
-        {
-            'name': 'payload_json',
-            'value': discord.utils.to_json(payload_dict),
-        },
-        discord_file_json
-    ]
-
-    route = discord.http.Route(
-        'PATCH', '/channels/{channel_id}/messages/{message_id}',
-        channel_id=discord_message.channel.id, message_id=discord_message.id
-    )
-    data = await discord_message._state.http.request(
-        route, files=[canvas_discord_file], form=form,
-    )
-    discord_message._update(data)
-    canvas_discord_file.close()
+    async with aiohttp.ClientSession() as session:
+        await session.patch(url=webhook_url, data=data)
 
 
-async def update_mirror(canvas_bytes: bytes, message_id: int, webhook_url: str, width: int, height: int):
-    canvas = bytes_to_image(canvas_bytes, width, height)
+async def update_mirror(canvas: Image.Image, message_id: int, webhook_url: str):
     canvas_scaled = scale_image(canvas, IMAGE_SCALE)
-    file_name = FILE_NAME_FORMAT.format(timestamp=datetime.now(timezone.utc).timestamp())
-
     with io.BytesIO() as byte_stream:
         canvas_scaled.save(byte_stream, format='PNG')
         byte_stream.seek(0)
-        canvas_discord_file = discord.File(byte_stream, filename=file_name)
+
+    now = datetime.now(timezone.utc)
+    embed = get_embed(now)

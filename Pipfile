@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 pillow = "*"
 aiohttp = "*"
-"discord.py" = "*"
 
 [dev-packages]
 
