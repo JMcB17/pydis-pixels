@@ -28,13 +28,8 @@ IMAGES_FOLDER = Path('images')
 CANVAS_LOG_PATH = Path('canvas.log')
 DEBUG_LOG_PATH = Path('debug.log')
 CANVAS_IMAGE_PATH = IMAGES_FOLDER / 'ignore' / 'canvas.png'
-WORM_COLOUR = 'ff8983'
-GMTIME = False
 
 BLANK_PIXEL = 'ffffff'
-
-
-image_type = list[list[str]]
 
 
 # file handler for all debug logging with timestamps
@@ -90,7 +85,7 @@ async def save_canvas_as_png(canvas_size, headers, path: Union[str, Path] = None
     canvas_image.save(path)
 
 
-async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, headers: dict, bot):
+async def run_for_zone(z: zone.Zone, canvas_size: dict, headers: dict, bot):
     """Given an img and the location of its top-left corner on the canvas, draw/repair that image."""
     log.info('Getting current canvas status')
     canvas_bytes = await api.get_pixels(canvas_size, headers, as_bytes=True)
@@ -132,8 +127,6 @@ async def run_for_img(img: img_type, img_location: dict, canvas_size: dict, head
                 log.info(f'Got status of pixel at {pix_coords_str}, {canvas[pix_y][pix_x]}')
             if canvas[pix_y][pix_x] == colour:
                 log.info(f'Pixel at {pix_coords_str} is {colour} as intended')
-            elif colour == WORM_COLOUR:
-                log.info('Oh, worm')
             else:
                 hit_incorrect_pixel = True
                 log.info(f'Pixel at {pix_coords_str} will be made {colour}')
