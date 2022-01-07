@@ -12,8 +12,10 @@ from .api import APIBase
 from .api import cmpc
 
 
+# todo: support multiple webhooks at once, and easier webhook creation
 # todo: script to mockup placing zone on canvas
 # todo: script to make json file
+# todo: subparsers for scripts
 # todo: legacy r/place support for kicks
 # todo: try adding tk display again? might kill me
 
