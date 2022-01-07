@@ -175,7 +175,8 @@ def main():
     try:
         if config_disc['webhook_url'] and config_disc['message_id']:
             api_instance.loop.run_until_complete(discord_mirror.run(
-                config_disc['message_id'], config_disc['webhook_url'], api_instance
+                config_disc['message_id'], config_disc['webhook_url'], api_instance,
+                interval=config_disc['update_interval']
             ))
         # api_instance.loop.run_until_complete(run(api_instance))
     except KeyboardInterrupt:

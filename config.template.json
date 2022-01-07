@@ -4,6 +4,7 @@
 
     "discord_mirror": {
         "webhook_url": "",
-        "message_id": 0
+        "message_id": 0,
+        "update_interval": 60
     }
 }
