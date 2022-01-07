@@ -1,4 +1,3 @@
-import asyncio
 import base64
 import io
 
@@ -8,7 +7,6 @@ from .. import util
 from ._base import APIBase, Pixel
 
 
-# todo: figure out twitch oauth
 # todo: rate limits
 
 
@@ -35,7 +33,6 @@ class APICMPC(APIBase):
 
         self.headers.update(
             {
-                'Connection': 'keep-alive',
                 'Origin': 'https://yp16mcc6rrm08z5aq7weu0fyp81quy.ext-twitch.tv',
                 'Referer': 'https://yp16mcc6rrm08z5aq7weu0fyp81quy.ext-twitch.tv/',
             }
@@ -44,16 +41,6 @@ class APICMPC(APIBase):
     async def open(self):
         await super().open()
         await self.session.post(self.endpoint_auth, headers=self.headers)
-        self.loop.create_task(self.stayalive(), name='stayalive')
-
-    async def close(self):
-        await super().close()
-        self.loop.stop()
-
-    async def stayalive(self):
-        while True:
-            await asyncio.sleep(self.stayalive_interval_seconds)
-            await self.session.post(self.endpoint_stayalive, headers=self.headers)
 
     async def get_pixels(self) -> Image.Image:
         async with self.session.get(

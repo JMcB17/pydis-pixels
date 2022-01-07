@@ -4,6 +4,9 @@ from PIL import Image
 import api
 
 
+# todo: fix
+
+
 __version__ = '0.1.0'
 
 HEX_CHARS = '0123456789abcdef'
