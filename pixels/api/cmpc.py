@@ -8,6 +8,7 @@ from ._base import APIBase, Pixel
 
 
 # todo: rate limits
+# todo: figure out live receive pixel endpoint
 
 
 class APICMPC(APIBase):

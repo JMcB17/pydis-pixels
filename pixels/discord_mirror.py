@@ -14,13 +14,16 @@ from .api import APIBase
 __version__ = '3.0.0'
 
 
+# todo: image scale in config
+
+
 EMBED_TITLE = 'Pixels State'
 EMBED_FOOTER = 'Last updated'
 WEBHOOK_USERNAME = 'Pixels-mirror'
 WEBHOOK_AVATAR_URL = 'https://cdn.discordapp.com/attachments/' \
                      '925454123808194661/929059288683544606/controlmypc_logo_concept_v4.png'
 FILE_NAME_FORMAT = 'pixels_mirror_{timestamp}.png'
-IMAGE_SCALE = 5
+IMAGE_SCALE = 2
 UPDATE_INTERVAL_SECONDS = 60
 
 
