@@ -163,17 +163,21 @@ def main():
 
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
-    log.info('Loaded config')
+    log.info('Loaded config.')
     api_instance = cmpc.APICMPC(token=config['token'], username=config['username'])
 
     config_disc = config['discord_mirror']
-    if config_disc['webhook_url'] and config_disc['message_id']:
-        api_instance.loop.create_task(discord_mirror.run(
-            config_disc['message_id'], config_disc['webhook_url'], api_instance
-        ))
+    # if config_disc['webhook_url'] and config_disc['message_id']:
+    #     api_instance.loop.create_task(discord_mirror.run(
+    #         config_disc['message_id'], config_disc['webhook_url'], api_instance
+    #     ))
 
     try:
-        api_instance.loop.run_until_complete(run(api_instance))
+        if config_disc['webhook_url'] and config_disc['message_id']:
+            api_instance.loop.run_until_complete(discord_mirror.run(
+                config_disc['message_id'], config_disc['webhook_url'], api_instance
+            ))
+        # api_instance.loop.run_until_complete(run(api_instance))
     except KeyboardInterrupt:
         log.info('Stopping.')
         api_instance.loop.run_until_complete(api_instance.close())
