@@ -5,8 +5,9 @@ import logging
 from pathlib import Path
 from typing import Union
 
-from . import zone
+from . import discord_mirror
 from . import util
+from . import zone
 from .api import APIBase
 from .api import cmpc
 
@@ -35,7 +36,7 @@ file_handler.setFormatter(file_formatter)
 # stream handler for info level print-like logging
 stream_handler = logging.StreamHandler(stream=sys.stdout)
 stream_handler.setLevel(logging.INFO)
-stream_formatter = logging.Formatter()
+stream_formatter = logging.Formatter('%(name)s:%(message)s')
 stream_handler.setFormatter(stream_formatter)
 logging.basicConfig(
     level=logging.DEBUG,
@@ -161,8 +162,14 @@ def main():
     with open(CONFIG_FILE_PATH) as config_file:
         config = json.load(config_file)
     log.info('Loaded config')
-
     api_instance = cmpc.APICMPC(token=config['token'], username=config['username'])
+
+    config_disc = config['discord_mirror']
+    if config_disc['webhook_url'] and config_disc['message_id']:
+        api_instance.loop.create_task(discord_mirror.run(
+            config_disc['message_id'], config_disc['webhook_url'], api_instance
+        ))
+
     try:
         api_instance.loop.run_until_complete(run(api_instance))
     except KeyboardInterrupt:

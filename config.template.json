@@ -1,4 +1,9 @@
 {
-  "username": "",
-  "token": ""
+    "username": "",
+    "token": "",
+
+    "discord_mirror": {
+        "webhook_url": "",
+        "message_id": 0
+    }
 }

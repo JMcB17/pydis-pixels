@@ -15,10 +15,16 @@ def bytes_to_image(image_bytes: bytes, width: int, height: int) -> Image.Image:
     )
 
 
-def scale_image(image: Image.Image, scale: int) -> Image.Image:
+def scale_image(image: Image.Image, scale: int, down: bool = True) -> Image.Image:
     """Calculate the new size of a PIL image, resize and return it."""
-    new_size = (
-        image.width // scale,
-        image.height // scale
-    )
+    if down:
+        new_size = (
+            image.width // scale,
+            image.height // scale
+        )
+    else:
+        new_size = (
+            image.width * scale,
+            image.height * scale
+        )
     return image.resize(size=new_size, resample=Image.NEAREST)

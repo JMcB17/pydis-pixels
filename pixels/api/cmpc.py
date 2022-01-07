@@ -77,11 +77,12 @@ class APICMPC(APIBase):
             'Y': x,
             'Color': util.rgb_to_hex(colour),
         }
-        return await self.session.post(
+        response = await self.session.post(
             self.endpoint_set_pixel,
             headers=self.headers,
             json=payload
         )
+        return response
 
     async def get_size(self) -> dict[str, int]:
         canvas = await self.get_pixels()
